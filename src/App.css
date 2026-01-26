@@ -8,6 +8,19 @@
   /* Fix blue box on click for mobile */
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
 :root {
   font-family: 'Inter', system-ui, sans-serif;
   color-scheme: dark;
@@ -171,9 +184,8 @@ body {
 }
 
 .tree-item.active {
-  background: rgba(56, 139, 253, 0.15);
   color: #58a6ff;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Center Content */
