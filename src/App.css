@@ -394,12 +394,11 @@ body {
   .main-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    /* Push content to the bottom */
-    min-height: 100vh;
-    /* Ensure wrapper takes full height to allow bottom alignment */
-    padding: 100px 20px 40px 20px;
+    padding: 20vh 20px 40px 20px;
+    /* Use VH for top spacing to push content down naturally */
     gap: 40px;
+    height: auto;
+    min-height: 100%;
   }
 
   /* Specific mobile ordering */
