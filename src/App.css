@@ -104,11 +104,8 @@ body {
 /* Sidebar Left (File Tree) */
 .sidebar-left {
   width: 260px;
-  background: transparent;
-  /* Changed from rgba(...) for full background visibility */
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.4);
+  /* Dark but transparent */
   padding: 20px 0;
   overflow-y: auto;
 }
@@ -230,11 +227,8 @@ body {
 /* Sidebar Right */
 .sidebar-right {
   width: 300px;
-  background: transparent;
-  /* Changed from rgba(...) for full background visibility */
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.4);
+  /* Dark but transparent */
   padding: 24px;
   overflow-y: auto;
   display: flex;
@@ -400,13 +394,23 @@ body {
   .main-wrapper {
     display: flex;
     flex-direction: column;
-    padding: env(safe-area-inset-top, 20px) 15px 40px 15px;
-    gap: 30px;
+    justify-content: flex-end;
+    /* Push content to the bottom */
+    min-height: 100vh;
+    /* Ensure wrapper takes full height to allow bottom alignment */
+    padding: 100px 20px 40px 20px;
+    gap: 40px;
   }
 
-  /* Reorder sidebar-right to top of sidebar-left so Authenticator is first */
+  /* Specific mobile ordering */
+  .sidebar-left {
+    order: 0;
+    /* Shows UTE and Bank */
+  }
+
   .sidebar-right {
-    order: -1;
+    order: 1;
+    /* Shows Authenticator at the very bottom */
   }
 }
 
@@ -432,16 +436,19 @@ body {
 
 /* Code blocks (Kính mờ giống sidebar) */
 pre {
-  background: rgba(13, 17, 23, 0.4);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: rgba(13, 17, 23, 0.8);
   padding: 16px;
   border-radius: 12px;
   margin: 16px 0;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow-x: auto;
+  width: fit-content;
+  /* Dài bằng nội dung */
+  min-width: 200px;
+  /* Đảm bảo không quá ngắn */
   max-width: 100%;
+  /* Không vượt quá màn hình */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   /* Chỉ thị có thể nhấn */

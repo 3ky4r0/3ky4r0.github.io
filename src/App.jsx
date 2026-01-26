@@ -4,8 +4,8 @@ import './App.css';
 
 // --- CONFIG & UTILS ---
 const MARKDOWN_SOURCES = {
-  foss: 'Markdown/foss.md',
-  v: 'Markdown/v.md'
+  foss: 'Markdown/page1.md',
+  v: 'Markdown/page2.md'
 };
 
 const KEYS = {
@@ -175,10 +175,10 @@ function App() {
               {expandedFolders.resources && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'markdown' && currentSource === 'foss' ? 'active' : ''}`} onClick={() => openMarkdown('foss')}>
-                    foss-apps.md
+                    page 1
                   </div>
                   <div className={`tree-item ${displayType === 'markdown' && currentSource === 'v' ? 'active' : ''}`} onClick={() => openMarkdown('v')}>
-                    v.md
+                    page 2
                   </div>
                 </div>
               )}
@@ -193,10 +193,10 @@ function App() {
               {expandedFolders.ute && (
                 <div className="tree-children">
                   <div className="tree-item" onClick={() => openFile('ute/chuongtrinhdaotao.pdf')}>
-                    chuong-trinh-dt.pdf
+                    CTDT
                   </div>
                   <div className="tree-item" onClick={() => openFile('ute/sotaysinhvien.pdf')}>
-                    so-tay-sv.pdf
+                    STSV
                   </div>
                 </div>
               )}
@@ -211,13 +211,13 @@ function App() {
               {expandedFolders.bank && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Agribank' ? 'active' : ''}`} onClick={() => openImage('bank/agribank.webp', 'Agribank')}>
-                    agribank.png
+                    agribank
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Vietcombank' ? 'active' : ''}`} onClick={() => openImage('bank/vietcombank.webp', 'Vietcombank')}>
-                    vietcombank.png
+                    vietcombank
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Ví Momo' ? 'active' : ''}`} onClick={() => openImage('bank/momo.webp', 'Ví Momo')}>
-                    momo.png
+                    momo
                   </div>
                 </div>
               )}
@@ -231,7 +231,7 @@ function App() {
             <span className="crumb">duyxyz</span>
             <span className="sep">/</span>
             <span className="crumb current">
-              {displayType === 'markdown' ? (currentSource === 'foss' ? 'Foss Apps' : 'V') : currentImage.label}
+              {displayType === 'markdown' ? (currentSource === 'foss' ? 'page 1' : 'page 2') : currentImage.label}
             </span>
           </nav>
 
