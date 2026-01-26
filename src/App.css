@@ -414,7 +414,8 @@ body {
     justify-content: flex-end;
     /* Strictly align to bottom */
     height: 100vh;
-    padding: 20px 20px 40px 20px;
+    padding: 20px 20px 80px 20px;
+    /* Increased bottom padding */
     gap: 25px;
     /* Tighter gap to fit everything */
     overflow: hidden;
