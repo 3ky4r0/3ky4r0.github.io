@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { marked } from 'marked';
 import './App.css';
+import PdfViewer from './PdfViewer';
 
 // --- CONFIG & UTILS ---
 const MARKDOWN_SOURCES = {
@@ -17,8 +18,9 @@ const KEYS = {
 function App() {
   const [currentSource, setCurrentSource] = useState('foss');
   const [markdownContent, setMarkdownContent] = useState('Đang nạp dữ liệu...');
-  const [displayType, setDisplayType] = useState('markdown'); // 'markdown' or 'image'
+  const [displayType, setDisplayType] = useState('markdown'); // 'markdown', 'image', 'pdf'
   const [currentImage, setCurrentImage] = useState({ src: '', label: '' });
+  const [currentPdf, setCurrentPdf] = useState({ src: '', label: '' });
   const [totpCodes, setTotpCodes] = useState({ key1: '------', key2: '------', key3: '------' });
   const [githubLimit, setGithubLimit] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('github_token') || '');
@@ -143,8 +145,12 @@ function App() {
     }
   };
 
-  const openFile = (path) => {
-    window.open(path, '_blank');
+  const openPdf = (src, label) => {
+    setCurrentPdf({ src, label });
+    setDisplayType('pdf');
+    if (window.innerWidth <= 768) {
+      setIsModalOpen(true);
+    }
   };
 
   return (
@@ -170,7 +176,7 @@ function App() {
             <div className="tree-folder hide-mobile">
               <div className="tree-folder-title" onClick={() => toggleFolder('resources')}>
                 <svg className={`chevron ${expandedFolders.resources ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-                <span>Nội dung</span>
+                <span>Docs</span>
               </div>
               {expandedFolders.resources && (
                 <div className="tree-children">
@@ -188,14 +194,14 @@ function App() {
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('ute')}>
                 <svg className={`chevron ${expandedFolders.ute ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-                <span>Trường học (UTE)</span>
+                <span>UTE</span>
               </div>
               {expandedFolders.ute && (
                 <div className="tree-children">
-                  <div className="tree-item" onClick={() => openFile('ute/chuongtrinhdaotao.pdf')}>
+                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'CTDT' ? 'active' : ''}`} onClick={() => openPdf('ute/chuongtrinhdaotao.pdf', 'CTDT')}>
                     CTDT
                   </div>
-                  <div className="tree-item" onClick={() => openFile('ute/sotaysinhvien.pdf')}>
+                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'STSV' ? 'active' : ''}`} onClick={() => openPdf('ute/sotaysinhvien.pdf', 'STSV')}>
                     STSV
                   </div>
                 </div>
@@ -206,7 +212,7 @@ function App() {
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('bank')}>
                 <svg className={`chevron ${expandedFolders.bank ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-                <span>Ngân hàng</span>
+                <span>bank</span>
               </div>
               {expandedFolders.bank && (
                 <div className="tree-children">
@@ -227,16 +233,10 @@ function App() {
         </aside>
 
         <main className="content-area">
-          <nav className="breadcrumb">
-            <span className="crumb">duyxyz</span>
-            <span className="sep">/</span>
-            <span className="crumb current">
-              {displayType === 'markdown' ? (currentSource === 'foss' ? 'page 1' : 'page 2') : currentImage.label}
-            </span>
-          </nav>
-
           {displayType === 'markdown' ? (
             <article className="markdown-body" dangerouslySetInnerHTML={{ __html: markdownContent }} />
+          ) : displayType === 'pdf' ? (
+            <PdfViewer file={currentPdf.src} />
           ) : (
             <div className="image-view">
               <img src={currentImage.src} alt={currentImage.label} className="centered-img" />
@@ -295,15 +295,21 @@ function App() {
         </aside>
       </div>
 
-      {/* POPUP MODAL FOR MOBILE IMAGES */}
+      {/* POPUP MODAL FOR MOBILE IMAGES & PDF */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content full-mobile" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <span>{currentImage.label}</span>
+              <span>{displayType === 'pdf' ? currentPdf.label : currentImage.label}</span>
               <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
             </div>
-            <img src={currentImage.src} alt={currentImage.label} className="modal-img" />
+            <div className="modal-body-content">
+              {displayType === 'pdf' ? (
+                <PdfViewer file={currentPdf.src} />
+              ) : (
+                <img src={currentImage.src} alt={currentImage.label} className="modal-img" />
+              )}
+            </div>
           </div>
         </div>
       )}
