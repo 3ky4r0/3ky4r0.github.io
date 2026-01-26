@@ -453,34 +453,6 @@ pre:hover {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-pre::after {
-  content: "Click to copy";
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  font-size: 0.65rem;
-  color: #8b949e;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-pre:hover::after {
-  opacity: 1;
-}
-
-/* Hiệu ứng khi đã copy */
-.code-copied {
-  border-color: #238636 !important;
-  background: rgba(35, 134, 54, 0.1) !important;
-  transform: scale(0.995);
-}
-
-.code-copied::after {
-  content: "Copied!" !important;
-  color: #3fb950 !important;
-  opacity: 1 !important;
-}
-
 code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;

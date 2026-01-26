@@ -70,12 +70,7 @@ function App() {
           const codeEl = pre.querySelector('code');
           const text = codeEl ? codeEl.innerText : pre.innerText;
 
-          navigator.clipboard.writeText(text).then(() => {
-            pre.classList.add('code-copied');
-            setTimeout(() => {
-              pre.classList.remove('code-copied');
-            }, 1500);
-          });
+          navigator.clipboard.writeText(text);
         };
       });
     };
