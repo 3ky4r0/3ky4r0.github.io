@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thời khóa biểu</title>
+  <style>
+    body {
+      font-family: "Inter","Segoe UI",sans-serif;
+      margin: 0;
+      padding: 10px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    .table-container {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow-x: auto;
+      animation: fadeIn 0.8s ease;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px 6px;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 14px;
+      word-wrap: break-word;  /* cho phép chữ xuống dòng */
+      white-space: normal;    /* không ép một dòng */
+    }
+    th {
+      background: #1976d2;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      font-size: 13px;
+    }
+
+    /* Màu phân loại theo ngày học */
+    tr[data-thu="2"] { background: #e3f2fd; }  /* xanh dương nhạt */
+    tr[data-thu="3"] { background: #f1f8e9; }  /* xanh lá nhạt */
+    tr[data-thu="4"] { background: #fff3e0; }  /* cam nhạt */
+    tr[data-thu="5"] { background: #e8f5e9; }  /* xanh lá nhạt hơn */
+    tr[data-thu="6"] { background: #ffffff; }  /* trắng */
+
+    tr:hover { background: #bbdefb !important; }
+
+    /* Animation khi load */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    tbody tr {
+      animation: slideUp 0.6s ease forwards;
+      opacity: 0;
+    }
+    tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    tbody tr:nth-child(2) { animation-delay: 0.2s; }
+    tbody tr:nth-child(3) { animation-delay: 0.3s; }
+    tbody tr:nth-child(4) { animation-delay: 0.4s; }
+    tbody tr:nth-child(5) { animation-delay: 0.5s; }
+    tbody tr:nth-child(6) { animation-delay: 0.6s; }
+    tbody tr:nth-child(7) { animation-delay: 0.7s; }
+    tbody tr:nth-child(8) { animation-delay: 0.8s; }
+    tbody tr:nth-child(9) { animation-delay: 0.9s; }
+    tbody tr:nth-child(10){ animation-delay: 1.0s; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tối ưu trên điện thoại */
+    @media (max-width: 600px) {
+      th, td {
+        font-size: 12px;
+        padding: 6px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Lớp</th>
+          <th>Môn học</th>
+          <th>Giảng viên</th>
+          <th>Phòng</th>
+          <th>Thứ</th>
+          <th>Từ tiết</th>
+          <th>Đến tiết</th>
+          <th>Ngày hiệu lực</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-thu="2">
+          <td>125KNLVN01</td>
+          <td>Kỹ năng làm việc nhóm</td>
+          <td>Trần Thị Lợi</td>
+          <td>A212</td>
+          <td>2</td>
+          <td>1</td>
+          <td>2</td>
+          <td>03-11-2025</td>
+        </tr>
+        <tr data-thu="2">
+          <td>125TAA2101</td>
+          <td>Tiếng Anh A2.1</td>
+          <td>Nguyễn Thị Diệu Thanh</td>
+          <td>A207</td>
+          <td>2</td>
+          <td>3</td>
+          <td>5</td>
+          <td>15-09-2025</td>
+        </tr>
+        <tr data-thu="2">
+          <td>125HCM01</td>
+          <td>Tư tưởng Hồ Chí Minh</td>
+          <td>Lê Thị Ngọc Hoa</td>
+          <td>A101</td>
+          <td>2</td>
+          <td>7</td>
+          <td>8</td>
+          <td>25-08-2025</td>
+        </tr>
+        <tr data-thu="2">
+          <td>125PLDC04</td>
+          <td>Pháp luật đại cương</td>
+          <td>Lê Thị Phương Trang</td>
+          <td>A301</td>
+          <td>2</td>
+          <td>9</td>
+          <td>10</td>
+          <td>08-09-2025</td>
+        </tr>
+        <tr data-thu="3">
+          <td>125GT103</td>
+          <td>Giải tích I</td>
+          <td>Nguyễn Thị Thu Sương</td>
+          <td>A306</td>
+          <td>3</td>
+          <td>3</td>
+          <td>5</td>
+          <td>08-09-2025</td>
+        </tr>
+        <tr data-thu="3">
+          <td>125LKDT01</td>
+          <td>Linh kiện điện tử</td>
+          <td>Nguyễn Văn Thịnh</td>
+          <td>A210</td>
+          <td>3</td>
+          <td>9</td>
+          <td>11</td>
+          <td>25-08-2025</td>
+        </tr>
+        <tr data-thu="4">
+          <td>125GDTC327</td>
+          <td>Giáo dục thể chất III</td>
+          <td>Hoàng Trọng Lợi</td>
+          <td>SVD</td>
+          <td>4</td>
+          <td>1</td>
+          <td>4</td>
+          <td>08-09-2025</td>
+        </tr>
+        <tr data-thu="5">
+          <td>125ATD05</td>
+          <td>An toàn điện</td>
+          <td>Ngô Đức Kiên</td>
+          <td>A105</td>
+          <td>5</td>
+          <td>7</td>
+          <td>8</td>
+          <td>20-10-2025</td>
+        </tr>
+        <tr data-thu="6">
+          <td>125TCN01</td>
+          <td>Toán chuyên ngành</td>
+          <td>Hoàng Dũng</td>
+          <td>A307</td>
+          <td>6</td>
+          <td>1</td>
+          <td>2</td>
+          <td>25-08-2025</td>
+        </tr>
+        <tr data-thu="6">
+          <td>125NNLTC2401</td>
+          <td>Ngôn ngữ lập trình C</td>
+          <td>Ngô Thị Minh Hương</td>
+          <td>A307</td>
+          <td>6</td>
+          <td>3</td>
+          <td>5</td>
+          <td>25-08-2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
