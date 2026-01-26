@@ -5,8 +5,8 @@ import './App.css';
 
 // --- CONFIG & UTILS ---
 const MARKDOWN_SOURCES = {
-  foss: 'https://raw.githubusercontent.com/duyxyz/duyxyz.github.io/refs/heads/main/Markdown/foss.md',
-  v: 'https://raw.githubusercontent.com/duyxyz/duyxyz.github.io/refs/heads/main/Markdown/v.md'
+  foss: 'Markdown/foss.md',
+  v: 'Markdown/v.md'
 };
 
 const KEYS = {
@@ -91,11 +91,13 @@ function App() {
 
       try {
         const res = await fetch(MARKDOWN_SOURCES[currentSource]);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const text = await res.text();
         localStorage.setItem(cacheKey, text);
         setMarkdownContent(marked.parse(text));
       } catch (e) {
-        if (!cached) setMarkdownContent('❌ Lỗi tải dữ liệu.');
+        console.error("Fetch error:", e);
+        if (!cached) setMarkdownContent(`❌ Lỗi tải dữ liệu: ${e.message}`);
       }
     }
     load();
@@ -255,7 +257,7 @@ function App() {
 
         <aside className="sidebar-right">
           <div className="profile-section hide-mobile">
-            <img src="https://raw.githubusercontent.com/duyxyz/duyxyz.github.io/main/assets/avatar.webp" alt="Avatar" className="avatar" />
+            <img src="assets/avatar.webp" alt="Avatar" className="avatar" />
           </div>
 
           <div className="widget">
