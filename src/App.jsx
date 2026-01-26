@@ -29,7 +29,8 @@ function App() {
     ute: true,
     bank: true
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
 
   const toggleFolder = (folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
@@ -134,7 +135,6 @@ function App() {
 
   // Preload Assets & Hide Preloader
   useEffect(() => {
-    // 1. Hide HTML Preloader after a short delay for smooth transition
     const preloader = document.getElementById('preloader');
     if (preloader) {
       setTimeout(() => {
@@ -143,7 +143,6 @@ function App() {
       }, 800);
     }
 
-    // 2. Preload Markdown files into cache
     Object.values(MARKDOWN_SOURCES).forEach(url => {
       fetch(url).then(res => res.text()).then(text => {
         const key = `cache_${url.split('/').pop().replace('.md', '')}`;
@@ -151,10 +150,8 @@ function App() {
       });
     });
 
-    // 3. Preload Large Images
-    ['bank/agribank.webp', 'bank/vietcombank.webp', 'bank/momo.webp', 'assets/avatar.webp'].forEach(src => {
-      const img = new Image();
-      img.src = src;
+    ['bank/agribank.webp', 'bank/vietcombank.webp', 'bank/momo.webp', 'assets/avatar.webp', 'ute/chuongtrinhdaotao.pdf', 'ute/sotaysinhvien.pdf'].forEach(src => {
+      fetch(src, { mode: 'no-cors' }).catch(() => { });
     });
   }, []);
 
@@ -167,7 +164,8 @@ function App() {
     setCurrentImage({ src, label });
     setDisplayType('image');
     if (window.innerWidth <= 768) {
-      setIsModalOpen(true);
+      setIsImageModalOpen(true);
+      setIsPdfModalOpen(false);
     }
   };
 
@@ -175,7 +173,8 @@ function App() {
     setCurrentPdf({ src, label });
     setDisplayType('pdf');
     if (window.innerWidth <= 768) {
-      setIsModalOpen(true);
+      setIsPdfModalOpen(true);
+      setIsImageModalOpen(false);
     }
   };
 
@@ -198,7 +197,7 @@ function App() {
         <aside className="sidebar-left">
           <div className="tree-container">
 
-            {/* Folder: Resources - HIDE ON MOBILE */}
+            {/* Folder: Docs - HIDE ON MOBILE */}
             <div className="tree-folder hide-mobile">
               <div className="tree-folder-title" onClick={() => toggleFolder('resources')}>
                 <svg className={`chevron ${expandedFolders.resources ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
@@ -234,7 +233,7 @@ function App() {
               )}
             </div>
 
-            {/* Folder: Bank */}
+            {/* Folder: bank */}
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('bank')}>
                 <svg className={`chevron ${expandedFolders.bank ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
@@ -321,20 +320,31 @@ function App() {
         </aside>
       </div>
 
-      {/* POPUP MODAL FOR MOBILE IMAGES & PDF */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content full-mobile" onClick={e => e.stopPropagation()}>
+      {/* POPUP MODAL FOR MOBILE IMAGES */}
+      {isImageModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsImageModalOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <span>{displayType === 'pdf' ? currentPdf.label : currentImage.label}</span>
-              <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
+              <span>{currentImage.label}</span>
+              <button className="close-btn" onClick={() => setIsImageModalOpen(false)}>&times;</button>
+            </div>
+            <div className="modal-body-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={currentImage.src} alt={currentImage.label} className="modal-img" style={{ maxWidth: '90%', maxHeight: '80vh', objectFit: 'contain' }} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* POPUP MODAL FOR MOBILE PDF */}
+      {isPdfModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsPdfModalOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <span>{currentPdf.label}</span>
+              <button className="close-btn" onClick={() => setIsPdfModalOpen(false)}>&times;</button>
             </div>
             <div className="modal-body-content">
-              {displayType === 'pdf' ? (
-                <PdfViewer file={currentPdf.src} />
-              ) : (
-                <img src={currentImage.src} alt={currentImage.label} className="modal-img" />
-              )}
+              <PdfViewer file={currentPdf.src} />
             </div>
           </div>
         </div>
