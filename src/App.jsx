@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import LightRays from './LightRays';
 import { marked } from 'marked';
 import './App.css';
 
@@ -14,53 +13,6 @@ const KEYS = {
   key2: "564b544d4e4e494e34584c48335a4f4c4f4d495352555449344e5947554434554b3246593442355a4341564f544b415550574f37354f4449454d4b3441564441",
   key3: "XBKB4AEAX4JUZHTB56JJK3J3GA"
 };
-
-function decodeKey(hex) {
-  if (hex.length % 2 !== 0) return hex;
-  let s = '';
-  for (let i = 0; i < hex.length; i += 2) s += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-  return s;
-}
-
-// Simple TOTP logic
-const BITS_IN_BYTE = 8;
-const STEP_SECONDS = 30;
-
-function base32ToBuffer(base32) {
-  const map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-  let buffer = [];
-  let bits = 0, value = 0;
-  base32 = base32.replace(/=+$/, '').toUpperCase();
-  for (let i = 0; i < base32.length; i++) {
-    const idx = map.indexOf(base32.charAt(i));
-    if (idx === -1) continue;
-    value = (value << 5) | idx;
-    bits += 5;
-    while (bits >= BITS_IN_BYTE) {
-      bits -= BITS_IN_BYTE;
-      buffer.push((value >> bits) & 0xFF);
-    }
-  }
-  return new Uint8Array(buffer).buffer;
-}
-
-async function generateTOTP(secret) {
-  try {
-    const keyBuf = base32ToBuffer(secret);
-    const epoch = Math.floor(Date.now() / 1000);
-    const timeStep = Math.floor(epoch / STEP_SECONDS);
-    const counterBuf = new ArrayBuffer(8);
-    const view = new DataView(counterBuf);
-    view.setUint32(4, timeStep, false);
-
-    const cryptoKey = await crypto.subtle.importKey('raw', keyBuf, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
-    const hmac = await crypto.subtle.sign('HMAC', cryptoKey, counterBuf);
-    const hmacView = new DataView(hmac);
-    const offset = hmacView.getUint8(hmac.byteLength - 1) & 0x0F;
-    const code = (hmacView.getUint32(offset, false) & 0x7FFFFFFF) % 1000000;
-    return code.toString().padStart(6, '0');
-  } catch (e) { return "------"; }
-}
 
 function App() {
   const [currentSource, setCurrentSource] = useState('foss');
@@ -103,19 +55,65 @@ function App() {
     load();
   }, [currentSource, displayType]);
 
-  // Update TOTP
+  // Post-process Markdown: Click-to-copy code blocks
   useEffect(() => {
-    async function update() {
-      const codes = {};
-      for (const id of ['key1', 'key2', 'key3']) {
-        const secret = id === 'key3' ? KEYS[id] : decodeKey(KEYS[id]);
-        codes[id] = await generateTOTP(secret);
-      }
-      setTotpCodes(codes);
+    if (displayType !== 'markdown') return;
+
+    const setupClickToCopy = () => {
+      const preElements = document.querySelectorAll('.markdown-body pre');
+      preElements.forEach(pre => {
+        if (pre.dataset.hasClickToCopy) return;
+        pre.dataset.hasClickToCopy = 'true';
+
+        pre.onclick = (e) => {
+          e.stopPropagation();
+          const codeEl = pre.querySelector('code');
+          const text = codeEl ? codeEl.innerText : pre.innerText;
+
+          navigator.clipboard.writeText(text).then(() => {
+            pre.classList.add('code-copied');
+            setTimeout(() => {
+              pre.classList.remove('code-copied');
+            }, 1500);
+          });
+        };
+      });
+    };
+
+    const observer = new MutationObserver(setupClickToCopy);
+    const contentArea = document.querySelector('.markdown-body');
+    if (contentArea) {
+      observer.observe(contentArea, { childList: true, subtree: true });
     }
+
+    setupClickToCopy();
+    const timer = setTimeout(setupClickToCopy, 300);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
+  }, [markdownContent, displayType]);
+
+  // Update TOTP using Web Worker
+  useEffect(() => {
+    const worker = new Worker(new URL('./totpWorker.js', import.meta.url));
+
+    worker.onmessage = (e) => {
+      setTotpCodes(e.data.codes);
+    };
+
+    const update = () => {
+      worker.postMessage({ keys: KEYS });
+    };
+
     update();
     const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      worker.terminate();
+    };
   }, []);
 
   // Check GitHub Limit
@@ -157,20 +155,16 @@ function App() {
   return (
     <div className="app-container">
       <div className="background-layer">
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#ffffff"
-          raysSpeed={1}
-          lightSpread={0.5}
-          rayLength={3}
-          followMouse={true}
-          mouseInfluence={0.1}
-          noiseAmount={0}
-          distortion={0}
-          pulsating={false}
-          fadeDistance={1}
-          saturation={1}
-        />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="background-video"
+        >
+          <source src="assets/main.webm" type="video/webm" />
+        </video>
+        <div className="background-overlay"></div>
       </div>
 
       <div className="main-wrapper">

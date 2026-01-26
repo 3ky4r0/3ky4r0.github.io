@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Block large/obsolete videos
+public/assets/dark-queen-knight-moewalls-com*
