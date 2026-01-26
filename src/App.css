@@ -4,6 +4,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  /* Fix blue box on click for mobile */
 }
 
 :root {
@@ -22,8 +24,9 @@ a:hover {
 body {
   background-color: #000;
   color: #e6edf3;
-  overflow-y: auto;
-  min-height: 100vh;
+  overflow: hidden;
+  /* Disable scroll globally to ensure no-scroll dashboard */
+  height: 100vh;
   width: 100vw;
 }
 
@@ -394,11 +397,13 @@ body {
   .main-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 20vh 20px 40px 20px;
-    /* Use VH for top spacing to push content down naturally */
-    gap: 40px;
-    height: auto;
-    min-height: 100%;
+    justify-content: flex-end;
+    /* Strictly align to bottom */
+    height: 100vh;
+    padding: 20px 20px 40px 20px;
+    gap: 25px;
+    /* Tighter gap to fit everything */
+    overflow: hidden;
   }
 
   /* Specific mobile ordering */
