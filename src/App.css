@@ -144,6 +144,9 @@ body {
   color: #8b949e;
   cursor: pointer;
   border-radius: 6px;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Prevent selection on tap */
 }
 
 .tree-folder-title:hover {
@@ -178,6 +181,10 @@ body {
   margin: 1px 0;
   color: #c9d1d9;
   transition: all 0.2s;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Prevent selection on tap */
+  outline: none;
 }
 
 .tree-item:hover {
@@ -185,8 +192,11 @@ body {
 }
 
 .tree-item.active {
-  color: #58a6ff;
-  font-weight: 600;
+  color: #e6edf3;
+  /* Back to normal color */
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.05);
+  /* Very subtle hint instead of blue text */
 }
 
 /* Center Content */

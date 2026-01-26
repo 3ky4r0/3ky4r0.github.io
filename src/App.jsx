@@ -132,6 +132,32 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Preload Assets & Hide Preloader
+  useEffect(() => {
+    // 1. Hide HTML Preloader after a short delay for smooth transition
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+      setTimeout(() => {
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.remove(), 500);
+      }, 800);
+    }
+
+    // 2. Preload Markdown files into cache
+    Object.values(MARKDOWN_SOURCES).forEach(url => {
+      fetch(url).then(res => res.text()).then(text => {
+        const key = `cache_${url.split('/').pop().replace('.md', '')}`;
+        localStorage.setItem(key, text);
+      });
+    });
+
+    // 3. Preload Large Images
+    ['bank/agribank.webp', 'bank/vietcombank.webp', 'bank/momo.webp', 'assets/avatar.webp'].forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const openMarkdown = (id) => {
     setCurrentSource(id);
     setDisplayType('markdown');
