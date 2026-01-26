@@ -378,6 +378,8 @@ body {
   .main-wrapper {
     display: flex;
     flex-direction: column;
+    padding: env(safe-area-inset-top, 20px) 15px 40px 15px;
+    gap: 30px;
   }
 
   /* Reorder sidebar-right to top of sidebar-left so Authenticator is first */
