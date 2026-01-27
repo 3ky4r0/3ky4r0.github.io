@@ -200,8 +200,14 @@ body {
 }
 
 @media (max-width: 768px) {
-  .tree-item.active {
-    background: transparent;
+
+  .tree-item,
+  .tree-item:hover,
+  .tree-item.active,
+  .tree-folder-title,
+  .tree-folder-title:hover {
+    background: transparent !important;
+    background-color: transparent !important;
     color: #c9d1d9;
     font-weight: normal;
   }
@@ -429,13 +435,12 @@ body {
   .main-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    /* Strictly align to bottom */
+    justify-content: flex-start;
+    /* Changed from flex-end to flex-start to move buttons to top */
     height: 100vh;
-    padding: 20px 20px 80px 20px;
-    /* Increased bottom padding */
+    padding: 60px 20px 20px 20px;
+    /* Adjusted top padding for breathability */
     gap: 25px;
-    /* Tighter gap to fit everything */
     overflow: hidden;
   }
 
@@ -448,6 +453,8 @@ body {
   .sidebar-right {
     order: 1;
     /* Shows Authenticator at the very bottom */
+    margin-top: auto !important;
+    padding-bottom: 40px !important;
   }
 }
 

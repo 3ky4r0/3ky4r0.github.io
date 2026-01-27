@@ -20,7 +20,7 @@ const KEYS = {
 const BANK_IMAGES = [
   { src: 'bank/agribank.webp', label: 'Agribank' },
   { src: 'bank/vietcombank.webp', label: 'Vietcombank' },
-  { src: 'bank/momo.webp', label: 'Ví Momo' }
+  { src: 'bank/momo.webp', label: 'Momo' }
 ];
 
 function App() {
@@ -33,9 +33,9 @@ function App() {
   const [githubLimit, setGithubLimit] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('github_token') || '');
   const [expandedFolders, setExpandedFolders] = useState({
-    resources: true,
-    ute: true,
-    bank: true
+    resources: false,
+    ute: false,
+    bank: false
   });
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isPhotoVisible, setIsPhotoVisible] = useState(false);
@@ -243,22 +243,22 @@ function App() {
               )}
             </div>
 
-            {/* Folder: bank */}
+            {/* Folder: BANK */}
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('bank')}>
                 <svg className={`chevron ${expandedFolders.bank ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-                <span>bank</span>
+                <span>BANK</span>
               </div>
               {expandedFolders.bank && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Agribank' ? 'active' : ''}`} onClick={() => openImage('bank/agribank.webp', 'Agribank')}>
-                    agribank
+                    Agribank
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Vietcombank' ? 'active' : ''}`} onClick={() => openImage('bank/vietcombank.webp', 'Vietcombank')}>
-                    vietcombank
+                    Vietcombank
                   </div>
-                  <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Ví Momo' ? 'active' : ''}`} onClick={() => openImage('bank/momo.webp', 'Ví Momo')}>
-                    momo
+                  <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Momo' ? 'active' : ''}`} onClick={() => openImage('bank/momo.webp', 'Momo')}>
+                    Momo
                   </div>
                 </div>
               )}
