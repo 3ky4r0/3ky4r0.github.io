@@ -1,0 +1,9 @@
+{
+  "name": "duyxyz",
+  "iconUrl": "https://avatars.githubusercontent.com/u/217141310?s=400&u=e512aeed372f27556fb6e0860df81ec3638a78ba&v=4",
+  "description": "Cloudstream extension Repository",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/duyxyz/cls/refs/heads/main/plugins.json"
+  ]
+}
