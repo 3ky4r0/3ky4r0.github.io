@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { marked } from 'marked';
 import './App.css';
 import PdfViewer from './PdfViewer';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 // --- CONFIG & UTILS ---
 const MARKDOWN_SOURCES = {
@@ -14,6 +16,12 @@ const KEYS = {
   key2: "564b544d4e4e494e34584c48335a4f4c4f4d495352555449344e5947554434554b3246593442355a4341564f544b415550574f37354f4449454d4b3441564441",
   key3: "XBKB4AEAX4JUZHTB56JJK3J3GA"
 };
+
+const BANK_IMAGES = [
+  { src: 'bank/agribank.webp', label: 'Agribank' },
+  { src: 'bank/vietcombank.webp', label: 'Vietcombank' },
+  { src: 'bank/momo.webp', label: 'Ví Momo' }
+];
 
 function App() {
   const [currentSource, setCurrentSource] = useState('foss');
@@ -29,7 +37,8 @@ function App() {
     ute: true,
     bank: true
   });
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [isPhotoVisible, setIsPhotoVisible] = useState(false);
 
   const toggleFolder = (folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
@@ -160,11 +169,14 @@ function App() {
   };
 
   const openImage = (src, label) => {
+    if (window.innerWidth <= 768) {
+      const idx = BANK_IMAGES.findIndex(img => img.src === src);
+      setPhotoIndex(idx !== -1 ? idx : 0);
+      setIsPhotoVisible(true);
+      return;
+    }
     setCurrentImage({ src, label });
     setDisplayType('image');
-    if (window.innerWidth <= 768) {
-      setIsImageModalOpen(true);
-    }
   };
 
   const openPdf = (src, label) => {
@@ -318,21 +330,21 @@ function App() {
         </aside>
       </div>
 
-      {/* POPUP MODAL FOR MOBILE IMAGES */}
-      {isImageModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsImageModalOpen(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <span>{currentImage.label}</span>
-              <button className="close-btn" onClick={() => setIsImageModalOpen(false)}>&times;</button>
-            </div>
-            <div className="modal-body-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={currentImage.src} alt={currentImage.label} className="modal-img" style={{ maxWidth: '90%', maxHeight: '80vh', objectFit: 'contain' }} />
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* MOBILE IMAGE VIEWER (Library) */}
+      <PhotoProvider
+        visible={isPhotoVisible}
+        onClose={() => setIsPhotoVisible(false)}
+        index={photoIndex}
+        onIndexChange={setPhotoIndex}
+        maskOpacity={0.9}
+      >
+        {BANK_IMAGES.map((item, index) => (
+          <PhotoView key={index} src={item.src}>
+            {/* Hidden triggers for the controlled provider */}
+            <span style={{ display: 'none' }} />
+          </PhotoView>
+        ))}
+      </PhotoProvider>
     </div>
   );
 }
