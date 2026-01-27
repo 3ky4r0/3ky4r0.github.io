@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { marked } from 'marked';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 import './App.css';
 import PdfViewer from './PdfViewer';
 
@@ -36,8 +34,8 @@ function App() {
     ute: false,
     bank: false
   });
-  const [photoIndex, setPhotoIndex] = useState(0);
   const [isPhotoVisible, setIsPhotoVisible] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState('');
 
   const toggleFolder = (folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
@@ -151,8 +149,7 @@ function App() {
 
   const openImage = (src, label) => {
     if (window.innerWidth <= 768) {
-      const idx = BANK_IMAGES.findIndex(img => img.src === src);
-      setPhotoIndex(idx !== -1 ? idx : 0);
+      setPhotoUrl(src);
       setIsPhotoVisible(true);
       return;
     }
@@ -290,24 +287,50 @@ function App() {
         </aside>
       </div>
 
-      {/* MOBILE IMAGE VIEWER (Library) */}
-      <PhotoProvider
-        visible={isPhotoVisible}
-        onClose={() => setIsPhotoVisible(false)}
-        index={photoIndex}
-        onIndexChange={setPhotoIndex}
-        maskOpacity={0.9}
-        toolbarRender={() => null}
-        overlayRender={() => null}
-        speed={() => 300}
-      >
-        {BANK_IMAGES.map((item, index) => (
-          <PhotoView key={index} src={item.src}>
-            {/* Hidden triggers for the controlled provider */}
-            <span style={{ display: 'none' }} />
-          </PhotoView>
-        ))}
-      </PhotoProvider>
+
+      {/* CUSTOM MOBILE PHOTO VIEWER WITH SWIPE TO CLOSE */}
+      {isPhotoVisible && (
+        <div
+          className="mobile-photo-overlay"
+          onClick={() => setIsPhotoVisible(false)}
+          onTouchStart={(e) => {
+            const touch = e.touches[0];
+            window._startY = touch.clientY;
+          }}
+          onTouchMove={(e) => {
+            const touch = e.touches[0];
+            const deltaY = touch.clientY - window._startY;
+            if (deltaY > 0) {
+              const el = e.currentTarget.querySelector('.mobile-photo-content');
+              if (el) {
+                el.style.transform = `translateY(${deltaY}px)`;
+                e.currentTarget.style.opacity = Math.max(0, 1 - deltaY / 400);
+              }
+            }
+          }}
+          onTouchEnd={(e) => {
+            const touch = e.changedTouches[0];
+            const deltaY = touch.clientY - window._startY;
+            if (deltaY > 100) {
+              setIsPhotoVisible(false);
+            } else {
+              const el = e.currentTarget.querySelector('.mobile-photo-content');
+              if (el) {
+                el.style.transform = '';
+                e.currentTarget.style.opacity = '';
+              }
+            }
+          }}
+        >
+          <div
+            className="mobile-photo-content"
+            style={{ transition: 'transform 0.2s ease, opacity 0.2s ease' }}
+            onClick={(e) => e.stopPropagation()} // Stop click from bubbling to the overlay
+          >
+            <img src={photoUrl} alt="View" className="mobile-view-img" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
