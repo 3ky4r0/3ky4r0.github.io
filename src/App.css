@@ -199,6 +199,14 @@ body {
   /* Very subtle hint instead of blue text */
 }
 
+@media (max-width: 768px) {
+  .tree-item.active {
+    background: transparent;
+    color: #c9d1d9;
+    font-weight: normal;
+  }
+}
+
 /* Center Content */
 .content-area {
   flex: 1;

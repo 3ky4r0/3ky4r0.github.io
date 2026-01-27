@@ -30,7 +30,6 @@ function App() {
     bank: true
   });
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
 
   const toggleFolder = (folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
@@ -165,17 +164,16 @@ function App() {
     setDisplayType('image');
     if (window.innerWidth <= 768) {
       setIsImageModalOpen(true);
-      setIsPdfModalOpen(false);
     }
   };
 
   const openPdf = (src, label) => {
+    if (window.innerWidth <= 768) {
+      window.open(src, '_blank');
+      return;
+    }
     setCurrentPdf({ src, label });
     setDisplayType('pdf');
-    if (window.innerWidth <= 768) {
-      setIsPdfModalOpen(true);
-      setIsImageModalOpen(false);
-    }
   };
 
   return (
@@ -335,20 +333,6 @@ function App() {
         </div>
       )}
 
-      {/* POPUP MODAL FOR MOBILE PDF */}
-      {isPdfModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsPdfModalOpen(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <span>{currentPdf.label}</span>
-              <button className="close-btn" onClick={() => setIsPdfModalOpen(false)}>&times;</button>
-            </div>
-            <div className="modal-body-content">
-              <PdfViewer file={currentPdf.src} />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
