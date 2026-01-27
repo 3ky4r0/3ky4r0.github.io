@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { marked } from 'marked';
-import './App.css';
-import PdfViewer from './PdfViewer';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import './App.css';
+import PdfViewer from './PdfViewer';
 
 // --- CONFIG & UTILS ---
 const MARKDOWN_SOURCES = {
@@ -30,7 +30,6 @@ function App() {
   const [currentImage, setCurrentImage] = useState({ src: '', label: '' });
   const [currentPdf, setCurrentPdf] = useState({ src: '', label: '' });
   const [totpCodes, setTotpCodes] = useState({ key1: '------', key2: '------', key3: '------' });
-  const [githubLimit, setGithubLimit] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('github_token') || '');
   const [expandedFolders, setExpandedFolders] = useState({
     resources: false,
@@ -122,24 +121,6 @@ function App() {
     };
   }, []);
 
-  // Check GitHub Limit
-  const checkGitHub = async () => {
-    if (!token) return;
-    try {
-      const res = await fetch('https://api.github.com/rate_limit', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      localStorage.setItem('github_token', token);
-      setGithubLimit(data.resources);
-    } catch (e) { alert('Token lỗi!'); }
-  };
-
-  useEffect(() => {
-    if (token) checkGitHub();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Preload Assets & Hide Preloader
   useEffect(() => {
@@ -216,10 +197,12 @@ function App() {
               {expandedFolders.resources && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'markdown' && currentSource === 'foss' ? 'active' : ''}`} onClick={() => openMarkdown('foss')}>
-                    page 1
+                    <span>page 1</span>
+                    {displayType === 'markdown' && currentSource === 'foss' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'markdown' && currentSource === 'v' ? 'active' : ''}`} onClick={() => openMarkdown('v')}>
-                    page 2
+                    <span>page 2</span>
+                    {displayType === 'markdown' && currentSource === 'v' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                 </div>
               )}
@@ -234,10 +217,12 @@ function App() {
               {expandedFolders.ute && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'CTDT' ? 'active' : ''}`} onClick={() => openPdf('ute/chuongtrinhdaotao.pdf', 'CTDT')}>
-                    CTDT
+                    <span>CTDT</span>
+                    {displayType === 'pdf' && currentPdf.label === 'CTDT' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'STSV' ? 'active' : ''}`} onClick={() => openPdf('ute/sotaysinhvien.pdf', 'STSV')}>
-                    STSV
+                    <span>STSV</span>
+                    {displayType === 'pdf' && currentPdf.label === 'STSV' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                 </div>
               )}
@@ -252,13 +237,16 @@ function App() {
               {expandedFolders.bank && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Agribank' ? 'active' : ''}`} onClick={() => openImage('bank/agribank.webp', 'Agribank')}>
-                    Agribank
+                    <span>Agribank</span>
+                    {displayType === 'image' && currentImage.label === 'Agribank' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Vietcombank' ? 'active' : ''}`} onClick={() => openImage('bank/vietcombank.webp', 'Vietcombank')}>
-                    Vietcombank
+                    <span>Vietcombank</span>
+                    {displayType === 'image' && currentImage.label === 'Vietcombank' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Momo' ? 'active' : ''}`} onClick={() => openImage('bank/momo.webp', 'Momo')}>
-                    Momo
+                    <span>Momo</span>
+                    {displayType === 'image' && currentImage.label === 'Momo' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                 </div>
               )}
@@ -299,34 +287,6 @@ function App() {
             </div>
           </div>
 
-          <div className="widget hide-mobile">
-            <h3 className="widget-title">GitHub API Status</h3>
-            <div className="gh-card">
-              <input
-                type="password"
-                className="gh-input"
-                placeholder="GitHub Token"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-              />
-              <button className="gh-button" onClick={checkGitHub}>Check Limit</button>
-
-              {githubLimit && (
-                <div className="gh-progress-group">
-                  <div className="gh-progress-label">
-                    <span>Core</span>
-                    <span>{githubLimit.core.remaining} / {githubLimit.core.limit}</span>
-                  </div>
-                  <div className="gh-progress-bar">
-                    <div
-                      className="gh-progress-fill core"
-                      style={{ width: `${(githubLimit.core.remaining / githubLimit.core.limit) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </aside>
       </div>
 
@@ -337,6 +297,9 @@ function App() {
         index={photoIndex}
         onIndexChange={setPhotoIndex}
         maskOpacity={0.9}
+        toolbarRender={() => null}
+        overlayRender={() => null}
+        speed={() => 300}
       >
         {BANK_IMAGES.map((item, index) => (
           <PhotoView key={index} src={item.src}>

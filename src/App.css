@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono&display=swap');
 
+/* TRIỆT ĐỂ: Ẩn thanh công cụ trình xem ảnh (Số 1/3 và nút X) */
+.PhotoView-Slider__Toolbar,
+.PhotoView-Slider__Header,
+.PhotoView-Slider__Header-close,
+.PhotoView-Slider__Header-count,
+div[class^="PhotoView-Slider__Header"],
+div[class*="PhotoView-Slider__Header"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -40,6 +54,19 @@ a:visited {
 a:hover {
   filter: brightness(1.2);
   text-decoration: underline;
+}
+
+/* Global Overrides for Library Components */
+.PhotoView-Slider__Toolbar,
+.PhotoView-Slider__Header,
+.PhotoView-Toolbar,
+.PhotoView-Slider__Header-close,
+div[class*="PhotoView-Slider__Toolbar"],
+div[class*="PhotoView-Slider__Header"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 body {
@@ -180,9 +207,10 @@ body {
 .tree-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  /* Push check icon to right */
   gap: 8px;
   padding: 6px 12px 6px 44px;
-  /* Increased from 32px for more indentation */
   font-size: 0.85rem;
   cursor: pointer;
   border-radius: 6px;
@@ -191,20 +219,30 @@ body {
   transition: all 0.2s;
   -webkit-user-select: none;
   user-select: none;
-  /* Prevent selection on tap */
   outline: none;
 }
 
 .tree-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
+  /* No background on hover */
+  color: #e6edf3;
 }
 
 .tree-item.active {
   color: #e6edf3;
-  /* Back to normal color */
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.05);
-  /* Very subtle hint instead of blue text */
+  background: transparent;
+  /* No background when active */
+}
+
+.active-check {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+  /* Force white color for SVG */
+  opacity: 1;
+  margin-left: 10px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -218,6 +256,10 @@ body {
     background-color: transparent !important;
     color: #c9d1d9;
     font-weight: normal;
+  }
+
+  .active-check {
+    display: none;
   }
 }
 
@@ -359,55 +401,6 @@ body {
 
 .totp-code.blue {
   color: #79c0ff;
-}
-
-/* GitHub API */
-.gh-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gh-input {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 10px 12px;
-  border-radius: 8px;
-  color: white;
-  font-size: 0.8rem;
-  outline: none;
-}
-
-.gh-input:focus {
-  border-color: #58a6ff;
-}
-
-.gh-button {
-  background: #238636;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: filter 0.2s;
-}
-
-.gh-button:hover {
-  filter: brightness(1.1);
-}
-
-.gh-progress-group {
-  margin-top: 8px;
-}
-
-.gh-progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7rem;
-  margin-bottom: 6px;
-  opacity: 0.8;
 }
 
 /* Mobile visibility logic */
@@ -643,4 +636,13 @@ code {
   align-items: center;
   gap: 20px;
   width: 100%;
+}
+
+/* Hide react-photo-view toolbar components */
+.PhotoView-Slider__Toolbar,
+.PhotoView-Slider__Header,
+.PhotoView-Slider__Header-close {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
