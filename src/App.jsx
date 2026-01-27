@@ -284,7 +284,7 @@ function App() {
             <img src="assets/avatar.webp" alt="Avatar" className="avatar" />
           </div>
 
-          <div className="widget">
+          <div className="widget hide-mobile">
             <h3 className="widget-title">Authenticator</h3>
             <div className="totp-box">
               <div className="totp-item" onClick={() => navigator.clipboard.writeText(totpCodes.key1)}>

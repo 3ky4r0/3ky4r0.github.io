@@ -28,10 +28,18 @@
 
 a {
   text-decoration: none;
+  color: #818cf8;
+  /* Bluish Purple / Indigo */
+  transition: color 0.2s;
+}
+
+a:visited {
+  color: #818cf8;
 }
 
 a:hover {
   filter: brightness(1.2);
+  text-decoration: underline;
 }
 
 body {
@@ -432,29 +440,23 @@ body {
     display: none !important;
   }
 
+  .sidebar-right {
+    display: none !important;
+  }
+
   .main-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* Changed from flex-end to flex-start to move buttons to top */
     height: 100vh;
-    padding: 60px 20px 20px 20px;
-    /* Adjusted top padding for breathability */
-    gap: 25px;
+    padding: 20px;
+    /* Reduced from 60px to bring items to the top */
+    gap: 20px;
     overflow: hidden;
   }
 
-  /* Specific mobile ordering */
   .sidebar-left {
-    order: 0;
-    /* Shows UTE and Bank */
-  }
-
-  .sidebar-right {
-    order: 1;
-    /* Shows Authenticator at the very bottom */
-    margin-top: auto !important;
-    padding-bottom: 40px !important;
+    padding: 0 !important;
   }
 }
 
