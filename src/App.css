@@ -139,6 +139,7 @@ body {
 .tree-folder-title {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
   padding: 8px 10px;
   font-weight: 500;
@@ -169,6 +170,12 @@ body {
 .tree-children {
   display: flex;
   flex-direction: column;
+  margin-left: 19px;
+  /* Indent slightly to align with parent folder icon */
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  /* The branch line */
+  padding-left: 4px;
+  margin-bottom: 8px;
 }
 
 .tree-item {
@@ -177,7 +184,7 @@ body {
   justify-content: space-between;
   /* Push check icon to right */
   gap: 8px;
-  padding: 6px 12px 6px 44px;
+  padding: 6px 12px;
   font-size: 0.85rem;
   cursor: pointer;
   border-radius: 6px;
@@ -189,34 +196,17 @@ body {
   outline: none;
 }
 
-.tree-item:hover {
-  background: transparent;
-  /* No background on hover */
-  color: #e6edf3;
-}
-
 .tree-item.active {
-  color: #e6edf3;
-  font-weight: 500;
-  background: transparent;
-  /* No background when active */
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.active-check {
-  width: 14px;
-  height: 14px;
-  filter: brightness(0) invert(1);
-  /* Force white color for SVG */
-  opacity: 1;
-  margin-left: 10px;
-  flex-shrink: 0;
+.tree-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #e6edf3;
 }
 
 @media (max-width: 768px) {
 
-  .tree-item,
-  .tree-item:hover,
-  .tree-item.active,
   .tree-folder-title,
   .tree-folder-title:hover {
     background: transparent !important;

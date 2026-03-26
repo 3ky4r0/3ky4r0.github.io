@@ -181,18 +181,16 @@ function App() {
             {/* Folder: Docs - HIDE ON MOBILE */}
             <div className="tree-folder hide-mobile">
               <div className="tree-folder-title" onClick={() => toggleFolder('resources')}>
-                <svg className={`chevron ${expandedFolders.resources ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
                 <span>Docs</span>
+                <svg className={`chevron ${expandedFolders.resources ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
               </div>
               {expandedFolders.resources && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'markdown' && currentSource === 'foss' ? 'active' : ''}`} onClick={() => openMarkdown('foss')}>
-                    <span>page 1</span>
-                    {displayType === 'markdown' && currentSource === 'foss' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
+                    <span>Page 1</span>
                   </div>
                   <div className={`tree-item ${displayType === 'markdown' && currentSource === 'v' ? 'active' : ''}`} onClick={() => openMarkdown('v')}>
-                    <span>page 2</span>
-                    {displayType === 'markdown' && currentSource === 'v' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
+                    <span>Page 2</span>
                   </div>
                 </div>
               )}
@@ -201,18 +199,16 @@ function App() {
             {/* Folder: UTE */}
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('ute')}>
-                <svg className={`chevron ${expandedFolders.ute ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
                 <span>UTE</span>
+                <svg className={`chevron ${expandedFolders.ute ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
               </div>
               {expandedFolders.ute && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'CTDT' ? 'active' : ''}`} onClick={() => openPdf('ute/chuongtrinhdaotao.pdf', 'CTDT')}>
                     <span>CTDT</span>
-                    {displayType === 'pdf' && currentPdf.label === 'CTDT' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'STSV' ? 'active' : ''}`} onClick={() => openPdf('ute/sotaysinhvien.pdf', 'STSV')}>
                     <span>STSV</span>
-                    {displayType === 'pdf' && currentPdf.label === 'STSV' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                 </div>
               )}
@@ -221,22 +217,19 @@ function App() {
             {/* Folder: BANK */}
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('bank')}>
-                <svg className={`chevron ${expandedFolders.bank ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
                 <span>BANK</span>
+                <svg className={`chevron ${expandedFolders.bank ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
               </div>
               {expandedFolders.bank && (
                 <div className="tree-children">
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Agribank' ? 'active' : ''}`} onClick={() => openImage('bank/agribank.webp', 'Agribank')}>
                     <span>Agribank</span>
-                    {displayType === 'image' && currentImage.label === 'Agribank' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Vietcombank' ? 'active' : ''}`} onClick={() => openImage('bank/vietcombank.webp', 'Vietcombank')}>
                     <span>Vietcombank</span>
-                    {displayType === 'image' && currentImage.label === 'Vietcombank' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                   <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Momo' ? 'active' : ''}`} onClick={() => openImage('bank/momo.webp', 'Momo')}>
                     <span>Momo</span>
-                    {displayType === 'image' && currentImage.label === 'Momo' && <img src="/assets/check.svg" className="active-check" alt="checked" />}
                   </div>
                 </div>
               )}
@@ -244,8 +237,8 @@ function App() {
 
             <div className="tree-folder">
               <div className="tree-folder-title" onClick={() => toggleFolder('authenticator')}>
-                <svg className={`chevron ${expandedFolders.authenticator ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
                 <span>2FA</span>
+                <svg className={`chevron ${expandedFolders.authenticator ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
               </div>
               {expandedFolders.authenticator && (
                 <div className="tree-children">
