@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -135,6 +135,39 @@ function App() {
     setDisplayType('pdf');
   };
 
+  const renderedMarkdown = useMemo(() => (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
+      components={{
+        pre: ({ node, ...props }) => (
+          <pre
+            {...props}
+            onClick={(e) => {
+              if (window.getSelection().toString()) return;
+              const text = e.currentTarget.innerText;
+              navigator.clipboard.writeText(text);
+            }}
+          />
+        ),
+        code: ({ node, inline, ...props }) => (
+          <code
+            {...props}
+            className={inline ? 'inline-code' : props.className}
+          />
+        )
+      }}
+    >
+      {markdownContent
+        .replace(/==([^=]+)==/g, '<mark>$1</mark>')
+        .replace(/%([^%]+)% (.+?) %%/g, '<span style="color: $1">$2</span>')
+        .replace(/-> (.+?) <-/g, '<div align="center">$1</div>')
+        .replace(/-> (.+?) ->/g, '<div align="right">$1</div>')
+        .replace(/!> (.+)/g, '<details class="spoiler"><summary>Spoiler</summary>$1</details>')
+      }
+    </ReactMarkdown>
+  ), [markdownContent]);
+
   return (
     <div className="app-container">
       <div className="background-layer">
@@ -234,36 +267,7 @@ function App() {
         <main className="content-area">
           {displayType === 'markdown' ? (
             <article className="markdown-body">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
-                components={{
-                  pre: ({ node, ...props }) => (
-                    <pre
-                      {...props}
-                      onClick={(e) => {
-                        if (window.getSelection().toString()) return;
-                        const text = e.currentTarget.innerText;
-                        navigator.clipboard.writeText(text);
-                      }}
-                    />
-                  ),
-                  code: ({ node, inline, ...props }) => (
-                    <code
-                      {...props}
-                      className={inline ? 'inline-code' : props.className}
-                    />
-                  )
-                }}
-              >
-                {markdownContent
-                  .replace(/==([^=]+)==/g, '<mark>$1</mark>')
-                  .replace(/%([^%]+)% (.+?) %%/g, '<span style="color: $1">$2</span>')
-                  .replace(/-> (.+?) <-/g, '<div align="center">$1</div>')
-                  .replace(/-> (.+?) ->/g, '<div align="right">$1</div>')
-                  .replace(/!> (.+)/g, '<details class="spoiler"><summary>Spoiler</summary>$1</details>')
-                }
-              </ReactMarkdown>
+              {renderedMarkdown}
             </article>
           ) : displayType === 'pdf' ? (
             <PdfViewer file={currentPdf.src} />
