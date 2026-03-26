@@ -1,4 +1,4 @@
-## duyxyz 
+- [duyxyz](https://duyxyz.github.io/)
 ```
 irm "https://duyxyz.github.io/DBT" | iex
 ```
@@ -9,19 +9,8 @@ irm "https://duyxyz.github.io/DBT" | iex
 irm "https://christitus.com/win" | iex
 ```
 - [Massgrave](https://massgrave.dev/)
-
-   - For **Windows 8, 10, 11**: 
-     ```
-     irm https://get.activated.win | iex
-     ```
-   - For **Windows 7** and later:
-     ```
-     iex ((New-Object Net.WebClient).DownloadString('https://get.activated.win'))
-     ```
-## DNS ADBLOCK  
-
 ```
-gz283pvppi.cloudflare-gateway.com
+irm https://get.activated.win | iex
 ```
 ## Runtime 
 - [Visual C++ Redistributable](https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/)
