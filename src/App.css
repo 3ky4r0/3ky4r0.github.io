@@ -144,6 +144,7 @@ body {
   flex-direction: column;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0;
+  overflow: hidden;
 }
 
 .sidebar-header,
@@ -171,7 +172,18 @@ body {
 }
 
 .clock-list {
-  padding: 10px;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.clock-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.clock-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
 }
 
 .clock-item {
