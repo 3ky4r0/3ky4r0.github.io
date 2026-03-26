@@ -30,9 +30,10 @@ function App() {
   const [totpCodes, setTotpCodes] = useState({ key1: '------', key2: '------', key3: '------' });
   const [token, setToken] = useState(localStorage.getItem('github_token') || '');
   const [expandedFolders, setExpandedFolders] = useState({
-    resources: false,
-    ute: false,
-    bank: false
+    resources: true,
+    ute: true,
+    bank: true,
+    authenticator: true
   });
   const [isPhotoVisible, setIsPhotoVisible] = useState(false);
   const [photoUrl, setPhotoUrl] = useState('');
@@ -74,6 +75,7 @@ function App() {
         pre.dataset.hasClickToCopy = 'true';
 
         pre.onclick = (e) => {
+          if (window.getSelection().toString()) return; // Don't copy if user is selecting text
           e.stopPropagation();
           const codeEl = pre.querySelector('code');
           const text = codeEl ? codeEl.innerText : pre.innerText;
@@ -126,8 +128,8 @@ function App() {
     if (preloader) {
       setTimeout(() => {
         preloader.style.opacity = '0';
-        setTimeout(() => preloader.remove(), 500);
-      }, 800);
+        setTimeout(() => preloader.remove(), 200);
+      }, 100);
     }
 
     Object.values(MARKDOWN_SOURCES).forEach(url => {
@@ -169,15 +171,6 @@ function App() {
   return (
     <div className="app-container">
       <div className="background-layer">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="background-video"
-        >
-          <source src="assets/main.webm" type="video/webm" />
-        </video>
         <div className="background-overlay"></div>
       </div>
 
@@ -249,6 +242,25 @@ function App() {
               )}
             </div>
 
+            <div className="tree-folder hide-mobile">
+              <div className="tree-folder-title" onClick={() => toggleFolder('authenticator')}>
+                <svg className={`chevron ${expandedFolders.authenticator ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
+                <span>2FA</span>
+              </div>
+              {expandedFolders.authenticator && (
+                <div className="tree-children">
+                  <div className="tree-item" onClick={() => navigator.clipboard.writeText(totpCodes.key1)}>
+                    <span className="totp-code red">{totpCodes.key1}</span>
+                  </div>
+                  <div className="tree-item" onClick={() => navigator.clipboard.writeText(totpCodes.key2)}>
+                    <span className="totp-code blue">{totpCodes.key2}</span>
+                  </div>
+                  <div className="tree-item" onClick={() => navigator.clipboard.writeText(totpCodes.key3)}>
+                    <span className="totp-code">{totpCodes.key3}</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </aside>
 
@@ -264,27 +276,6 @@ function App() {
           )}
         </main>
 
-        <aside className="sidebar-right">
-          <div className="profile-section hide-mobile">
-            <img src="assets/avatar.webp" alt="Avatar" className="avatar" />
-          </div>
-
-          <div className="widget hide-mobile">
-            <h3 className="widget-title">Authenticator</h3>
-            <div className="totp-box">
-              <div className="totp-item" onClick={() => navigator.clipboard.writeText(totpCodes.key1)}>
-                <span className="totp-code red">{totpCodes.key1}</span>
-              </div>
-              <div className="totp-item" onClick={() => navigator.clipboard.writeText(totpCodes.key2)}>
-                <span className="totp-code blue">{totpCodes.key2}</span>
-              </div>
-              <div className="totp-item" onClick={() => navigator.clipboard.writeText(totpCodes.key3)}>
-                <span className="totp-code">{totpCodes.key3}</span>
-              </div>
-            </div>
-          </div>
-
-        </aside>
       </div>
 
 
