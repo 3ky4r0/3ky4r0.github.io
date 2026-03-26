@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { marked } from 'marked';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import './App.css';
 import PdfViewer from './PdfViewer';
 
@@ -48,14 +50,14 @@ function App() {
     async function load() {
       const cacheKey = `cache_${currentSource}`;
       const cached = localStorage.getItem(cacheKey);
-      if (cached) setMarkdownContent(marked.parse(cached));
+      if (cached) setMarkdownContent(cached);
 
       try {
         const res = await fetch(MARKDOWN_SOURCES[currentSource]);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const text = await res.text();
         localStorage.setItem(cacheKey, text);
-        setMarkdownContent(marked.parse(text));
+        setMarkdownContent(text);
       } catch (e) {
         console.error("Fetch error:", e);
         if (!cached) setMarkdownContent(`❌ Lỗi tải dữ liệu: ${e.message}`);
@@ -64,41 +66,6 @@ function App() {
     load();
   }, [currentSource, displayType]);
 
-  // Post-process Markdown: Click-to-copy code blocks
-  useEffect(() => {
-    if (displayType !== 'markdown') return;
-
-    const setupClickToCopy = () => {
-      const preElements = document.querySelectorAll('.markdown-body pre');
-      preElements.forEach(pre => {
-        if (pre.dataset.hasClickToCopy) return;
-        pre.dataset.hasClickToCopy = 'true';
-
-        pre.onclick = (e) => {
-          if (window.getSelection().toString()) return; // Don't copy if user is selecting text
-          e.stopPropagation();
-          const codeEl = pre.querySelector('code');
-          const text = codeEl ? codeEl.innerText : pre.innerText;
-
-          navigator.clipboard.writeText(text);
-        };
-      });
-    };
-
-    const observer = new MutationObserver(setupClickToCopy);
-    const contentArea = document.querySelector('.markdown-body');
-    if (contentArea) {
-      observer.observe(contentArea, { childList: true, subtree: true });
-    }
-
-    setupClickToCopy();
-    const timer = setTimeout(setupClickToCopy, 300);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(timer);
-    };
-  }, [markdownContent, displayType]);
 
   // Update TOTP using Web Worker
   useEffect(() => {
@@ -266,7 +233,32 @@ function App() {
 
         <main className="content-area">
           {displayType === 'markdown' ? (
-            <article className="markdown-body" dangerouslySetInnerHTML={{ __html: markdownContent }} />
+            <article className="markdown-body">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  pre: ({ node, ...props }) => (
+                    <pre
+                      {...props}
+                      onClick={(e) => {
+                        if (window.getSelection().toString()) return;
+                        const text = e.currentTarget.innerText;
+                        navigator.clipboard.writeText(text);
+                      }}
+                    />
+                  ),
+                  code: ({ node, inline, ...props }) => (
+                    <code
+                      {...props}
+                      className={inline ? 'inline-code' : props.className}
+                    />
+                  )
+                }}
+              >
+                {markdownContent}
+              </ReactMarkdown>
+            </article>
           ) : displayType === 'pdf' ? (
             <PdfViewer file={currentPdf.src} />
           ) : (
