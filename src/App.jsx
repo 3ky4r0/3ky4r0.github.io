@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import PdfViewer from './PdfViewer';
 
@@ -134,6 +134,14 @@ function App() {
     setCurrentPdf({ src, label });
     setDisplayType('pdf');
   };
+
+  const [notes, setNotes] = useState(() => {
+    return localStorage.getItem('op2fa_notes') || '';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('op2fa_notes', notes);
+  }, [notes]);
 
   const renderedMarkdown = useMemo(() => (
     <ReactMarkdown
@@ -270,6 +278,18 @@ function App() {
             </div>
           )}
         </main>
+
+        <aside className="sidebar-right">
+          <div className="notes-header">
+            <span>Notes</span>
+          </div>
+          <textarea
+            className="notes-area"
+            placeholder="Viết ghi chú tại đây..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </aside>
 
       </div>
 

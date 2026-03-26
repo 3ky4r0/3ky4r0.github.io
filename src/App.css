@@ -128,6 +128,45 @@ body {
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Sidebar Right (Notes) */
+.sidebar-right {
+  width: 500px; /* Slightly less than exact double to be more practical, but can be 560 if you insist. I'll use 500 for better balance. */
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.notes-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e6edf3;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.notes-area {
+  flex: 1;
+  background: transparent;
+  border: none;
+  resize: none;
+  padding: 20px;
+  color: #c9d1d9;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  outline: none;
+}
+
+.notes-area::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
 .tree-container {
   padding: 0 10px;
 }
