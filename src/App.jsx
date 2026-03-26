@@ -135,6 +135,49 @@ function App() {
     setDisplayType('pdf');
   };
 
+  const [worldTimes, setWorldTimes] = useState({});
+
+  useEffect(() => {
+    const updateTimes = () => {
+      const locales = {
+        'Mỹ': 'America/New_York',
+        'Anh': 'Europe/London',
+        'Đức': 'Europe/Berlin',
+        'Nga': 'Europe/Moscow',
+        'Ấn Độ': 'Asia/Kolkata',
+        'Trung Quốc': 'Asia/Shanghai',
+        'Việt Nam': 'Asia/Ho_Chi_Minh',
+        'Singapore': 'Asia/Singapore',
+        'Nhật Bản': 'Asia/Tokyo',
+        'Úc': 'Australia/Sydney'
+      };
+      const now = new Date();
+      const times = {};
+      Object.entries(locales).forEach(([name, zone]) => {
+        times[name] = {
+          time: now.toLocaleTimeString('vi-VN', {
+            timeZone: zone,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+          }),
+          date: now.toLocaleDateString('vi-VN', {
+            timeZone: zone,
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          })
+        };
+      });
+      setWorldTimes(times);
+    };
+
+    updateTimes();
+    const interval = setInterval(updateTimes, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const [notes, setNotes] = useState(() => {
     return localStorage.getItem('op2fa_notes') || '';
   });
@@ -183,9 +226,26 @@ function App() {
       </div>
 
       <div className="main-wrapper">
-        <aside className="sidebar-left">
-          <div className="tree-container">
+        {/* Part 1: World Clock (now on far left) */}
+        <aside className="sidebar-clock">
+          <div className="clock-header">World Time</div>
+          <div className="clock-list">
+            {Object.entries(worldTimes).map(([country, data]) => (
+              <div key={country} className="clock-item">
+                <div className="item-row">
+                  <span className="clock-label">{country}</span>
+                  <span className="clock-date">{data.date}</span>
+                </div>
+                <span className="clock-value">{data.time}</span>
+              </div>
+            ))}
+          </div>
+        </aside>
 
+        {/* Part 2: Navigation Sidebar */}
+        <aside className="sidebar-left">
+          <div className="sidebar-header">Files</div>
+          <div className="tree-container">
             {/* Folder: Docs - HIDE ON MOBILE */}
             <div className="tree-folder hide-mobile">
               <div className="tree-folder-title" onClick={() => toggleFolder('resources')}>
@@ -264,6 +324,8 @@ function App() {
             </div>
           </div>
         </aside>
+
+        {/* End of sidebars */}
 
         <main className="content-area">
           {displayType === 'markdown' ? (
