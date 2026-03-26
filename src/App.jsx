@@ -212,10 +212,10 @@ function App() {
               </div>
               {expandedFolders.ute && (
                 <div className="tree-children">
-                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'CTDT' ? 'active' : ''}`} onClick={() => openPdf('ute/chuongtrinhdaotao.pdf', 'CTDT')}>
+                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'CTDT' ? 'active' : ''}`} onClick={() => openPdf('/ute/chuongtrinhdaotao.pdf', 'CTDT')}>
                     <span>CTDT</span>
                   </div>
-                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'STSV' ? 'active' : ''}`} onClick={() => openPdf('ute/sotaysinhvien.pdf', 'STSV')}>
+                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'STSV' ? 'active' : ''}`} onClick={() => openPdf('/ute/sotaysinhvien.pdf', 'STSV')}>
                     <span>STSV</span>
                   </div>
                 </div>
