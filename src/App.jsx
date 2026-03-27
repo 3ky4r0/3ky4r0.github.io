@@ -39,6 +39,16 @@ function App() {
   });
   const [isPhotoVisible, setIsPhotoVisible] = useState(false);
   const [photoUrl, setPhotoUrl] = useState('');
+  const [notesWidth, setNotesWidth] = useState(() => {
+    return parseInt(localStorage.getItem('notes_width')) || 400;
+  });
+  const [clockWidth, setClockWidth] = useState(() => {
+    return parseInt(localStorage.getItem('clock_width')) || 260;
+  });
+  const [fileWidth, setFileWidth] = useState(() => {
+    return parseInt(localStorage.getItem('file_width')) || 260;
+  });
+  const [resizingSidebar, setResizingSidebar] = useState(null); // 'clock', 'file', 'notes'
 
   const toggleFolder = (folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
@@ -186,6 +196,59 @@ function App() {
     localStorage.setItem('op2fa_notes', notes);
   }, [notes]);
 
+  // Sidebar Resizing Logic
+  const startResizing = (sidebar) => (e) => {
+    e.preventDefault();
+    setResizingSidebar(sidebar);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!resizingSidebar) return;
+
+      if (resizingSidebar === 'clock') {
+        const newWidth = e.clientX;
+        if (newWidth > 150 && newWidth < 500) {
+          setClockWidth(newWidth);
+          localStorage.setItem('clock_width', newWidth);
+        }
+      } else if (resizingSidebar === 'file') {
+        const newWidth = e.clientX - clockWidth;
+        if (newWidth > 150 && newWidth < 500) {
+          setFileWidth(newWidth);
+          localStorage.setItem('file_width', newWidth);
+        }
+      } else if (resizingSidebar === 'notes') {
+        const newWidth = window.innerWidth - e.clientX;
+        if (newWidth > 200 && newWidth < 800) {
+          setNotesWidth(newWidth);
+          localStorage.setItem('notes_width', newWidth);
+        }
+      }
+    };
+
+    const stopResizing = () => {
+      setResizingSidebar(null);
+    };
+
+    if (resizingSidebar) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', stopResizing);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', stopResizing);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [resizingSidebar, clockWidth]);
+
   const renderedMarkdown = useMemo(() => (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -227,23 +290,33 @@ function App() {
 
       <div className="main-wrapper">
         {/* Part 1: World Clock (now on far left) */}
-        <aside className="sidebar-clock">
+        <aside
+          className="sidebar-clock"
+          style={{ width: window.innerWidth > 1100 ? `${clockWidth}px` : undefined }}
+        >
+          <div className="sidebar-resizer resizer-right" onMouseDown={startResizing('clock')} />
           <div className="clock-header">World Time</div>
           <div className="clock-list">
             {Object.entries(worldTimes).map(([country, data]) => (
               <div key={country} className="clock-item">
-                <div className="item-row">
+                <div className="clock-left">
                   <span className="clock-label">{country}</span>
                   <span className="clock-date">{data.date}</span>
                 </div>
-                <span className="clock-value">{data.time}</span>
+                <div className="clock-right">
+                  <span className="clock-value">{data.time}</span>
+                </div>
               </div>
             ))}
           </div>
         </aside>
 
         {/* Part 2: Navigation Sidebar */}
-        <aside className="sidebar-left">
+        <aside
+          className="sidebar-left"
+          style={{ width: window.innerWidth > 768 ? `${fileWidth}px` : undefined }}
+        >
+          <div className="sidebar-resizer resizer-right" onMouseDown={startResizing('file')} />
           <div className="sidebar-header">Files</div>
           <div className="tree-container">
             {/* Folder: Docs - HIDE ON MOBILE */}
@@ -341,7 +414,11 @@ function App() {
           )}
         </main>
 
-        <aside className="sidebar-right">
+        <aside
+          className="sidebar-right"
+          style={{ width: window.innerWidth > 1400 ? `${notesWidth}px` : undefined }}
+        >
+          <div className="sidebar-resizer resizer-left" onMouseDown={startResizing('notes')} />
           <div className="notes-header">
             <span>Notes</span>
           </div>
