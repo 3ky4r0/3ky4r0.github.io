@@ -12,6 +12,20 @@ const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage, 
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]} 
             rehypePlugins={[rehypeRaw]}
+            components={{
+              pre: ({ children, ...props }) => (
+                <pre 
+                  {...props} 
+                  className="copyable-code-block"
+                  onClick={(e) => {
+                    const code = e.currentTarget.querySelector('code')?.innerText || '';
+                    navigator.clipboard.writeText(code);
+                  }}
+                >
+                  {children}
+                </pre>
+              )
+            }}
           >
             {renderedMarkdown}
           </ReactMarkdown>

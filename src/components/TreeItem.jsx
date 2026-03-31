@@ -9,6 +9,7 @@ const TreeItem = React.memo(({ active, onClick, children, className = "" }) => (
     className={`tree-item ${active ? 'active' : ''} ${className}`}
     onClick={onClick}
   >
+    <div className="ripple-wrapper"><md-ripple></md-ripple></div>
     {children}
   </div>
 ));

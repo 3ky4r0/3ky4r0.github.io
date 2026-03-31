@@ -101,6 +101,7 @@ const SidebarMain = ({
                   <span key={i} className="otp-digit">{char}</span>
                 ))}
               </div>
+              <md-ripple></md-ripple>
             </div>
           ))}
         </TreeFolder>
