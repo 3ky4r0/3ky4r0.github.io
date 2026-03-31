@@ -19,23 +19,23 @@ const SettingsDropdown = ({ isOpen, theme, setTheme, onClose }) => {
   return (
     <>
       {/* Static Backdrop */}
-      <div 
-        className="dropdown-backdrop" 
-        onClick={handleBackdropClick} 
-        style={{ 
-          position: 'fixed', 
-          inset: 0, 
+      <div
+        className="dropdown-backdrop"
+        onClick={handleBackdropClick}
+        style={{
+          position: 'fixed',
+          inset: 0,
           zIndex: 998,
           background: 'transparent'
-        }} 
+        }}
       />
-      
-      <div 
+
+      <div
         className="settings-dropdown"
         onClick={handleContentClick}
         style={{
           position: 'absolute',
-          bottom: '10px',
+          bottom: '35px',
           left: '60px',
           zIndex: 999
         }}
