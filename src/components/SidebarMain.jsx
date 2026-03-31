@@ -13,6 +13,8 @@ const SidebarMain = ({
   setDisplayType,
   currentImage,
   openImage,
+  currentPdf,
+  openPdf,
   totpCodes,
   BANK_IMAGES
 }) => {
@@ -41,6 +43,25 @@ const SidebarMain = ({
             onClick={() => { setCurrentSource('v'); setDisplayType('markdown'); }}
           >
             <span>Logbook</span>
+          </TreeItem>
+        </TreeFolder>
+
+        <TreeFolder 
+          title="Academy" 
+          expanded={expandedFolders.ute} 
+          onToggle={() => toggleFolder('ute')}
+        >
+          <TreeItem 
+            active={displayType === 'pdf' && currentPdf.src === 'ute/chuongtrinhdaotao.pdf'}
+            onClick={() => openPdf('ute/chuongtrinhdaotao.pdf', 'Chương trình Đào tạo')}
+          >
+            <span>Registry</span>
+          </TreeItem>
+          <TreeItem 
+            active={displayType === 'pdf' && currentPdf.src === 'ute/sotaysinhvien.pdf'}
+            onClick={() => openPdf('ute/sotaysinhvien.pdf', 'Sổ tay Sinh viên')}
+          >
+            <span>Handbook</span>
           </TreeItem>
         </TreeFolder>
 

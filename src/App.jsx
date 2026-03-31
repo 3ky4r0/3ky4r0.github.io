@@ -92,6 +92,11 @@ function App() {
     setDisplayType('image');
   }, []);
 
+  const openPdf = useCallback((src, label) => {
+    setCurrentPdf({ src, label });
+    setDisplayType('pdf');
+  }, []);
+
   const startResizing = useCallback((sidebar) => (e) => {
     e.preventDefault();
     setResizingSidebar(sidebar);
@@ -159,6 +164,8 @@ function App() {
                 setDisplayType={setDisplayType}
                 currentImage={currentImage}
                 openImage={openImage}
+                currentPdf={currentPdf}
+                openPdf={openPdf}
                 totpCodes={totpCodes}
                 BANK_IMAGES={BANK_IMAGES}
               />
@@ -171,7 +178,7 @@ function App() {
               currentImage={currentImage}
             />
 
-            {(displayType !== 'video' && displayType !== 'image') && (
+            {displayType !== 'video' && (
               <NotesSidebar 
                 notesWidth={notesWidth}
                 startResizing={startResizing}
