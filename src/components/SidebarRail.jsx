@@ -29,7 +29,11 @@ const SidebarRail = ({
         title="Sentinel Visualizer"
       >
         <div className="ripple-wrapper"><md-ripple></md-ripple></div>
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 13L2 11M6 16L6 8M10 19L10 5M14 17L14 7M18 14L18 10M22 12L22 12"></path></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+          <path d="M8 20h8"></path>
+          <path d="M12 16v4"></path>
+        </svg>
       </div>
       <div 
         className={`rail-item ${displayType === 'video' ? 'active' : ''}`} 
