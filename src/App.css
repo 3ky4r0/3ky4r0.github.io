@@ -1432,7 +1432,7 @@ code {
   background-image:
     linear-gradient(rgba(203, 166, 247, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(203, 166, 247, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-size: 52px 52px;
 }
 
 .visualizer-grid-lines--dots {
