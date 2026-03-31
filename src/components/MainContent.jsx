@@ -44,6 +44,20 @@ const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage, 
         <div className="video-viewer-full">
           <video src="/video.mp4" controls autoPlay loop className="full-video" />
         </div>
+      ) : displayType === 'visualizer' ? (
+        <div className="visualizer-container">
+          <div className="visualizer-header">SYSTEM_ACTIVITY_MONITOR</div>
+          <div className="visualizer-bars">
+            {Array.from({ length: 48 }).map((_, i) => (
+              <div 
+                key={i} 
+                className="v-bar" 
+                style={{ '--delay': `${i * 0.05}s`, '--height': `${20 + Math.random() * 60}%` }}
+              ></div>
+            ))}
+          </div>
+          <div className="visualizer-grid-lines"></div>
+        </div>
       ) : null}
     </main>
   );

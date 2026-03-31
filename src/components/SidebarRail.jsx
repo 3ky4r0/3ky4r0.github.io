@@ -23,9 +23,13 @@ const SidebarRail = ({
         <div className="ripple-wrapper"><md-ripple></md-ripple></div>
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
       </div>
-      <div className="rail-item">
+      <div 
+        className={`rail-item ${displayType === 'visualizer' ? 'active' : ''}`}
+        onClick={() => setDisplayType('visualizer')}
+        title="Sentinel Visualizer"
+      >
         <div className="ripple-wrapper"><md-ripple></md-ripple></div>
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 13L2 11M6 16L6 8M10 19L10 5M14 17L14 7M18 14L18 10M22 12L22 12"></path></svg>
       </div>
       <div 
         className={`rail-item ${displayType === 'video' ? 'active' : ''}`} 
