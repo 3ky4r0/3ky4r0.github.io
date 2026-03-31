@@ -5,10 +5,12 @@ import { useState, useEffect } from 'react';
  * Manages markdown content fetching and caching.
  */
 export const useMarkdown = (currentSource, MARKDOWN_SOURCES) => {
-  const [markdownContent, setMarkdownContent] = useState('Đang nạp dữ liệu...');
+  const [markdownContent, setMarkdownContent] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function load() {
+      setIsLoading(true);
       const cacheKey = `cache_${currentSource}`;
       const cached = localStorage.getItem(cacheKey);
       if (cached) setMarkdownContent(cached);
@@ -20,12 +22,13 @@ export const useMarkdown = (currentSource, MARKDOWN_SOURCES) => {
         localStorage.setItem(cacheKey, text);
         setMarkdownContent(text);
       } catch (e) {
-        console.error("Fetch error:", e);
         if (!cached) setMarkdownContent(`❌ Lỗi tải dữ liệu: ${e.message}`);
+      } finally {
+        setIsLoading(false);
       }
     }
     load();
   }, [currentSource, MARKDOWN_SOURCES]);
 
-  return markdownContent;
+  return { markdown: markdownContent, isLoading };
 };

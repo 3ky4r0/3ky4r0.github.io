@@ -38,7 +38,7 @@ function App() {
   const { theme, setTheme, activeTheme } = useTheme();
   const [currentSource, setCurrentSource] = useState('foss');
   const [displayType, setDisplayType] = useState('markdown');
-  const markdownRaw = useMarkdown(currentSource, MARKDOWN_SOURCES);
+  const { markdown: markdownRaw, isLoading: isMarkdownLoading } = useMarkdown(currentSource, MARKDOWN_SOURCES);
   const totpCodes = useTotp(KEYS);
 
   // Remaining Local Logic (UI State)
@@ -60,7 +60,23 @@ function App() {
   const [notesWidth, setNotesWidth] = useState(() => parseInt(localStorage.getItem('notes_width')) || 400);
   const [resizingSidebar, setResizingSidebar] = useState(null);
 
+  const [otpProgress, setOtpProgress] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
+
   useEffect(() => { localStorage.setItem('op2fa_notes', notes); }, [notes]);
+
+  // Status Bar Timer
+  useEffect(() => {
+    const update = () => {
+      const now = Date.now() / 1000;
+      const progress = now % 30;
+      setOtpProgress(progress);
+      setTimeLeft(30 - progress);
+    };
+    const timer = setInterval(update, 500);
+    update();
+    return () => clearInterval(timer);
+  }, []);
 
   // Derived State
   const renderedMarkdown = useMemo(() => parseCustomMarkdown(markdownRaw), [markdownRaw]);
@@ -129,38 +145,63 @@ function App() {
           setCurrentSource={setCurrentSource}
         />
 
-        {displayType !== 'video' && (
-          <SidebarMain 
-            fileWidth={fileWidth}
-            startResizing={startResizing}
-            expandedFolders={expandedFolders}
-            toggleFolder={toggleFolder}
-            displayType={displayType}
-            currentSource={currentSource}
-            setCurrentSource={setCurrentSource}
-            setDisplayType={setDisplayType}
-            currentImage={currentImage}
-            openImage={openImage}
-            totpCodes={totpCodes}
-            BANK_IMAGES={BANK_IMAGES}
-          />
-        )}
+        <div className="workspace-core">
+          <div className="sections-container">
+            {displayType !== 'video' && (
+              <SidebarMain 
+                fileWidth={fileWidth}
+                startResizing={startResizing}
+                expandedFolders={expandedFolders}
+                toggleFolder={toggleFolder}
+                displayType={displayType}
+                currentSource={currentSource}
+                setCurrentSource={setCurrentSource}
+                setDisplayType={setDisplayType}
+                currentImage={currentImage}
+                openImage={openImage}
+                totpCodes={totpCodes}
+                BANK_IMAGES={BANK_IMAGES}
+              />
+            )}
 
-        <MainContent 
-          displayType={displayType}
-          renderedMarkdown={renderedMarkdown}
-          currentPdf={currentPdf}
-          currentImage={currentImage}
-        />
+            <MainContent 
+              displayType={displayType}
+              renderedMarkdown={renderedMarkdown}
+              currentPdf={currentPdf}
+              currentImage={currentImage}
+            />
 
-        {displayType !== 'video' && (
-          <NotesSidebar 
-            notesWidth={notesWidth}
-            startResizing={startResizing}
-            notes={notes}
-            setNotes={setNotes}
-          />
-        )}
+            {(displayType !== 'video' && displayType !== 'image') && (
+              <NotesSidebar 
+                notesWidth={notesWidth}
+                startResizing={startResizing}
+                notes={notes}
+                setNotes={setNotes}
+              />
+            )}
+          </div>
+
+          <div className="status-bar">
+            <div className="status-left">
+              <span className={`system-status-icon ${isMarkdownLoading ? 'spinning' : 'ready'}`}></span>
+              <span className="status-label">{isMarkdownLoading ? 'FETCHING_DATA...' : 'SYS_READY_V1.0'}</span>
+              {!isMarkdownLoading && <span className="status-label">| WORKSTATION_ACTIVE</span>}
+            </div>
+            
+            <div className="status-center">
+              <div className="totp-sync-display">
+                <span className="status-label">SENTINEL_SYNC:</span>
+                <span className="status-time-compact">{Math.ceil(timeLeft)}S</span>
+              </div>
+            </div>
+
+            <div className="status-right">
+              <span className="status-label">UTF-8</span>
+              <span className="status-label">LN {renderedMarkdown.length} B</span>
+              <span className="status-label">JS React</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Photo Overlay (Mobile/Center) */}
