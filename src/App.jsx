@@ -37,7 +37,7 @@ function App() {
   // Logic Layer Integration
   const { theme, setTheme, activeTheme } = useTheme();
   const [currentSource, setCurrentSource] = useState('foss');
-  const [displayType, setDisplayType] = useState('markdown');
+  const [displayType, setDisplayType] = useState(() => (window.innerWidth <= 768 ? 'video' : 'markdown'));
   const { markdown: markdownRaw, isLoading: isMarkdownLoading } = useMarkdown(currentSource, MARKDOWN_SOURCES);
   const totpCodes = useTotp(KEYS);
 

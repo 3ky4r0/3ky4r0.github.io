@@ -857,45 +857,51 @@ md-ripple {
 
 /* Mobile visibility logic */
 @media (max-width: 768px) {
-
-  .sidebar-left {
-    width: 100% !important;
-    background: transparent !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    border: none !important;
-    padding: 15px !important;
-    overflow: visible !important;
-  }
-
-  .content-area {
-    display: none !important;
-    /* Hide center content on mobile as requested */
-  }
-
-  /* Hide specific tree folders */
-  .tree-folder.hide-mobile {
-    display: none !important;
-  }
-
-  /* Hide specific widgets */
-  .widget.hide-mobile {
+  /* Hide sidebars and auxiliary UI completely */
+  .sidebar-rail, 
+  .sidebar-left, 
+  .sidebar-right, 
+  .status-bar,
+  .background-layer,
+  .background-overlay {
     display: none !important;
   }
 
   .main-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100vh;
-    padding: 20px;
-    /* Reduced from 60px to bring items to the top */
-    gap: 20px;
-    overflow: hidden;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
   }
 
-  .sidebar-left {
+  .workspace-core,
+  .sections-container {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
+  }
+
+  .content-area {
+    display: flex !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    z-index: 1000 !important;
+  }
+
+  /* Force video to fill screen */
+  .video-viewer-full,
+  .full-video {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover !important;
   }
 }
 
