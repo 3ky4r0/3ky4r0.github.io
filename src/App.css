@@ -175,9 +175,18 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  justify-content: center;
+  padding: 0; /* Clear common padding */
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 10px; /* Aligned with tree-container 10px padding */
+}
+
+.rail-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-color);
+  object-fit: cover;
 }
 
 .rail-item {
@@ -235,15 +244,15 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--tree-item-color); /* Use a slightly dimmed color instead of opacity */
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0.8;
+  letter-spacing: 0.15em;
   box-sizing: border-box !important;
+  background: var(--sidebar-bg); /* Ensure all have the same solid floor */
 }
 
 .content-header {

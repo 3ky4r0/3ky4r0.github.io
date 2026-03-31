@@ -5,7 +5,13 @@ const SidebarRail = ({
 }) => {
   return (
     <aside className="sidebar-rail">
-      <div className="rail-header"></div>
+      <div className="rail-header">
+        <img 
+          src="https://avatars.githubusercontent.com/u/217141310?s=400&u=e512aeed372f27556fb6e0860df81ec3638a78ba&v=4" 
+          alt="Avatar" 
+          className="rail-avatar"
+        />
+      </div>
       <div 
         className={`rail-item ${displayType === 'markdown' ? 'active' : ''}`}
         onClick={() => {

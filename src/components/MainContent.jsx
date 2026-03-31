@@ -39,9 +39,9 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
     <main className={`content-area ${displayType === 'video' ? 'video-mode' : ''}`}>
       {(displayType !== 'video' && displayType !== 'visualizer') && (
         <header className="content-header">
-          {displayType === 'markdown' && 'DOCUMENT_VIEWER'}
-          {displayType === 'pdf' && 'SENTINEL_SECURE_PDF'}
-          {displayType === 'image' && 'SECURE_IMAGE_ASSET'}
+          {displayType === 'markdown' && 'DOCUMENT VIEWER'}
+          {displayType === 'pdf' && 'SENTINEL SECURE PDF'}
+          {displayType === 'image' && 'SECURE IMAGE ASSET'}
         </header>
       )}
 
@@ -87,7 +87,7 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
         </div>
       ) : displayType === 'visualizer' ? (
         <div className="visualizer-container fps-mode">
-          <div className="visualizer-header">WORKSTATION_PERFORMANCE_SYNC</div>
+          <div className="visualizer-header">WORKSTATION PERFORMANCE SYNC</div>
           
           <div className="fps-dashboard">
             <div className="fps-main">

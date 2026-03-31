@@ -8,7 +8,7 @@ const NotesSidebar = ({ notesWidth, startResizing, notes, setNotes, totpCodes })
     >
       <div className="sidebar-resizer resizer-left" onMouseDown={startResizing('notes')} />
       <div className="notes-header">
-        Notes
+        NOTES
       </div>
       <textarea
         className="notes-area"

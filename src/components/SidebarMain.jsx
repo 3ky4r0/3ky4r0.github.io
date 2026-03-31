@@ -24,7 +24,7 @@ const SidebarMain = ({
       style={{ width: window.innerWidth > 768 ? `${fileWidth}px` : undefined }}
     >
       <div className="sidebar-resizer resizer-right" onMouseDown={startResizing('file')} />
-      <div className="sidebar-header">Files</div>
+      <div className="sidebar-header">EXPLORER</div>
       <div className="tree-container">
         <TreeFolder 
           title="The Vault" 
