@@ -73,6 +73,7 @@ function App() {
 
   const [otpProgress, setOtpProgress] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
 
   useEffect(() => { localStorage.setItem('op2fa_notes', notes); }, [notes]);
 
@@ -104,6 +105,7 @@ function App() {
   }, []);
 
   const openPdf = useCallback((src, label) => {
+    setIsPdfLoading(true);
     setCurrentPdf({ src, label });
     setDisplayType('pdf');
   }, []);
@@ -187,6 +189,7 @@ function App() {
               renderedMarkdown={renderedMarkdown}
               currentPdf={currentPdf}
               currentImage={currentImage}
+              onPdfLoadFinish={() => setIsPdfLoading(false)}
             />
 
             {displayType !== 'video' && (
@@ -201,9 +204,9 @@ function App() {
 
           <div className="status-bar">
             <div className="status-left">
-              <span className={`system-status-icon ${isMarkdownLoading ? 'spinning' : 'ready'}`}></span>
-              <span className="status-label">{isMarkdownLoading ? 'FETCHING_DATA...' : 'SYS_READY_V1.0'}</span>
-              {!isMarkdownLoading && <span className="status-label">| WORKSTATION_ACTIVE</span>}
+              <span className="status-label">SYS_READY_V1.0</span>
+              <span className="status-label">| WORKSTATION_ACTIVE</span>
+              {(isMarkdownLoading || isPdfLoading) && <span className="system-status-icon spinning"></span>}
             </div>
             
             <div className="status-center">

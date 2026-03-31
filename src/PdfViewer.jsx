@@ -6,11 +6,12 @@ import 'react-pdf/dist/Page/TextLayer.css';
 // Set up worker for PDF.js - Use full HTTPS URL for deployment reliability
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-function PdfViewer({ file }) {
+function PdfViewer({ file, onLoadFinish }) {
     const [numPages, setNumPages] = useState(null);
 
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
+        if (onLoadFinish) onLoadFinish();
     }
 
     return (
@@ -19,7 +20,8 @@ function PdfViewer({ file }) {
                 <Document
                     file={file}
                     onLoadSuccess={onDocumentLoadSuccess}
-                    loading={<div className="loading-text">Đang tải PDF...</div>}
+                    onLoadError={() => onLoadFinish && onLoadFinish()}
+                    loading={null}
                     error={<div className="error-text">Không thể tải PDF.</div>}
                 >
                     {Array.from(new Array(numPages), (el, index) => (

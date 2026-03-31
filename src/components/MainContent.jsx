@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import PdfViewer from '../PdfViewer';
 
-const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage }) => {
+const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage, onPdfLoadFinish }) => {
   return (
     <main className={`content-area ${displayType === 'video' ? 'video-mode' : ''}`}>
       {displayType === 'markdown' ? (
@@ -17,7 +17,7 @@ const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage }
           </ReactMarkdown>
         </article>
       ) : displayType === 'pdf' ? (
-        <PdfViewer file={currentPdf.src} />
+        <PdfViewer file={currentPdf.src} onLoadFinish={onPdfLoadFinish} />
       ) : displayType === 'image' ? (
         <div className="image-viewer-centered">
           <img 
