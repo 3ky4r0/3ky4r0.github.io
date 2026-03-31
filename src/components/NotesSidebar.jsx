@@ -17,9 +17,6 @@ const NotesSidebar = ({ notesWidth, startResizing, notes, setNotes, totpCodes })
         onChange={(e) => setNotes(e.target.value)}
       />
       <div className="notes-sentinel-footer">
-        <div className="notes-header">
-          Sentinel
-        </div>
         <div className="notes-otp-row">
           {totpCodes && [
             { code: totpCodes.key1, color: 'red' },
