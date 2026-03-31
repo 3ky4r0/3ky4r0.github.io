@@ -86,7 +86,7 @@ function App() {
     const handleMouseMove = (e) => {
       if (!resizingSidebar) return;
       if (resizingSidebar === 'file') {
-        const newWidth = e.clientX;
+        const newWidth = e.clientX - 54; // Account for Sidebar Rail
         if (newWidth > 260 && newWidth < 500) {
           setFileWidth(newWidth);
           localStorage.setItem('file_width', newWidth);
@@ -124,22 +124,27 @@ function App() {
           theme={theme}
           setTheme={setTheme}
           setIsSettingsOpen={setIsSettingsOpen}
+          displayType={displayType}
+          setDisplayType={setDisplayType}
+          setCurrentSource={setCurrentSource}
         />
 
-        <SidebarMain 
-          fileWidth={fileWidth}
-          startResizing={startResizing}
-          expandedFolders={expandedFolders}
-          toggleFolder={toggleFolder}
-          displayType={displayType}
-          currentSource={currentSource}
-          setCurrentSource={setCurrentSource}
-          setDisplayType={setDisplayType}
-          currentImage={currentImage}
-          openImage={openImage}
-          totpCodes={totpCodes}
-          BANK_IMAGES={BANK_IMAGES}
-        />
+        {displayType !== 'video' && (
+          <SidebarMain 
+            fileWidth={fileWidth}
+            startResizing={startResizing}
+            expandedFolders={expandedFolders}
+            toggleFolder={toggleFolder}
+            displayType={displayType}
+            currentSource={currentSource}
+            setCurrentSource={setCurrentSource}
+            setDisplayType={setDisplayType}
+            currentImage={currentImage}
+            openImage={openImage}
+            totpCodes={totpCodes}
+            BANK_IMAGES={BANK_IMAGES}
+          />
+        )}
 
         <MainContent 
           displayType={displayType}
@@ -148,12 +153,14 @@ function App() {
           currentImage={currentImage}
         />
 
-        <NotesSidebar 
-          notesWidth={notesWidth}
-          startResizing={startResizing}
-          notes={notes}
-          setNotes={setNotes}
-        />
+        {displayType !== 'video' && (
+          <NotesSidebar 
+            notesWidth={notesWidth}
+            startResizing={startResizing}
+            notes={notes}
+            setNotes={setNotes}
+          />
+        )}
       </div>
 
       {/* Photo Overlay (Mobile/Center) */}

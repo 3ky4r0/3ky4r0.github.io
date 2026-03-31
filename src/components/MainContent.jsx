@@ -6,7 +6,7 @@ import PdfViewer from '../PdfViewer';
 
 const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage }) => {
   return (
-    <main className="content-area">
+    <main className={`content-area ${displayType === 'video' ? 'video-mode' : ''}`}>
       {displayType === 'markdown' ? (
         <article className="markdown-body">
           <ReactMarkdown 
@@ -18,7 +18,7 @@ const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage }
         </article>
       ) : displayType === 'pdf' ? (
         <PdfViewer file={currentPdf.src} />
-      ) : (
+      ) : displayType === 'image' ? (
         <div className="image-viewer-centered">
           <img 
             src={currentImage.src} 
@@ -26,7 +26,11 @@ const MainContent = ({ displayType, renderedMarkdown, currentPdf, currentImage }
             className="centered-img" 
           />
         </div>
-      )}
+      ) : displayType === 'video' ? (
+        <div className="video-viewer-full">
+          <video src="/video.mp4" controls autoPlay loop className="full-video" />
+        </div>
+      ) : null}
     </main>
   );
 };
