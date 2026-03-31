@@ -1,11 +1,21 @@
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './App.css';
-import PdfViewer from './PdfViewer';
 
-// --- CONFIG & UTILS ---
+// Logic Layer (Hooks)
+import { useTheme } from './hooks/useTheme';
+import { useTotp } from './hooks/useTotp';
+import { useMarkdown } from './hooks/useMarkdown';
+
+// Utility Layer
+import { parseCustomMarkdown } from './utils/markdown';
+
+// Component Layer
+import SidebarRail from './components/SidebarRail';
+import SidebarMain from './components/SidebarMain';
+import MainContent from './components/MainContent';
+import NotesSidebar from './components/NotesSidebar';
+
+// --- CONFIG ---
 const MARKDOWN_SOURCES = {
   foss: 'Markdown/page1.md',
   v: 'Markdown/page2.md'
@@ -24,147 +34,60 @@ const BANK_IMAGES = [
 ];
 
 function App() {
+  // Logic Layer Integration
+  const { theme, setTheme, activeTheme } = useTheme();
   const [currentSource, setCurrentSource] = useState('foss');
-  const [markdownContent, setMarkdownContent] = useState('Đang nạp dữ liệu...');
-  const [displayType, setDisplayType] = useState('markdown'); // 'markdown', 'image', 'pdf'
+  const [displayType, setDisplayType] = useState('markdown');
+  const markdownRaw = useMarkdown(currentSource, MARKDOWN_SOURCES);
+  const totpCodes = useTotp(KEYS);
+
+  // Remaining Local Logic (UI State)
   const [currentImage, setCurrentImage] = useState({ src: '', label: '' });
   const [currentPdf, setCurrentPdf] = useState({ src: '', label: '' });
-  const [totpCodes, setTotpCodes] = useState({ key1: '------', key2: '------', key3: '------' });
-  const [token, setToken] = useState(localStorage.getItem('github_token') || '');
   const [expandedFolders, setExpandedFolders] = useState({
     resources: true,
     ute: true,
     bank: true,
     authenticator: true
   });
+  const [notes, setNotes] = useState(() => localStorage.getItem('op2fa_notes') || '');
   const [isPhotoVisible, setIsPhotoVisible] = useState(false);
   const [photoUrl, setPhotoUrl] = useState('');
-  const [notesWidth, setNotesWidth] = useState(() => {
-    return parseInt(localStorage.getItem('notes_width')) || 400;
-  });
-  const [fileWidth, setFileWidth] = useState(() => {
-    return parseInt(localStorage.getItem('file_width')) || 260;
-  });
-  const [resizingSidebar, setResizingSidebar] = useState(null); // 'clock', 'file', 'notes'
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  const toggleFolder = (folder) => {
+  // Layout Dimensions
+  const [fileWidth, setFileWidth] = useState(() => parseInt(localStorage.getItem('file_width')) || 260);
+  const [notesWidth, setNotesWidth] = useState(() => parseInt(localStorage.getItem('notes_width')) || 400);
+  const [resizingSidebar, setResizingSidebar] = useState(null);
+
+  useEffect(() => { localStorage.setItem('op2fa_notes', notes); }, [notes]);
+
+  // Derived State
+  const renderedMarkdown = useMemo(() => parseCustomMarkdown(markdownRaw), [markdownRaw]);
+
+  // Handlers
+  const toggleSettings = useCallback(() => setIsSettingsOpen(prev => !prev), []);
+  const toggleFolder = useCallback((folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
-  };
-
-  // Load Markdown
-  useEffect(() => {
-    if (displayType !== 'markdown') return;
-    async function load() {
-      const cacheKey = `cache_${currentSource}`;
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) setMarkdownContent(cached);
-
-      try {
-        const res = await fetch(MARKDOWN_SOURCES[currentSource]);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const text = await res.text();
-        localStorage.setItem(cacheKey, text);
-        setMarkdownContent(text);
-      } catch (e) {
-        console.error("Fetch error:", e);
-        if (!cached) setMarkdownContent(`❌ Lỗi tải dữ liệu: ${e.message}`);
-      }
-    }
-    load();
-  }, [currentSource, displayType]);
-
-
-  // Update TOTP using Web Worker
-  useEffect(() => {
-    const worker = new Worker(new URL('./totpWorker.js', import.meta.url));
-
-    worker.onmessage = (e) => {
-      setTotpCodes(e.data.codes);
-    };
-
-    const update = () => {
-      worker.postMessage({ keys: KEYS });
-    };
-
-    update();
-    const interval = setInterval(update, 1000);
-
-    return () => {
-      clearInterval(interval);
-      worker.terminate();
-    };
   }, []);
 
-
-  // Preload Assets & Hide Preloader
-  useEffect(() => {
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-      setTimeout(() => {
-        preloader.style.opacity = '0';
-        setTimeout(() => preloader.remove(), 200);
-      }, 100);
-    }
-
-    Object.values(MARKDOWN_SOURCES).forEach(url => {
-      fetch(url).then(res => res.text()).then(text => {
-        const key = `cache_${url.split('/').pop().replace('.md', '')}`;
-        localStorage.setItem(key, text);
-      });
-    });
-
-    ['bank/agribank.webp', 'bank/vietcombank.webp', 'bank/momo.webp', 'assets/avatar.webp', 'ute/chuongtrinhdaotao.pdf', 'ute/sotaysinhvien.pdf'].forEach(src => {
-      fetch(src, { mode: 'no-cors' }).catch(() => { });
-    });
-  }, []);
-
-  const openMarkdown = (id) => {
-    setCurrentSource(id);
-    setDisplayType('markdown');
-  };
-
-  const openImage = (src, label) => {
-    if (window.innerWidth <= 768) {
-      setPhotoUrl(src);
-      setIsPhotoVisible(true);
-      return;
-    }
+  const openImage = useCallback((src, label) => {
     setCurrentImage({ src, label });
     setDisplayType('image');
-  };
+  }, []);
 
-  const openPdf = (src, label) => {
-    if (window.innerWidth <= 768) {
-      window.open(src, '_blank');
-      return;
-    }
-    setCurrentPdf({ src, label });
-    setDisplayType('pdf');
-  };
-
-
-
-  const [notes, setNotes] = useState(() => {
-    return localStorage.getItem('op2fa_notes') || '';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('op2fa_notes', notes);
-  }, [notes]);
-
-  // Sidebar Resizing Logic
-  const startResizing = (sidebar) => (e) => {
+  const startResizing = useCallback((sidebar) => (e) => {
     e.preventDefault();
     setResizingSidebar(sidebar);
-  };
+  }, []);
 
+  // Global Event Listeners
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!resizingSidebar) return;
-
       if (resizingSidebar === 'file') {
         const newWidth = e.clientX;
-        if (newWidth > 150 && newWidth < 500) {
+        if (newWidth > 260 && newWidth < 500) {
           setFileWidth(newWidth);
           localStorage.setItem('file_width', newWidth);
         }
@@ -176,232 +99,67 @@ function App() {
         }
       }
     };
-
-    const stopResizing = () => {
-      setResizingSidebar(null);
-    };
-
-    if (resizingSidebar) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', stopResizing);
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', stopResizing);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    }
-
+    const handleMouseUp = () => setResizingSidebar(null);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', stopResizing);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [resizingSidebar]);
 
-  const renderedMarkdown = useMemo(() => (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw]}
-      components={{
-        pre: ({ node, ...props }) => (
-          <pre
-            {...props}
-            onClick={(e) => {
-              if (window.getSelection().toString()) return;
-              const text = e.currentTarget.innerText;
-              navigator.clipboard.writeText(text);
-            }}
-          />
-        ),
-        code: ({ node, inline, ...props }) => (
-          <code
-            {...props}
-            className={inline ? 'inline-code' : props.className}
-          />
-        )
-      }}
-    >
-      {markdownContent
-        .replace(/==([^=]+)==/g, '<mark>$1</mark>')
-        .replace(/%([^%]+)% (.+?) %%/g, '<span style="color: $1">$2</span>')
-        .replace(/-> (.+?) <-/g, '<div align="center">$1</div>')
-        .replace(/-> (.+?) ->/g, '<div align="right">$1</div>')
-        .replace(/!> (.+)/g, '<details class="spoiler"><summary>Spoiler</summary>$1</details>')
-      }
-    </ReactMarkdown>
-  ), [markdownContent]);
+  // The application now loads immediately without the artificial wait.
+
 
   return (
-    <div className="app-container">
+    <div className={`app-container theme-${activeTheme} theme-sel-${theme}`}>
       <div className="background-layer">
         <div className="background-overlay"></div>
       </div>
 
       <div className="main-wrapper">
+        <SidebarRail 
+          isSettingsOpen={isSettingsOpen}
+          toggleSettings={toggleSettings}
+          theme={theme}
+          setTheme={setTheme}
+          setIsSettingsOpen={setIsSettingsOpen}
+        />
 
+        <SidebarMain 
+          fileWidth={fileWidth}
+          startResizing={startResizing}
+          expandedFolders={expandedFolders}
+          toggleFolder={toggleFolder}
+          displayType={displayType}
+          currentSource={currentSource}
+          setCurrentSource={setCurrentSource}
+          setDisplayType={setDisplayType}
+          currentImage={currentImage}
+          openImage={openImage}
+          totpCodes={totpCodes}
+          BANK_IMAGES={BANK_IMAGES}
+        />
 
-        {/* Part 2: Navigation Sidebar */}
-        <aside
-          className="sidebar-left"
-          style={{ width: window.innerWidth > 768 ? `${fileWidth}px` : undefined }}
-        >
-          <div className="sidebar-resizer resizer-right" onMouseDown={startResizing('file')} />
-          <div className="sidebar-header">Files</div>
-          <div className="tree-container">
-            {/* Folder: Docs - HIDE ON MOBILE */}
-            <div className="tree-folder hide-mobile">
-              <div className="tree-folder-title" onClick={() => toggleFolder('resources')}>
-                <span>Docs</span>
-                <svg className={`chevron ${expandedFolders.resources ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-              </div>
-              {expandedFolders.resources && (
-                <div className="tree-children">
-                  <div className={`tree-item ${displayType === 'markdown' && currentSource === 'foss' ? 'active' : ''}`} onClick={() => openMarkdown('foss')}>
-                    <span>Page 1</span>
-                  </div>
-                  <div className={`tree-item ${displayType === 'markdown' && currentSource === 'v' ? 'active' : ''}`} onClick={() => openMarkdown('v')}>
-                    <span>Page 2</span>
-                  </div>
-                </div>
-              )}
-            </div>
+        <MainContent 
+          displayType={displayType}
+          renderedMarkdown={renderedMarkdown}
+          currentPdf={currentPdf}
+          currentImage={currentImage}
+        />
 
-            {/* Folder: UTE */}
-            <div className="tree-folder">
-              <div className="tree-folder-title" onClick={() => toggleFolder('ute')}>
-                <span>UTE</span>
-                <svg className={`chevron ${expandedFolders.ute ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-              </div>
-              {expandedFolders.ute && (
-                <div className="tree-children">
-                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'CTDT' ? 'active' : ''}`} onClick={() => openPdf('/ute/chuongtrinhdaotao.pdf', 'CTDT')}>
-                    <span>CTDT</span>
-                  </div>
-                  <div className={`tree-item ${displayType === 'pdf' && currentPdf.label === 'STSV' ? 'active' : ''}`} onClick={() => openPdf('/ute/sotaysinhvien.pdf', 'STSV')}>
-                    <span>STSV</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Folder: BANK */}
-            <div className="tree-folder">
-              <div className="tree-folder-title" onClick={() => toggleFolder('bank')}>
-                <span>BANK</span>
-                <svg className={`chevron ${expandedFolders.bank ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-              </div>
-              {expandedFolders.bank && (
-                <div className="tree-children">
-                  <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Agribank' ? 'active' : ''}`} onClick={() => openImage('bank/agribank.webp', 'Agribank')}>
-                    <span>Agribank</span>
-                  </div>
-                  <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Vietcombank' ? 'active' : ''}`} onClick={() => openImage('bank/vietcombank.webp', 'Vietcombank')}>
-                    <span>Vietcombank</span>
-                  </div>
-                  <div className={`tree-item ${displayType === 'image' && currentImage.label === 'Momo' ? 'active' : ''}`} onClick={() => openImage('bank/momo.webp', 'Momo')}>
-                    <span>Momo</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="tree-folder">
-              <div className="tree-folder-title" onClick={() => toggleFolder('authenticator')}>
-                <span>2FA</span>
-                <svg className={`chevron ${expandedFolders.authenticator ? 'expanded' : ''}`} viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z"></path></svg>
-              </div>
-              {expandedFolders.authenticator && (
-                <div className="tree-children">
-                  <div className="tree-item" onClick={() => navigator.clipboard.writeText(totpCodes.key1)}>
-                    <span className="totp-code red">{totpCodes.key1}</span>
-                  </div>
-                  <div className="tree-item" onClick={() => navigator.clipboard.writeText(totpCodes.key2)}>
-                    <span className="totp-code blue">{totpCodes.key2}</span>
-                  </div>
-                  <div className="tree-item" onClick={() => navigator.clipboard.writeText(totpCodes.key3)}>
-                    <span className="totp-code">{totpCodes.key3}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </aside>
-
-        {/* End of sidebars */}
-
-        <main className="content-area">
-          {displayType === 'markdown' ? (
-            <article className="markdown-body">
-              {renderedMarkdown}
-            </article>
-          ) : displayType === 'pdf' ? (
-            <PdfViewer file={currentPdf.src} />
-          ) : (
-            <div className="image-view">
-              <img src={currentImage.src} alt={currentImage.label} className="centered-img" />
-            </div>
-          )}
-        </main>
-
-        <aside
-          className="sidebar-right"
-          style={{ width: window.innerWidth > 1400 ? `${notesWidth}px` : undefined }}
-        >
-          <div className="sidebar-resizer resizer-left" onMouseDown={startResizing('notes')} />
-          <div className="notes-header">
-            <span>Notes</span>
-          </div>
-          <textarea
-            className="notes-area"
-            placeholder="Viết ghi chú tại đây..."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </aside>
-
+        <NotesSidebar 
+          notesWidth={notesWidth}
+          startResizing={startResizing}
+          notes={notes}
+          setNotes={setNotes}
+        />
       </div>
 
-
-      {/* CUSTOM MOBILE PHOTO VIEWER WITH SWIPE TO CLOSE */}
+      {/* Photo Overlay (Mobile/Center) */}
       {isPhotoVisible && (
-        <div
-          className="mobile-photo-overlay"
-          onClick={() => setIsPhotoVisible(false)}
-          onTouchStart={(e) => {
-            const touch = e.touches[0];
-            window._startY = touch.clientY;
-          }}
-          onTouchMove={(e) => {
-            const touch = e.touches[0];
-            const deltaY = touch.clientY - window._startY;
-            if (deltaY > 0) {
-              const el = e.currentTarget.querySelector('.mobile-photo-content');
-              if (el) {
-                el.style.transform = `translateY(${deltaY}px)`;
-                e.currentTarget.style.opacity = Math.max(0, 1 - deltaY / 400);
-              }
-            }
-          }}
-          onTouchEnd={(e) => {
-            const touch = e.changedTouches[0];
-            const deltaY = touch.clientY - window._startY;
-            if (deltaY > 100) {
-              setIsPhotoVisible(false);
-            } else {
-              const el = e.currentTarget.querySelector('.mobile-photo-content');
-              if (el) {
-                el.style.transform = '';
-                e.currentTarget.style.opacity = '';
-              }
-            }
-          }}
-        >
-          <div
-            className="mobile-photo-content"
-            style={{ transition: 'transform 0.2s ease, opacity 0.2s ease' }}
-            onClick={(e) => e.stopPropagation()} // Stop click from bubbling to the overlay
-          >
+        <div className="mobile-photo-overlay" onClick={() => setIsPhotoVisible(false)}>
+          <div className="mobile-photo-content" onClick={e => e.stopPropagation()}>
             <img src={photoUrl} alt="View" className="mobile-view-img" />
           </div>
         </div>
