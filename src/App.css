@@ -302,6 +302,42 @@ body {
   opacity: 0.3;
 }
 
+.notes-sentinel-footer {
+  border-top: 1px solid var(--border-color);
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-otp-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  justify-content: center;
+}
+
+.notes-otp-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.notes-otp-item:hover {
+  background: var(--hover-bg);
+}
+
+.otp-container.compact .otp-digit {
+  width: 24px;
+  height: 24px;
+  font-size: 0.85rem;
+}
+
 .tree-container {
   padding: 0 10px;
 }

@@ -81,30 +81,6 @@ const SidebarMain = ({
           ))}
         </TreeFolder>
 
-        <TreeFolder 
-          title="Sentinel" 
-          expanded={expandedFolders.authenticator} 
-          onToggle={() => toggleFolder('authenticator')}
-        >
-          {[
-            { code: totpCodes.key1, color: 'red' },
-            { code: totpCodes.key2, color: 'blue' },
-            { code: totpCodes.key3, color: 'neutral' },
-          ].map((item, idx) => (
-            <div 
-              key={idx} 
-              className="tree-item totp-item" 
-              onClick={() => navigator.clipboard.writeText(item.code)}
-            >
-              <div className={`otp-container ${item.color}`}>
-                {item.code.split('').map((char, i) => (
-                  <span key={i} className="otp-digit">{char}</span>
-                ))}
-              </div>
-              <md-ripple></md-ripple>
-            </div>
-          ))}
-        </TreeFolder>
       </div>
     </aside>
   );

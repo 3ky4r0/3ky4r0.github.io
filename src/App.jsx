@@ -198,6 +198,7 @@ function App() {
                 startResizing={startResizing}
                 notes={notes}
                 setNotes={setNotes}
+                totpCodes={totpCodes}
               />
             )}
           </div>
