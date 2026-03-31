@@ -53,20 +53,19 @@ function App() {
   const [notes, setNotes] = useState(() => localStorage.getItem('op2fa_notes') || '');
   const [isPhotoVisible, setIsPhotoVisible] = useState(false);
   const [photoUrl, setPhotoUrl] = useState('');
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Layout Dimensions (Default to 1/4, 2/4, 1/4 layout)
   const [fileWidth, setFileWidth] = useState(() => {
     const cached = localStorage.getItem('file_width');
     if (cached) return parseInt(cached);
-    const workspaceWidth = window.innerWidth - 54;
+    const workspaceWidth = window.innerWidth - 55;
     return Math.max(260, Math.floor(workspaceWidth * 0.25));
   });
 
   const [notesWidth, setNotesWidth] = useState(() => {
     const cached = localStorage.getItem('notes_width');
     if (cached) return parseInt(cached);
-    const workspaceWidth = window.innerWidth - 54;
+    const workspaceWidth = window.innerWidth - 55;
     return Math.max(260, Math.floor(workspaceWidth * 0.25));
   });
   const [resizingSidebar, setResizingSidebar] = useState(null);
@@ -94,7 +93,6 @@ function App() {
   const renderedMarkdown = useMemo(() => parseCustomMarkdown(markdownRaw), [markdownRaw]);
 
   // Handlers
-  const toggleSettings = useCallback(() => setIsSettingsOpen(prev => !prev), []);
   const toggleFolder = useCallback((folder) => {
     setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
   }, []);
@@ -153,11 +151,6 @@ function App() {
 
       <div className="main-wrapper">
         <SidebarRail 
-          isSettingsOpen={isSettingsOpen}
-          toggleSettings={toggleSettings}
-          theme={theme}
-          setTheme={setTheme}
-          setIsSettingsOpen={setIsSettingsOpen}
           displayType={displayType}
           setDisplayType={setDisplayType}
           setCurrentSource={setCurrentSource}
@@ -185,6 +178,7 @@ function App() {
             )}
 
             <MainContent 
+              currentSource={currentSource}
               displayType={displayType}
               renderedMarkdown={renderedMarkdown}
               currentPdf={currentPdf}
@@ -213,7 +207,14 @@ function App() {
             <div className="status-center">
               <div className="totp-sync-display">
                 <span className="status-label">SENTINEL_SYNC:</span>
-                <span className="status-time-compact">{Math.ceil(timeLeft)}</span>
+                <div className="totp-dots-bar">
+                  {Array.from({ length: 30 }).map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`totp-dot ${(i < (30 - Math.ceil(timeLeft))) ? 'active' : ''}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 

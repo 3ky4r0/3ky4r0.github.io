@@ -1,5 +1,5 @@
 | STT | Email |
-|-----|-------|
+|:---:|:------|
 | 1 | `ngduy10102006@gmail.com` |
 | 2 | `haileovan46@gmail.com` |
 | 3 | `nguyenduy96969@gmail.com` |
