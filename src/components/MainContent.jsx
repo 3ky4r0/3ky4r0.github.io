@@ -87,8 +87,6 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
         </div>
       ) : displayType === 'visualizer' ? (
         <div className="visualizer-container fps-mode">
-          <div className="visualizer-header">WORKSTATION PERFORMANCE SYNC</div>
-          
           <div className="fps-dashboard">
             <div className="fps-main">
               <span className="fps-value">{fps}</span>

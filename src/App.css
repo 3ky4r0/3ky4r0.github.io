@@ -1310,16 +1310,20 @@ code {
   font-size: 0.8rem;
   color: var(--active-color);
   letter-spacing: 0.3em;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   opacity: 0.5;
   z-index: 2;
 }
 
 .fps-dashboard {
+  position: relative;
+  width: 560px;
+  min-height: 560px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  justify-content: center;
+  gap: 26px;
   z-index: 2;
 }
 
@@ -1347,17 +1351,19 @@ code {
 .fps-metrics {
   display: flex;
   gap: 40px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 20px 40px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  backdrop-filter: none;
 }
 
 .metric-item {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   align-items: center;
+  min-width: 180px;
 }
 
 .m-label {
@@ -1378,13 +1384,18 @@ code {
 }
 
 .performance-gauge {
-  width: 200px;
-  height: 200px;
-  position: relative;
+  width: 560px;
+  height: 560px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 0;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .gauge-outer {
@@ -1392,6 +1403,8 @@ code {
   height: 100%;
   border-radius: 50%;
   border: 4px solid var(--border-color);
+  background: radial-gradient(circle, rgba(203, 166, 247, 0.1) 0%, rgba(203, 166, 247, 0.045) 34%, rgba(203, 166, 247, 0.015) 58%, rgba(203, 166, 247, 0) 76%);
+  box-shadow: inset 0 0 70px rgba(203, 166, 247, 0.06);
 }
 
 .gauge-inner {
@@ -1511,6 +1524,15 @@ code {
 @media (max-width: 768px) {
   .fps-value {
     font-size: 4rem;
+  }
+  .fps-dashboard {
+    width: 420px;
+    min-height: 420px;
+    gap: 18px;
+  }
+  .performance-gauge {
+    width: 420px;
+    height: 420px;
   }
   .fps-metrics {
     gap: 20px;
