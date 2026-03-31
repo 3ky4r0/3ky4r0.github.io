@@ -165,7 +165,7 @@ function App() {
 
         <div className="workspace-core">
           <div className="sections-container">
-            {displayType !== 'video' && (
+            {(displayType !== 'video' && displayType !== 'visualizer') && (
               <SidebarMain 
                 fileWidth={fileWidth}
                 startResizing={startResizing}
@@ -192,7 +192,7 @@ function App() {
               onPdfLoadFinish={() => setIsPdfLoading(false)}
             />
 
-            {displayType !== 'video' && (
+            {(displayType !== 'video' && displayType !== 'visualizer') && (
               <NotesSidebar 
                 notesWidth={notesWidth}
                 startResizing={startResizing}
