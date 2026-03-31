@@ -435,7 +435,9 @@ body {
   gap: 8px;
   font-size: 0.85rem;
   color: #8b949e;
-  margin-bottom: 24px;
+  margin: 0 auto 24px;
+  max-width: 800px;
+  width: 100%;
 }
 
 .crumb.current {
@@ -443,12 +445,7 @@ body {
   font-weight: 600;
 }
 
-.markdown-body {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  user-select: text;
-  color: var(--text-color);
-}
+/* Consolidated below */
 
 .markdown-body > *:first-child {
   margin-top: 0 !important;
@@ -477,6 +474,10 @@ body {
   user-select: text;
   color: var(--text-color);
   background: transparent;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
 }
 
 .markdown-body pre {
@@ -729,9 +730,6 @@ body {
 .status-time-compact {
   color: var(--text-color);
   font-weight: 600;
-  background: var(--active-bg);
-  padding: 1px 6px;
-  border-radius: 4px;
 }
 .totp-item {
   padding: 8px 4px !important;

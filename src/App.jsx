@@ -55,9 +55,20 @@ function App() {
   const [photoUrl, setPhotoUrl] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // Layout Dimensions
-  const [fileWidth, setFileWidth] = useState(() => parseInt(localStorage.getItem('file_width')) || 260);
-  const [notesWidth, setNotesWidth] = useState(() => parseInt(localStorage.getItem('notes_width')) || 400);
+  // Layout Dimensions (Default to 1/4, 2/4, 1/4 layout)
+  const [fileWidth, setFileWidth] = useState(() => {
+    const cached = localStorage.getItem('file_width');
+    if (cached) return parseInt(cached);
+    const workspaceWidth = window.innerWidth - 54;
+    return Math.max(260, Math.floor(workspaceWidth * 0.25));
+  });
+
+  const [notesWidth, setNotesWidth] = useState(() => {
+    const cached = localStorage.getItem('notes_width');
+    if (cached) return parseInt(cached);
+    const workspaceWidth = window.innerWidth - 54;
+    return Math.max(260, Math.floor(workspaceWidth * 0.25));
+  });
   const [resizingSidebar, setResizingSidebar] = useState(null);
 
   const [otpProgress, setOtpProgress] = useState(0);
@@ -198,7 +209,7 @@ function App() {
             <div className="status-center">
               <div className="totp-sync-display">
                 <span className="status-label">SENTINEL_SYNC:</span>
-                <span className="status-time-compact">{Math.ceil(timeLeft)}S</span>
+                <span className="status-time-compact">{Math.ceil(timeLeft)}</span>
               </div>
             </div>
 
