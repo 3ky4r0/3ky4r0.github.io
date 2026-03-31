@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import PdfViewer from '../PdfViewer';
 
-const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf, currentImage, onPdfLoadFinish }) => {
+const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf, currentImage, onPdfLoadFinish, totpCodes }) => {
   const [fps, setFps] = React.useState(0);
   const [ms, setMs] = React.useState(0);
 
@@ -37,7 +37,7 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
 
   return (
     <main className={`content-area ${displayType === 'video' ? 'video-mode' : ''}`}>
-      {(displayType !== 'video' && displayType !== 'visualizer') && (
+      {(displayType !== 'video' && displayType !== 'visualizer' && displayType !== 'otp') && (
         <header className="content-header">
           {displayType === 'markdown' && 'DOCUMENT VIEWER'}
           {displayType === 'pdf' && 'SENTINEL SECURE PDF'}
@@ -112,7 +112,35 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
             </div>
           </div>
 
-          <div className="visualizer-grid-lines"></div>
+          <div className="visualizer-grid-lines visualizer-grid-lines--grid"></div>
+        </div>
+      ) : displayType === 'otp' ? (
+        <div className="visualizer-container otp-mode">
+          <div className="visualizer-header">SENTINEL OTP VAULT</div>
+
+          <div className="otp-screen">
+            {totpCodes && [
+              { code: totpCodes.key1, color: 'red', label: 'KEY 01' },
+              { code: totpCodes.key2, color: 'blue', label: 'KEY 02' },
+              { code: totpCodes.key3, color: 'neutral', label: 'KEY 03' },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="otp-screen-card"
+                onClick={() => item.code && navigator.clipboard.writeText(item.code)}
+              >
+                <div className="otp-screen-label">{item.label}</div>
+                <div className={`otp-container otp-screen-container ${item.color}`}>
+                  {item.code && item.code.split('').map((char, i) => (
+                    <span key={i} className="otp-digit">{char}</span>
+                  ))}
+                </div>
+                <div className="ripple-wrapper"><md-ripple></md-ripple></div>
+              </div>
+            ))}
+          </div>
+
+          <div className="visualizer-grid-lines visualizer-grid-lines--dots"></div>
         </div>
       ) : null}
     </main>

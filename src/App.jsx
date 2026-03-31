@@ -158,7 +158,7 @@ function App() {
 
         <div className="workspace-core">
           <div className="sections-container">
-            {(displayType !== 'video' && displayType !== 'visualizer') && (
+            {(displayType !== 'video' && displayType !== 'visualizer' && displayType !== 'otp') && (
               <SidebarMain 
                 fileWidth={fileWidth}
                 startResizing={startResizing}
@@ -184,15 +184,15 @@ function App() {
               currentPdf={currentPdf}
               currentImage={currentImage}
               onPdfLoadFinish={() => setIsPdfLoading(false)}
+              totpCodes={totpCodes}
             />
 
-            {(displayType !== 'video' && displayType !== 'visualizer') && (
+            {(displayType !== 'video' && displayType !== 'visualizer' && displayType !== 'otp') && (
               <NotesSidebar 
                 notesWidth={notesWidth}
                 startResizing={startResizing}
                 notes={notes}
                 setNotes={setNotes}
-                totpCodes={totpCodes}
               />
             )}
           </div>
