@@ -1427,40 +1427,69 @@ code {
   background-size: 22px 22px;
 }
 
-.otp-screen {
-  width: min(760px, 100%);
+.otp-card-grid {
+  width: min(980px, 100%);
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   z-index: 2;
 }
 
-.otp-screen-card {
+.otp-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 22px;
-  border-radius: 16px;
+  gap: 16px;
+  padding: 18px;
   border: 1px solid var(--border-color);
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  backdrop-filter: blur(10px);
   overflow: hidden;
+  cursor: pointer;
 }
 
-.otp-screen-card:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--active-color);
+.otp-card:hover {
+  background: rgba(255, 255, 255, 0.045);
 }
 
-.otp-screen-label {
-  font-size: 0.72rem;
+.otp-card-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.otp-card-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.otp-card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.24em;
-  color: var(--active-color);
-  opacity: 0.75;
+  color: var(--text-color);
+}
+
+.otp-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.otp-status-red {
+  background: #f38ba8;
+}
+
+.otp-status-blue {
+  background: #89b4fa;
+}
+
+.otp-status-neutral {
+  background: #cdd6f4;
 }
 
 .otp-screen-container {
@@ -1478,6 +1507,18 @@ code {
   font-size: clamp(1rem, 2vw, 1.35rem);
 }
 
+.otp-copy-button {
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--active-color);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+}
+
 /* Fix for mobile visualizer */
 @media (max-width: 768px) {
   .fps-value {
@@ -1490,8 +1531,12 @@ code {
   .visualizer-container {
     background: #000 !important;
   }
-  .otp-screen-card {
-    padding: 16px;
+  .otp-card-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .otp-card {
+    padding: 14px;
   }
   .otp-screen-container {
     gap: 6px;

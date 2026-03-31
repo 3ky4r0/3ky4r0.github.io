@@ -118,7 +118,7 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
         <div className="visualizer-container otp-mode">
           <div className="visualizer-header">SENTINEL OTP VAULT</div>
 
-          <div className="otp-screen">
+          <div className="otp-card-grid">
             {totpCodes && [
               { code: totpCodes.key1, color: 'red', label: 'KEY 01' },
               { code: totpCodes.key2, color: 'blue', label: 'KEY 02' },
@@ -126,10 +126,16 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="otp-screen-card"
+                className="otp-card"
                 onClick={() => item.code && navigator.clipboard.writeText(item.code)}
               >
-                <div className="otp-screen-label">{item.label}</div>
+                <div className="otp-card-header">
+                  <div className="otp-card-label-wrap">
+                    <span className={`otp-status otp-status-${item.color}`}></span>
+                    <span className="otp-card-label">{item.label}</span>
+                  </div>
+                  <button type="button" className="otp-copy-button">COPY</button>
+                </div>
                 <div className={`otp-container otp-screen-container ${item.color}`}>
                   {item.code && item.code.split('').map((char, i) => (
                     <span key={i} className="otp-digit">{char}</span>
