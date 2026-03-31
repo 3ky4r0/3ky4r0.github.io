@@ -42,9 +42,6 @@ function App() {
   const [notesWidth, setNotesWidth] = useState(() => {
     return parseInt(localStorage.getItem('notes_width')) || 400;
   });
-  const [clockWidth, setClockWidth] = useState(() => {
-    return parseInt(localStorage.getItem('clock_width')) || 260;
-  });
   const [fileWidth, setFileWidth] = useState(() => {
     return parseInt(localStorage.getItem('file_width')) || 260;
   });
@@ -145,48 +142,7 @@ function App() {
     setDisplayType('pdf');
   };
 
-  const [worldTimes, setWorldTimes] = useState({});
 
-  useEffect(() => {
-    const updateTimes = () => {
-      const locales = {
-        'Mỹ': 'America/New_York',
-        'Anh': 'Europe/London',
-        'Đức': 'Europe/Berlin',
-        'Nga': 'Europe/Moscow',
-        'Ấn Độ': 'Asia/Kolkata',
-        'Trung Quốc': 'Asia/Shanghai',
-        'Việt Nam': 'Asia/Ho_Chi_Minh',
-        'Singapore': 'Asia/Singapore',
-        'Nhật Bản': 'Asia/Tokyo',
-        'Úc': 'Australia/Sydney'
-      };
-      const now = new Date();
-      const times = {};
-      Object.entries(locales).forEach(([name, zone]) => {
-        times[name] = {
-          time: now.toLocaleTimeString('vi-VN', {
-            timeZone: zone,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-          }),
-          date: now.toLocaleDateString('vi-VN', {
-            timeZone: zone,
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-          })
-        };
-      });
-      setWorldTimes(times);
-    };
-
-    updateTimes();
-    const interval = setInterval(updateTimes, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const [notes, setNotes] = useState(() => {
     return localStorage.getItem('op2fa_notes') || '';
@@ -206,14 +162,8 @@ function App() {
     const handleMouseMove = (e) => {
       if (!resizingSidebar) return;
 
-      if (resizingSidebar === 'clock') {
+      if (resizingSidebar === 'file') {
         const newWidth = e.clientX;
-        if (newWidth > 150 && newWidth < 500) {
-          setClockWidth(newWidth);
-          localStorage.setItem('clock_width', newWidth);
-        }
-      } else if (resizingSidebar === 'file') {
-        const newWidth = e.clientX - clockWidth;
         if (newWidth > 150 && newWidth < 500) {
           setFileWidth(newWidth);
           localStorage.setItem('file_width', newWidth);
@@ -247,7 +197,7 @@ function App() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', stopResizing);
     };
-  }, [resizingSidebar, clockWidth]);
+  }, [resizingSidebar]);
 
   const renderedMarkdown = useMemo(() => (
     <ReactMarkdown
@@ -289,27 +239,7 @@ function App() {
       </div>
 
       <div className="main-wrapper">
-        {/* Part 1: World Clock (now on far left) */}
-        <aside
-          className="sidebar-clock"
-          style={{ width: window.innerWidth > 1100 ? `${clockWidth}px` : undefined }}
-        >
-          <div className="sidebar-resizer resizer-right" onMouseDown={startResizing('clock')} />
-          <div className="clock-header">World Time</div>
-          <div className="clock-list">
-            {Object.entries(worldTimes).map(([country, data]) => (
-              <div key={country} className="clock-item">
-                <div className="clock-left">
-                  <span className="clock-label">{country}</span>
-                  <span className="clock-date">{data.date}</span>
-                </div>
-                <div className="clock-right">
-                  <span className="clock-value">{data.time}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </aside>
+
 
         {/* Part 2: Navigation Sidebar */}
         <aside

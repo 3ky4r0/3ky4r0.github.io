@@ -138,21 +138,9 @@ body {
   flex: 1;
 }
 
-/* Sidebar Clock (World Time) */
-.sidebar-clock {
-  width: 260px;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-}
+
 
 .sidebar-header,
-.clock-header,
 .notes-header {
   height: 52px;
   display: flex;
@@ -167,73 +155,11 @@ body {
   letter-spacing: 0.1em;
 }
 
-.sidebar-header {
-  /* Specific left sidebar styles if any */
-}
 
-.clock-header {
-  justify-content: flex-start; /* Was center before, changing to match others */
-}
 
-.clock-list {
-  padding: 0;
-  overflow-y: auto;
-  flex: 1;
-}
 
-.clock-list::-webkit-scrollbar {
-  width: 4px;
-}
 
-.clock-list::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-}
 
-.clock-item {
-  padding: 14px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  transition: background 0.2s;
-}
-
-.clock-item:hover {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.clock-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.clock-right {
-  display: flex;
-  align-items: center;
-}
-
-.clock-label {
-  font-size: 0.7rem;
-  color: #8b949e;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 600;
-}
-
-.clock-date {
-  font-size: 0.65rem;
-  color: #484f58;
-  font-family: inherit;
-}
-
-.clock-value {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.95rem;
-  color: #e6edf3;
-  font-weight: 500;
-}
 
 /* Sidebar Right (Notes) */
 .sidebar-right {
@@ -382,15 +308,10 @@ body {
   }
 }
 
-@media (max-width: 1100px) {
-  .sidebar-clock {
-    display: none;
-  }
-}
+
 
 @media (max-width: 768px) {
   .content-area,
-  .sidebar-clock,
   .sidebar-right {
     display: none !important;
   }
