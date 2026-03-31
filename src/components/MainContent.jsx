@@ -134,7 +134,6 @@ const MainContent = ({ currentSource, displayType, renderedMarkdown, currentPdf,
                     <span className={`otp-status otp-status-${item.color}`}></span>
                     <span className="otp-card-label">{item.label}</span>
                   </div>
-                  <button type="button" className="otp-copy-button">COPY</button>
                 </div>
                 <div className={`otp-container otp-screen-container ${item.color}`}>
                   {item.code && item.code.split('').map((char, i) => (
