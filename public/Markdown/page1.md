@@ -1,14 +1,5 @@
 
 
-- [ChrisTitusTech](https://github.com/ChrisTitusTech/winutil)
-```
-irm "https://christitus.com/win" | iex
-```
-- [Massgrave](https://massgrave.dev/)
-```
-irm https://get.activated.win | iex
-```
-
 | Icon | Extension              | Link |
 |------|------------------------|------|
 | ![](https://lh3.googleusercontent.com/lsanoOfx5N_t-7gh5Qg9FGIirVEjdCqalZXyLZYRd5d7Fydm83FQhu4Oq0JmlRyMtyF_LfwuQQZyKRTHs6emnFirsA=s60) | uBlock Origin Lite     | [Thêm](https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh?hl=vi) |
@@ -18,6 +9,16 @@ irm https://get.activated.win | iex
 | ![](https://lh3.googleusercontent.com/oSoXDpjLX_iytl11_ROa1thmFI0xPk9pL8ttEtnFkBI8Cie0Ge8KxVFaokgBRscvUR1cXH4bVeG_C_Fl6kBw3A3_=s60) | SponsorBlock           | [Thêm](https://chromewebstore.google.com/detail/sponsorblock-for-youtube/mnjggcdmjocbbbhaepdhchncahnbgone) |
 | ![](https://lh3.googleusercontent.com/SiKy7vZibS-NRzSUa_PIDoPsmwQFdTxIa4gEnd4ANqWfJFil9kSX58_EIe3iISGDZ-ISqvDeImKc0hl-57xTj0YBvA=s60) | FastForward            | [Thêm](https://chromewebstore.google.com/detail/fastforward/icallnadddjmdinamnolclfjanhfoafe) |
 | ![](https://lh3.googleusercontent.com/mPmvAF3WBb1Pg87jg25peUQwG6aoXJV6wCv7vZP6tc6SesxIqkihlcnOhy0aczE2JPgDBs24T3XQ3wqB8NHAEkEVyQ=s60) | Từ điển Anh Việt ENVI  | [Thêm](https://chromewebstore.google.com/detail/t%E1%BB%AB-%C4%91i%E1%BB%83n-anh-vi%E1%BB%87t-envi/cflakfhockilljdbofnanaijpmpmfcol) |
+
+
+- [ChrisTitusTech](https://github.com/ChrisTitusTech/winutil)
+```
+irm "https://christitus.com/win" | iex
+```
+- [Massgrave](https://massgrave.dev/)
+```
+irm https://get.activated.win | iex
+```
 ## Runtime 
 - [Visual C++ Redistributable](https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/)
 - [DirectX](https://www.microsoft.com/en-us/download/details.aspx?id=35)
