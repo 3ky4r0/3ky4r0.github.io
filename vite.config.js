@@ -35,6 +35,7 @@ export default defineConfig(({ command }) => ({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,md,webp,mp4}'],
+        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // Tăng giới hạn lên 15MB
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.destination === 'video',
