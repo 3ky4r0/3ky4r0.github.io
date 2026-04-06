@@ -9,6 +9,8 @@
 | <img src="https://lh3.googleusercontent.com/oSoXDpjLX_iytl11_ROa1thmFI0xPk9pL8ttEtnFkBI8Cie0Ge8KxVFaokgBRscvUR1cXH4bVeG_C_Fl6kBw3A3_=s60" width="30"> | SponsorBlock | [Thêm](https://chromewebstore.google.com/detail/sponsorblock-for-youtube/mnjggcdmjocbbbhaepdhchncahnbgone) |
 | <img src="https://lh3.googleusercontent.com/SiKy7vZibS-NRzSUa_PIDoPsmwQFdTxIa4gEnd4ANqWfJFil9kSX58_EIe3iISGDZ-ISqvDeImKc0hl-57xTj0YBvA=s60" width="30"> | FastForward | [Thêm](https://chromewebstore.google.com/detail/fastforward/icallnadddjmdinamnolclfjanhfoafe) |
 | <img src="https://lh3.googleusercontent.com/mPmvAF3WBb1Pg87jg25peUQwG6aoXJV6wCv7vZP6tc6SesxIqkihlcnOhy0aczE2JPgDBs24T3XQ3wqB8NHAEkEVyQ=s60" width="30"> | Từ điển Anh Việt ENVI | [Thêm](https://chromewebstore.google.com/detail/t%E1%BB%AB-%C4%91i%E1%BB%83n-anh-vi%E1%BB%87t-envi/cflakfhockilljdbofnanaijpmpmfcol) |
+| <img src="https://lh3.googleusercontent.com/zoY8FwoOqPlBgFxcmFdNSK2Q4CcLmv-gw7vTjF2KMR9cEabwBsGNrHBTEMitn0Ba6OmCVJ0NcLnFGu3N97BP8Phu0g=s60" width="30"> | Tampermonkey | [Thêm](https://chromewebstore.google.com/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo?utm_source=item-share-cb) |
+
 
 
 
