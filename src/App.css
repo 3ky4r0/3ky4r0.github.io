@@ -524,12 +524,7 @@ body {
   color: var(--text-color);
 }
 
-.markdown-body.logbook-mode h1,
-.markdown-body.logbook-mode h2,
-.markdown-body.logbook-mode h3,
-.markdown-body.logbook-mode h4 {
-  text-align: center;
-}
+
 
 .markdown-body {
   font-size: 0.95rem;
@@ -547,19 +542,9 @@ body {
   animation: fadeIn 0.4s ease-out;
 }
 
-.markdown-body.logbook-mode {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
-}
 
-.markdown-body.logbook-mode table {
-  margin-left: auto;
-  margin-right: auto;
-}
+
+
 
 .copyable-code-block {
   position: relative;
@@ -629,15 +614,7 @@ body {
   border: 1px solid #45475a; /* Slightly lighter surface1 for visibility */
 }
 
-/* Logbook-specific alignment overrides */
-.markdown-body.logbook-mode td:first-child,
-.markdown-body.logbook-mode th:first-child {
-  text-align: center;
-}
 
-.markdown-body.logbook-mode td:nth-child(2) {
-  text-align: left;
-}
 
 .markdown-body th {
   background: var(--hover-bg);
@@ -692,9 +669,7 @@ body {
   margin: 16px 0;
 }
 
-.markdown-body.logbook-mode img {
-  margin: 16px auto;
-}
+
 
 .markdown-body p[align="center"], 
 .markdown-body div[align="center"] {
