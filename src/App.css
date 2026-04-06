@@ -551,9 +551,9 @@ body {
   overflow: hidden;
   cursor: pointer;
   background: var(--hover-bg);
-  padding: 16px;
-  border-radius: 12px;
-  margin: 16px 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 12px 0;
   border: 1px solid var(--border-color);
   outline: none;
   -webkit-tap-highlight-color: transparent !important;
@@ -583,7 +583,7 @@ body {
 
 .markdown-body code {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: var(--active-color);
   padding: 0.2em 0.4em;
   border-radius: 6px;
