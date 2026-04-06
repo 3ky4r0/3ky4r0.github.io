@@ -37,12 +37,12 @@ function App() {
   // Logic Layer Integration
   const { theme, setTheme, activeTheme } = useTheme();
   const [currentSource, setCurrentSource] = useState('foss');
-  const [displayType, setDisplayType] = useState(() => (window.innerWidth <= 768 ? 'video' : 'markdown'));
+  const [displayType, setDisplayType] = useState(() => (window.innerWidth <= 768 ? 'image' : 'markdown'));
   const { markdown: markdownRaw, isLoading: isMarkdownLoading } = useMarkdown(currentSource, MARKDOWN_SOURCES);
   const totpCodes = useTotp(KEYS);
 
   // Remaining Local Logic (UI State)
-  const [currentImage, setCurrentImage] = useState({ src: '', label: '' });
+  const [currentImage, setCurrentImage] = useState(() => (window.innerWidth <= 768 ? { src: 'bank/momo.webp', label: 'MoMo' } : { src: '', label: '' }));
   const [currentPdf, setCurrentPdf] = useState({ src: '', label: '' });
   const [expandedFolders, setExpandedFolders] = useState({
     resources: true,
