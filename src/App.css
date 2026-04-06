@@ -1114,51 +1114,6 @@ code {
   transform: scale(1.2) rotate(90deg);
 }
 
-.close-btn:active {
-  transform: scale(0.9);
-}
-
-.modal-img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* PDF Viewer Styles */
-.pdf-viewer-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 0;
-  /* Removed gap */
-}
-
-.pdf-document-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: transparent;
-  /* Seamless background */
-  border-radius: 0;
-  /* Squared edges */
-  padding: 5px;
-  /* Minimal padding */
-  gap: 15px;
-}
-
-.pdf-page-item {
-  margin-bottom: 10px;
-}
-
-.loading-text,
-.error-text {
-  padding: 40px;
-  text-align: center;
-  color: #8b949e;
-}
-
 /* react-pdf overrides */
 .react-pdf__Page__canvas {
   max-width: 100% !important;
@@ -1554,4 +1509,69 @@ code {
   .otp-screen-container .otp-digit {
     font-size: clamp(0.86rem, 4vw, 1rem);
   }
+}
+
+/* PDF Viewer Loading-Spinner Animation */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.pdf-loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  background: var(--bg-color);
+}
+
+.modal-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* PDF Viewer Styles */
+.pdf-viewer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0;
+  position: relative;
+}
+
+.pdf-document-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  padding: 5px;
+  gap: 15px;
+  position: relative;
+}
+
+.pdf-page-item {
+  margin-bottom: 10px;
+}
+
+.loading-text,
+.error-text {
+  padding: 40px;
+  text-align: center;
+  color: #8b949e;
+}
+
+.loading-spinner-img {
+  width: 48px;
+  height: 48px;
+  animation: spin-slow 2s linear infinite;
+  /* Transform brown image to theme's lavender #cba6f7 */
+  filter: brightness(0) saturate(100%) invert(87%) sepia(31%) saturate(1485%) hue-rotate(200deg) brightness(101%) contrast(100%);
 }

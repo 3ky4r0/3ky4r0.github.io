@@ -21,7 +21,11 @@ function PdfViewer({ file, onLoadFinish }) {
                     file={file}
                     onLoadSuccess={onDocumentLoadSuccess}
                     onLoadError={() => onLoadFinish && onLoadFinish()}
-                    loading={null}
+                    loading={
+                        <div className="pdf-loading-container">
+                            <img src="/loading-indicator.png" className="loading-spinner-img" alt="Loading..." />
+                        </div>
+                    }
                     error={<div className="error-text">Không thể tải PDF.</div>}
                 >
                     {Array.from(new Array(numPages), (el, index) => (
