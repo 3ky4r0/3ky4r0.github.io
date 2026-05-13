@@ -1,1 +1,196 @@
-<meta http-equiv="refresh" content="0;url=https://github.com/duyxyz">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>_</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: hsl(226 68% 30%);
+    --secondary: hsl(207 66% 61%);
+    --surface: hsl(0 0% 100%);
+    --on-surface: hsl(0 0% 15%);
+    --outline: hsl(208 22% 85%);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --primary: hsl(222 5% 90%);
+      --secondary: hsl(222 5% 80%);
+      --surface: hsl(222 5% 7%);
+      --on-surface: hsl(222 5% 82%);
+      --outline: hsl(222 5% 21%);
+    }
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--surface);
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+  }
+
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 10;
+  }
+  #overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  #launcher {
+    position: fixed;
+    top: 28%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    width: min(480px, 92vw);
+    background: var(--surface);
+    border: 1px solid var(--outline);
+    border-radius: 8px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 20;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+  #launcher.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  #input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--outline);
+  }
+
+  #slash {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--secondary);
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  #cmd-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--on-surface);
+    caret-color: var(--primary);
+  }
+
+  #cmd-input::placeholder {
+    color: var(--secondary);
+    opacity: 0.5;
+  }
+
+  #footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 8px 16px;
+  }
+
+  .key-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--secondary);
+  }
+
+  kbd {
+    background: transparent;
+    border: 1px solid var(--outline);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--on-surface);
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<div id="overlay"></div>
+
+<div id="launcher">
+  <div id="input-row">
+    <span id="slash">/</span>
+    <input id="cmd-input" type="text" autocomplete="off" spellcheck="false" placeholder="command">
+  </div>
+  <div id="footer">
+    <span class="key-hint"><kbd>↵</kbd> open</span>
+    <span class="key-hint"><kbd>esc</kbd> close</span>
+  </div>
+</div>
+
+<script>
+  const BASE = 'https://duyxyz.github.io/';
+
+  const overlay  = document.getElementById('overlay');
+  const launcher = document.getElementById('launcher');
+  const input    = document.getElementById('cmd-input');
+  let open = false;
+
+  function openLauncher() {
+    open = true;
+    overlay.classList.add('active');
+    launcher.classList.add('active');
+    input.value = '';
+    setTimeout(() => input.focus(), 40);
+  }
+
+  function closeLauncher() {
+    open = false;
+    overlay.classList.remove('active');
+    launcher.classList.remove('active');
+    input.blur();
+  }
+
+  function execute() {
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    closeLauncher();
+    window.open(BASE + cmd, '_blank');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!open && e.key === '/') {
+      e.preventDefault();
+      openLauncher();
+      return;
+    }
+    if (open) {
+      if (e.key === 'Escape') { closeLauncher(); return; }
+      if (e.key === 'Enter')  { execute(); return; }
+    }
+  });
+
+  overlay.addEventListener('click', closeLauncher);
+</script>
+</body>
+</html>
