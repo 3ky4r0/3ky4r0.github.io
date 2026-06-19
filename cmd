@@ -3,28 +3,63 @@ $repo = "CMD"
 
 $api = "https://api.github.com/repos/$owner/$repo/contents"
 
-$files = Invoke-RestMethod $api |
-    Where-Object { $_.name -like "*.cmd" }
+try {
+    $files = Invoke-RestMethod -Uri $api |
+        Where-Object {
+            $_.type -eq "file" -and
+            $_.name.ToLower().EndsWith(".cmd")
+        } |
+        Sort-Object name
 
-Write-Host ""
-Write-Host "=== Duy CMD Menu ==="
-Write-Host ""
+    if ($files.Count -eq 0) {
+        Write-Host "Khong tim thay file .cmd nao!"
+        pause
+        exit
+    }
 
-for ($i = 0; $i -lt $files.Count; $i++) {
-    Write-Host "$($i+1). $($files[$i].name)"
-}
+    Clear-Host
 
-$choice = Read-Host "Chon lenh"
 
-if ($choice -match '^\d+$') {
+    for ($i = 0; $i -lt $files.Count; $i++) {
+        $displayName = ($files[$i].name -replace '\.cmd$','') -replace '[._]',' '
+        Write-Host "$($i + 1). $displayName"
+    }
+
+    Write-Host ""
+    $choice = Read-Host "Chon Lenh"
+
+    if ($choice -notmatch '^\d+$') {
+        Write-Host "Lua chon khong hop le!"
+        pause
+        exit
+    }
+
     $index = [int]$choice - 1
 
-    if ($index -ge 0 -and $index -lt $files.Count) {
-        $temp = "$env:TEMP\$($files[$index].name)"
-
-        Invoke-WebRequest $files[$index].download_url `
-            -OutFile $temp
-
-        Start-Process cmd "/c `"$temp`"" -Wait
+    if ($index -lt 0 -or $index -ge $files.Count) {
+        Write-Host "Lua chon khong hop le!"
+        pause
+        exit
     }
+
+    $selected = $files[$index]
+
+    $tempFile = Join-Path $env:TEMP $selected.name
+
+    Write-Host ""
+    Write-Host "Dang tai $($selected.name)..."
+
+    Invoke-WebRequest `
+        -Uri $selected.download_url `
+        -OutFile $tempFile
+
+    Write-Host "Dang chay..."
+    Start-Process cmd.exe "/c `"$tempFile`"" -Wait
+
+}
+catch {
+    Write-Host ""
+    Write-Host "Loi:"
+    Write-Host $_.Exception.Message
+    pause
 }
