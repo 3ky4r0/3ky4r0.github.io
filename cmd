@@ -19,14 +19,13 @@ try {
 
     Clear-Host
 
-
     for ($i = 0; $i -lt $files.Count; $i++) {
         $displayName = ($files[$i].name -replace '\.cmd$','') -replace '[._]',' '
-        Write-Host "$($i + 1). $displayName"
+        Write-Host "[$($i + 1)] $displayName"
     }
 
     Write-Host ""
-    $choice = Read-Host "Chon Lenh"
+    $choice = Read-Host ">"
 
     if ($choice -notmatch '^\d+$') {
         Write-Host "Lua chon khong hop le!"
@@ -43,23 +42,16 @@ try {
     }
 
     $selected = $files[$index]
-
     $tempFile = Join-Path $env:TEMP $selected.name
-
-    Write-Host ""
-    Write-Host "Dang tai $($selected.name)..."
 
     Invoke-WebRequest `
         -Uri $selected.download_url `
         -OutFile $tempFile
 
-    Write-Host "Dang chay..."
     Start-Process cmd.exe "/c `"$tempFile`"" -Wait
 
 }
 catch {
-    Write-Host ""
-    Write-Host "Loi:"
-    Write-Host $_.Exception.Message
+    Write-Host "Loi: $($_.Exception.Message)"
     pause
 }
