@@ -35,32 +35,32 @@
   </main>
 
   <script>
-    const PROXY = 'https://corsproxy.io/?url=';
     const TARGET = 'https://rentry.org/duyxyz';
+    const url = 'https://api.allorigins.win/get?url=' + encodeURIComponent(TARGET) + '&t=' + Date.now();
 
-    fetch(PROXY + encodeURIComponent(TARGET))
-      .then(r => r.text())
-      .then(html => {
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        const html = data.contents;
         const doc = new DOMParser().parseFromString(html, 'text/html');
 
-        // rentry đánh dấu link nội dung bằng class "external"
-        let links = Array.from(doc.querySelectorAll('a.external[href]'));
+        console.log('[debug] HTML length:', html.length);
+        console.log('[debug] All links:', Array.from(doc.querySelectorAll('a')).map(a => a.className + ' | ' + a.getAttribute('href') + ' | ' + a.textContent.trim()));
 
-        // fallback: lấy link trong .entry-text
-        if (links.length === 0) {
-          links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
-        }
+        // Lấy tất cả link, lọc chỉ giữ link ngoài (không phải rentry)
+        let links = Array.from(doc.querySelectorAll('a[href]')).filter(a => {
+          const href = a.getAttribute('href') || '';
+          const text = a.textContent.trim();
+          return text && href.startsWith('http') && !href.includes('rentry.');
+        });
 
-        // fallback: lấy link trong article
-        if (links.length === 0) {
-          links = Array.from(doc.querySelectorAll('article a[href]'));
-        }
+        console.log('[debug] Filtered links:', links.map(a => a.getAttribute('href') + ' | ' + a.textContent.trim()));
 
         const container = document.getElementById('links');
         const status = document.getElementById('status');
 
         if (links.length === 0) {
-          status.textContent = 'Không tìm thấy link nào.';
+          status.textContent = 'Không tìm thấy link. Mở F12 > Console để debug.';
           return;
         }
 
@@ -76,6 +76,7 @@
       })
       .catch(err => {
         document.getElementById('status').textContent = 'Lỗi: ' + err.message;
+        console.error(err);
       });
   </script>
 
