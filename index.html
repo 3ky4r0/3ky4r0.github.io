@@ -35,49 +35,32 @@
   </main>
 
   <script>
+    const PROXY = 'https://corsproxy.io/?url=';
     const TARGET = 'https://rentry.org/duyxyz';
 
-    // Danh sách proxy, thử lần lượt
-    const PROXIES = [
-      url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&t=${Date.now()}`,
-      url => `https://corsproxy.io/?url=${encodeURIComponent(url)}&t=${Date.now()}`,
-      url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-    ];
-
-    async function fetchHtml(target) {
-      for (const makeUrl of PROXIES) {
-        try {
-          const res = await fetch(makeUrl(target));
-          if (!res.ok) continue;
-          const ct = res.headers.get('content-type') || '';
-          if (ct.includes('json')) {
-            const data = await res.json();
-            return data.contents;
-          }
-          return await res.text();
-        } catch (e) {
-          console.warn('Proxy lỗi, thử tiếp:', makeUrl(target), e.message);
-        }
-      }
-      throw new Error('Tất cả proxy đều thất bại');
-    }
-
-    fetchHtml(TARGET)
+    fetch(PROXY + encodeURIComponent(TARGET + '?_=' + Date.now()), { cache: 'no-store' })
+      .then(r => r.text())
       .then(html => {
         const doc = new DOMParser().parseFromString(html, 'text/html');
 
-        // Lấy tất cả link ngoài (không phải rentry)
-        const links = Array.from(doc.querySelectorAll('a[href]')).filter(a => {
-          const href = a.getAttribute('href') || '';
-          const text = a.textContent.trim();
-          return text && href.startsWith('http') && !href.includes('rentry.');
-        });
+        // rentry đánh dấu link nội dung bằng class "external"
+        let links = Array.from(doc.querySelectorAll('a.external[href]'));
+
+        // fallback: lấy link trong .entry-text
+        if (links.length === 0) {
+          links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
+        }
+
+        // fallback: lấy link trong article
+        if (links.length === 0) {
+          links = Array.from(doc.querySelectorAll('article a[href]'));
+        }
 
         const container = document.getElementById('links');
         const status = document.getElementById('status');
 
         if (links.length === 0) {
-          status.textContent = 'Không tìm thấy link.';
+          status.textContent = 'Không tìm thấy link nào.';
           return;
         }
 
@@ -93,7 +76,6 @@
       })
       .catch(err => {
         document.getElementById('status').textContent = 'Lỗi: ' + err.message;
-        console.error(err);
       });
   </script>
 
