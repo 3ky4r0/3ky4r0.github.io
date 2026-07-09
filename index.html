@@ -1,64 +1,82 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>duyxyz</title>
-<style>
-  body { font-family: sans-serif; max-width: 600px; margin: 60px auto; padding: 0 16px; }
-  a { display: block; margin: 8px 0; }
-  #status { color: gray; font-size: 0.9em; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>duyxyz</title>
+  <meta name="description" content="duyxyz.">
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 0 16px;
+    }
+
+    a {
+      display: block;
+      margin: 8px 0;
+    }
+
+    #status {
+      color: gray;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
+
 <body>
 
+<h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">duyxyz</h1>
 <div id="status">Đang tải...</div>
-<div id="links"></div>
+  <div id="links"></div>
 
-<script>
-const PROXY = 'https://corsproxy.io/?url=';
-const TARGET = 'https://rentry.org/duyxyz';
+  <script>
+    const PROXY = 'https://corsproxy.io/?url=';
+    const TARGET = 'https://rentry.org/duyxyz';
 
-fetch(PROXY + encodeURIComponent(TARGET))
-  .then(r => r.text())
-  .then(html => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    fetch(PROXY + encodeURIComponent(TARGET))
+      .then(r => r.text())
+      .then(html => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
 
-    // rentry đánh dấu link nội dung bằng class "external"
-    let links = Array.from(doc.querySelectorAll('a.external[href]'));
+        // rentry đánh dấu link nội dung bằng class "external"
+        let links = Array.from(doc.querySelectorAll('a.external[href]'));
 
-    // fallback: lấy link trong .entry-text
-    if (links.length === 0) {
-      links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
-    }
+        // fallback: lấy link trong .entry-text
+        if (links.length === 0) {
+          links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
+        }
 
-    // fallback: lấy link trong article
-    if (links.length === 0) {
-      links = Array.from(doc.querySelectorAll('article a[href]'));
-    }
+        // fallback: lấy link trong article
+        if (links.length === 0) {
+          links = Array.from(doc.querySelectorAll('article a[href]'));
+        }
 
-    const container = document.getElementById('links');
-    const status = document.getElementById('status');
+        const container = document.getElementById('links');
+        const status = document.getElementById('status');
 
-    if (links.length === 0) {
-      status.textContent = 'Không tìm thấy link nào.';
-      return;
-    }
+        if (links.length === 0) {
+          status.textContent = 'Không tìm thấy link nào.';
+          return;
+        }
 
-    status.textContent = '';
-    links.forEach(a => {
-      const el = document.createElement('a');
-      el.href = a.getAttribute('href');
-      el.textContent = a.textContent.trim();
-      el.target = '_blank';
-      el.rel = 'noopener noreferrer';
-      container.appendChild(el);
-    });
-  })
-  .catch(err => {
-    document.getElementById('status').textContent = 'Lỗi: ' + err.message;
-  });
-</script>
+        status.textContent = '';
+        links.forEach(a => {
+          const el = document.createElement('a');
+          el.href = a.getAttribute('href');
+          el.textContent = a.textContent.trim();
+          el.target = '_blank';
+          el.rel = 'noopener noreferrer';
+          container.appendChild(el);
+        });
+      })
+      .catch(err => {
+        document.getElementById('status').textContent = 'Lỗi: ' + err.message;
+      });
+  </script>
 
 </body>
+
 </html>
