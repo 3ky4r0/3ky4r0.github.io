@@ -1,114 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-
+<title>duyxyz</title>
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  :root {
-    --surface: hsl(0 0% 100%);
-    --on-surface: hsl(0 0% 12%);
-    --outline: hsl(220 15% 88%);
-    --secondary: hsl(220 10% 55%);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --surface: hsl(222 5% 7%);
-      --on-surface: hsl(222 5% 86%);
-      --outline: hsl(222 5% 20%);
-      --secondary: hsl(222 5% 55%);
-    }
-  }
-
-  html,
-  body {
-    width: 100%;
-    height: 100%;
-    background: var(--surface);
-    display: flex;
-    justify-content: center;
-    padding-top: 18vh;
-    overflow: hidden;
-  }
-
-  #cmd {
-    width: min(480px, 92vw);
-    height: 48px;
-
-    background: var(--surface);
-    color: var(--on-surface);
-
-    border: 1px solid var(--outline);
-    border-radius: 8px;
-
-    outline: none;
-
-    padding: 0 16px;
-
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-
-    caret-color: var(--secondary);
-  }
-
-  #cmd::placeholder {
-    color: var(--secondary);
-    opacity: 0.6;
-  }
+  body { font-family: sans-serif; max-width: 600px; margin: 60px auto; padding: 0 16px; }
+  a { display: block; margin: 8px 0; }
+  #status { color: gray; font-size: 0.9em; }
 </style>
 </head>
-
 <body>
 
-<input
-  id="cmd"
-  type="text"
-  autocomplete="off"
-  spellcheck="false"
-  placeholder="Type / to search"
-/>
+<h1>duyxyz</h1>
+<div id="status">Đang tải...</div>
+<div id="links"></div>
 
 <script>
-  const BASE = 'https://duyxyz.github.io/';
-  const input = document.getElementById('cmd');
+const PROXY = 'https://corsproxy.io/?url=';
+const TARGET = 'https://rentry.org/duyxyz';
 
-  document.addEventListener('keydown', e => {
+fetch(PROXY + encodeURIComponent(TARGET))
+  .then(r => r.text())
+  .then(html => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
 
-    if (e.key === '/' && document.activeElement !== input) {
-      e.preventDefault();
-      input.focus();
+    // rentry đánh dấu link nội dung bằng class "external"
+    let links = Array.from(doc.querySelectorAll('a.external[href]'));
+
+    // fallback: lấy link trong .entry-text
+    if (links.length === 0) {
+      links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
+    }
+
+    // fallback: lấy link trong article
+    if (links.length === 0) {
+      links = Array.from(doc.querySelectorAll('article a[href]'));
+    }
+
+    const container = document.getElementById('links');
+    const status = document.getElementById('status');
+
+    if (links.length === 0) {
+      status.textContent = 'Không tìm thấy link nào.';
       return;
     }
 
-    if (e.key === 'Escape') {
-      input.blur();
-      input.value = '';
-      return;
-    }
-
-    if (e.key === 'Enter' && document.activeElement === input) {
-
-      const cmd = input.value.trim();
-
-      if (!cmd) return;
-
-      window.open(BASE + cmd, '_blank');
-
-      input.value = '';
-      input.blur();
-    }
-
+    status.textContent = '';
+    links.forEach(a => {
+      const el = document.createElement('a');
+      el.href = a.getAttribute('href');
+      el.textContent = a.textContent.trim();
+      el.target = '_blank';
+      el.rel = 'noopener noreferrer';
+      container.appendChild(el);
+    });
+  })
+  .catch(err => {
+    document.getElementById('status').textContent = 'Lỗi: ' + err.message;
   });
 </script>
 
