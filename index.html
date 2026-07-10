@@ -84,10 +84,38 @@
       width: 32px;
       height: 32px;
     }
+
+    .bg-illustration {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      max-height: 45vh;
+      max-width: 30vw;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.95;
+    }
+
+    .left-illustration {
+      left: 20px;
+    }
+
+    .right-illustration {
+      right: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .bg-illustration {
+        display: none;
+      }
+    }
   </style>
 </head>
 
 <body>
+
+  <img src="assets/1.png" alt="Makoto Niijima" class="bg-illustration left-illustration">
+  <img src="assets/2.png" alt="Morgana" class="bg-illustration right-illustration">
 
   <main>
     <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">duyxyz</h1>
