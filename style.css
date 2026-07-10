@@ -1,0 +1,151 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 24px;
+  background-color: #ffffff;
+  color: #111827;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+#links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#links a {
+  display: block;
+  width: fit-content;
+  margin: 14px 0;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 1.05em;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+#links a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+#status {
+  color: #6b7280;
+  font-size: 0.95em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 4px; /* Thu hẹp khoảng cách các nút còn 4px */
+}
+
+.fab-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: transparent;
+  color: #666;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.fab-btn:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #000;
+}
+
+.fab-btn svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 2;
+}
+
+#fab-pinterest svg,
+#fab-facebook svg,
+#fab-tiktok svg {
+  width: 36px;
+  height: 36px;
+}
+
+#fab-github svg {
+  width: 32px;
+  height: 32px;
+}
+
+.top-controls {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 4px;
+  z-index: 1000;
+}
+
+/* Dark Theme Styles */
+body.dark-theme {
+  background-color: #1c1c1c;
+  color: #f9fafb;
+}
+
+body.dark-theme #status {
+  color: #9ca3af;
+}
+
+body.dark-theme #links a {
+  color: #60a5fa;
+}
+
+body.dark-theme #links a:hover {
+  color: #93c5fd;
+}
+
+body.dark-theme .fab-btn {
+  color: #9ca3af;
+}
+
+body.dark-theme .fab-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.bg-illustration {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 45vh;
+  max-width: 30vw;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.95;
+}
+
+.left-illustration {
+  left: 20px;
+}
+
+.right-illustration {
+  right: 20px;
+}
+
+@media (max-width: 1024px) {
+  .bg-illustration {
+    display: none;
+  }
+}

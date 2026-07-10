@@ -8,164 +8,19 @@
   <meta name="description" content="duyxyz.">
   <meta name="google-site-verification" content="pZVinKBAW4pfP9EmQFUHf_y3g5mnE8Yv05ubMc5diQw" />
   <link rel="preconnect" href="https://corsproxy.io">
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 0 24px;
-      background-color: #ffffff;
-      color: #111827;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      box-sizing: border-box;
-    }
-
-    #links {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-
-    #links a {
-      display: block;
-      width: fit-content;
-      margin: 14px 0;
-      color: #2563eb;
-      text-decoration: none;
-      font-size: 1.05em;
-      font-weight: 500;
-      transition: color 0.15s ease;
-    }
-
-    #links a:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
-
-    #status {
-      color: #6b7280;
-      font-size: 0.95em;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .fab-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      display: flex;
-      gap: 4px; /* Thu hẹp khoảng cách các nút còn 4px */
-    }
-
-    .fab-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: transparent;
-      color: #666;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: color 0.15s ease, background-color 0.15s ease;
-    }
-
-    .fab-btn:hover {
-      background-color: rgba(0, 0, 0, 0.2);
-      color: #000;
-    }
-
-    .fab-btn svg {
-      width: 30px;
-      height: 30px;
-      stroke-width: 2;
-    }
-
-    #fab-pinterest svg,
-    #fab-facebook svg,
-    #fab-tiktok svg {
-      width: 36px;
-      height: 36px;
-    }
-
-    #fab-github svg {
-      width: 32px;
-      height: 32px;
-    }
-
-    .top-controls {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      display: flex;
-      gap: 4px;
-      z-index: 1000;
-    }
-
-    /* Dark Theme Styles */
-    body.dark-theme {
-      background-color: #1c1c1c;
-      color: #f9fafb;
-    }
-
-    body.dark-theme #status {
-      color: #9ca3af;
-    }
-
-    body.dark-theme #links a {
-      color: #60a5fa;
-    }
-
-    body.dark-theme #links a:hover {
-      color: #93c5fd;
-    }
-
-    body.dark-theme .fab-btn {
-      color: #9ca3af;
-    }
-
-    body.dark-theme .fab-btn:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-    }
-
-
-
-    .bg-illustration {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      max-height: 45vh;
-      max-width: 30vw;
-      pointer-events: none;
-      z-index: -1;
-      opacity: 0.95;
-    }
-
-    .left-illustration {
-      left: 20px;
-    }
-
-    .right-illustration {
-      right: 20px;
-    }
-
-    @media (max-width: 1024px) {
-      .bg-illustration {
-        display: none;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.body.classList.add('dark-theme');
+      }
+    })();
+  </script>
 
   <div class="top-controls">
     <button id="theme-toggle" class="fab-btn" title="Chuyển chế độ sáng/tối">
@@ -184,93 +39,6 @@
     <div id="status">Đang tải</div>
     <div id="links"></div>
   </main>
-
-  <script>
-    const PROXY = 'https://corsproxy.io/?url=';
-    const TARGETS = [
-      'https://rentry.org/duyxyz',
-      'https://rentry.co/duyxyz'
-    ];
-
-    function parseLinks(html) {
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      let links = Array.from(doc.querySelectorAll('a.external[href]'));
-      if (links.length === 0) links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
-      if (links.length === 0) links = Array.from(doc.querySelectorAll('article a[href]'));
-      return links;
-    }
-
-    function tryFetch(index) {
-      if (index >= TARGETS.length) {
-        document.getElementById('status').textContent = 'Không tìm thấy link nào.';
-        return;
-      }
-
-      const url = TARGETS[index];
-      fetch(PROXY + encodeURIComponent(url + '?_=' + Date.now()), { cache: 'no-store' })
-        .then(r => r.text())
-        .then(html => {
-          const links = parseLinks(html);
-          const container = document.getElementById('links');
-          const status = document.getElementById('status');
-
-          if (links.length === 0) {
-            // Thử nguồn tiếp theo
-            tryFetch(index + 1);
-            return;
-          }
-
-          status.textContent = '';
-          links.forEach(a => {
-            const el = document.createElement('a');
-            el.href = a.getAttribute('href');
-            el.textContent = a.textContent.trim();
-            el.target = '_blank';
-            el.rel = 'noopener noreferrer';
-            container.appendChild(el);
-          });
-        })
-        .catch(() => {
-          // Nguồn hiện tại lỗi, thử nguồn tiếp theo
-          tryFetch(index + 1);
-        });
-    }
-
-    tryFetch(0);
-
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-
-    const sunSVG = `<circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" />`;
-    const moonSVG = `<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />`;
-
-    function updateIcon(isDark) {
-      themeIcon.innerHTML = isDark ? moonSVG : sunSVG;
-      themeIcon.setAttribute('class', isDark ? 'lucide lucide-moon' : 'lucide lucide-sun');
-    }
-
-    function toggleTheme() {
-      const isDark = document.body.classList.toggle('dark-theme');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      updateIcon(isDark);
-    }
-
-    // Initialize Theme
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-
-    if (initialDark) {
-      document.body.classList.add('dark-theme');
-      updateIcon(true);
-    } else {
-      document.body.classList.remove('dark-theme');
-      updateIcon(false);
-    }
-
-    themeToggle.addEventListener('click', toggleTheme);
-  </script>
 
   <div class="fab-container">
     <a id="fab-steam" class="fab-btn" href="https://steamcommunity.com/id/duyxyz/" target="_blank" rel="noopener noreferrer" title="Steam duyxyz">
@@ -294,5 +62,7 @@
     </a>
   </div>
 
+  <script src="script.js" defer></script>
 </body>
+
 </html>
