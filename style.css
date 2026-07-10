@@ -31,9 +31,11 @@ body {
   transition: color 0.15s ease;
 }
 
-#links a:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
+@media (hover: hover) {
+  #links a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
 }
 
 #status {
@@ -66,8 +68,15 @@ body {
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.fab-btn:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+@media (hover: hover) {
+  .fab-btn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #000;
+  }
+}
+
+.fab-btn:active {
+  background-color: rgba(0, 0, 0, 0.15);
   color: #000;
 }
 
@@ -112,16 +121,25 @@ body.dark-theme #links a {
   color: #60a5fa;
 }
 
-body.dark-theme #links a:hover {
-  color: #93c5fd;
+@media (hover: hover) {
+  body.dark-theme #links a:hover {
+    color: #93c5fd;
+  }
 }
 
 body.dark-theme .fab-btn {
   color: #9ca3af;
 }
 
-body.dark-theme .fab-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+@media (hover: hover) {
+  body.dark-theme .fab-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+}
+
+body.dark-theme .fab-btn:active {
+  background-color: rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }
 

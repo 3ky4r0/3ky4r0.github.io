@@ -134,3 +134,37 @@ function fetchWeather() {
 }
 
 fetchWeather();
+
+// Dynamic background illustration loading for desktop only
+function initBackgrounds() {
+  const mediaQuery = window.matchMedia('(min-width: 1025px)');
+  
+  function handleTabletChange(e) {
+    if (e.matches) {
+      if (!document.querySelector('.bg-illustration')) {
+        const leftImg = document.createElement('img');
+        leftImg.src = 'assets/1.webp';
+        leftImg.alt = 'Makoto Niijima';
+        leftImg.className = 'bg-illustration left-illustration';
+
+        const rightImg = document.createElement('img');
+        rightImg.src = 'assets/2.webp';
+        rightImg.alt = 'Morgana';
+        rightImg.className = 'bg-illustration right-illustration';
+
+        document.body.appendChild(leftImg);
+        document.body.appendChild(rightImg);
+      }
+    }
+  }
+  
+  if (typeof mediaQuery.addEventListener === 'function') {
+    mediaQuery.addEventListener('change', handleTabletChange);
+  } else {
+    mediaQuery.addListener(handleTabletChange);
+  }
+  
+  handleTabletChange(mediaQuery);
+}
+
+initBackgrounds();
