@@ -177,6 +177,12 @@ body.dark-theme .fab-btn:active {
   }
 }
 
+@media (max-width: 768px) {
+  .bottom-left-controls {
+    display: none;
+  }
+}
+
 /* Weather Widget Styles */
 .weather-widget {
   position: fixed;
