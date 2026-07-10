@@ -9,20 +9,72 @@
   <meta name="google-site-verification" content="pZVinKBAW4pfP9EmQFUHf_y3g5mnE8Yv05ubMc5diQw" />
   <style>
     body {
-      font-family: sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       max-width: 600px;
       margin: 60px auto;
-      padding: 0 16px;
+      padding: 0 24px;
+      background-color: #f9fafb;
+      color: #111827;
     }
 
-    a {
+    #links a {
       display: block;
-      margin: 8px 0;
+      padding: 14px 20px;
+      margin: 12px 0;
+      color: #1f2937;
+      text-decoration: none;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1.05em;
+      font-weight: 500;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    #links a:hover {
+      border-color: #d1d5db;
+      background-color: #f9fafb;
+      color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
     #status {
-      color: gray;
-      font-size: 0.9em;
+      color: #6b7280;
+      font-size: 0.95em;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: transparent;
+      color: #666;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    #fab:hover {
+      background-color: rgba(0, 0, 0, 0.08);
+      color: #000;
+      transform: scale(1.08);
+    }
+
+    #fab svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2;
     }
   </style>
 </head>
@@ -37,48 +89,61 @@
 
   <script>
     const PROXY = 'https://corsproxy.io/?url=';
-    const TARGET = 'https://rentry.org/duyxyz';
+    const TARGETS = [
+      'https://rentry.org/duyxyz',
+      'https://rentry.co/duyxyz'
+    ];
 
-    fetch(PROXY + encodeURIComponent(TARGET + '?_=' + Date.now()), { cache: 'no-store' })
-      .then(r => r.text())
-      .then(html => {
-        const doc = new DOMParser().parseFromString(html, 'text/html');
+    function parseLinks(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      let links = Array.from(doc.querySelectorAll('a.external[href]'));
+      if (links.length === 0) links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
+      if (links.length === 0) links = Array.from(doc.querySelectorAll('article a[href]'));
+      return links;
+    }
 
-        // rentry đánh dấu link nội dung bằng class "external"
-        let links = Array.from(doc.querySelectorAll('a.external[href]'));
+    function tryFetch(index) {
+      if (index >= TARGETS.length) {
+        document.getElementById('status').textContent = 'Không tìm thấy link nào.';
+        return;
+      }
 
-        // fallback: lấy link trong .entry-text
-        if (links.length === 0) {
-          links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
-        }
+      const url = TARGETS[index];
+      fetch(PROXY + encodeURIComponent(url + '?_=' + Date.now()), { cache: 'no-store' })
+        .then(r => r.text())
+        .then(html => {
+          const links = parseLinks(html);
+          const container = document.getElementById('links');
+          const status = document.getElementById('status');
 
-        // fallback: lấy link trong article
-        if (links.length === 0) {
-          links = Array.from(doc.querySelectorAll('article a[href]'));
-        }
+          if (links.length === 0) {
+            // Thử nguồn tiếp theo
+            tryFetch(index + 1);
+            return;
+          }
 
-        const container = document.getElementById('links');
-        const status = document.getElementById('status');
-
-        if (links.length === 0) {
-          status.textContent = 'Không tìm thấy link nào.';
-          return;
-        }
-
-        status.textContent = '';
-        links.forEach(a => {
-          const el = document.createElement('a');
-          el.href = a.getAttribute('href');
-          el.textContent = a.textContent.trim();
-          el.target = '_blank';
-          el.rel = 'noopener noreferrer';
-          container.appendChild(el);
+          status.textContent = '';
+          links.forEach(a => {
+            const el = document.createElement('a');
+            el.href = a.getAttribute('href');
+            el.textContent = a.textContent.trim();
+            el.target = '_blank';
+            el.rel = 'noopener noreferrer';
+            container.appendChild(el);
+          });
+        })
+        .catch(() => {
+          // Nguồn hiện tại lỗi, thử nguồn tiếp theo
+          tryFetch(index + 1);
         });
-      })
-      .catch(err => {
-        document.getElementById('status').textContent = 'Lỗi: ' + err.message;
-      });
+    }
+
+    tryFetch(0);
   </script>
+
+  <a id="fab" href="https://rentry.co/duyxyz" target="_blank" rel="noopener noreferrer" title="Mở rentry.co/duyxyz">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+  </a>
 
 </body>
 
