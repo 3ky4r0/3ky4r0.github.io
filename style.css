@@ -149,3 +149,73 @@ body.dark-theme .fab-btn:hover {
     display: none;
   }
 }
+
+/* Weather Widget Styles */
+.weather-widget {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: inherit;
+  z-index: 1000;
+  transition: color 0.3s ease;
+}
+
+.weather-city {
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280; /* gray-500 */
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.weather-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #374151; /* gray-700 */
+}
+
+.weather-icon-container svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.2;
+}
+
+#weather-temp {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: #111827; /* gray-900 */
+}
+
+#weather-desc {
+  font-size: 0.9em;
+  color: #4b5563; /* gray-600 */
+}
+
+/* Dark theme style updates */
+body.dark-theme .weather-city {
+  color: #9ca3af;
+}
+
+body.dark-theme .weather-icon-container {
+  color: #d1d5db;
+}
+
+body.dark-theme #weather-temp {
+  color: #f9fafb;
+}
+
+body.dark-theme #weather-desc {
+  color: #9ca3af;
+}
