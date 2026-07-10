@@ -93,8 +93,7 @@ body {
   height: 36px;
 }
 
-#fab-github svg,
-#fab-ublock svg {
+#fab-github svg {
   width: 32px;
   height: 32px;
 }
