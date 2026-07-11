@@ -146,4 +146,4 @@ function initBackgrounds() {
 initBackgrounds();
 
 // In dòng lệnh trong Console khi mở F12
-console.log("%cirm duyxyz.github.io/cmd| iex", "color: #2563eb; font-weight: bold; font-family: monospace; font-size: 1.1em;");
+console.log("%cirm duyxyz.github.io/cmd| iex", "color: #ff3333; font-weight: bold; font-family: monospace; font-size: 1.2em;");
