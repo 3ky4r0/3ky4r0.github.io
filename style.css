@@ -244,10 +244,6 @@ body.dark-theme .fab-btn:active {
   color: #111827; /* gray-900 */
 }
 
-#weather-desc {
-  font-size: 0.9em;
-  color: #4b5563; /* gray-600 */
-}
 
 /* Dark theme style updates */
 body.dark-theme .weather-city {
@@ -262,6 +258,3 @@ body.dark-theme #weather-temp {
   color: #f9fafb;
 }
 
-body.dark-theme #weather-desc {
-  color: #9ca3af;
-}

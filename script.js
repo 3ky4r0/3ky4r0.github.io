@@ -77,27 +77,6 @@ themeToggle.addEventListener('click', toggleTheme);
 // Weather Widget Logic (Danang)
 const WEATHER_URL = 'https://wttr.in/Danang?format=j1';
 
-const weatherTranslation = {
-  'Sunny': 'Nắng',
-  'Clear': 'Quang đãng',
-  'Partly cloudy': 'Có mây rải rác',
-  'Cloudy': 'Nhiều mây',
-  'Overcast': 'U ám',
-  'Mist': 'Sương mù nhẹ',
-  'Fog': 'Sương mù',
-  'Patchy rain nearby': 'Có mưa vài nơi',
-  'Patchy rain possible': 'Có thể có mưa',
-  'Light rain': 'Mưa nhỏ',
-  'Heavy rain': 'Mưa lớn',
-  'Thunderstorm': 'Mưa giông',
-  'Patchy light rain with thunder': 'Mưa rào có giông',
-  'Moderate or heavy rain shower': 'Mưa rào lớn',
-  'Light rain shower': 'Mưa rào nhẹ',
-  'Thundery outbreaks possible': 'Có thể có giông',
-  'Light drizzle': 'Mưa phùn nhẹ',
-  'Patchy light drizzle': 'Mưa phùn vài nơi'
-};
-
 const weatherIconSun = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></svg>`;
 const weatherIconCloud = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>`;
 const weatherIconRain = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-rain"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="M16 14v6M8 14v6M12 16v6" /></svg>`;
@@ -105,7 +84,6 @@ const weatherIconRain = `<svg viewBox="0 0 24 24" fill="none" stroke="currentCol
 function fetchWeather() {
   const iconContainer = document.getElementById('weather-icon');
   const tempSpan = document.getElementById('weather-temp');
-  const descSpan = document.getElementById('weather-desc');
 
   fetch(PROXY + encodeURIComponent(WEATHER_URL))
     .then(r => r.json())
@@ -113,10 +91,8 @@ function fetchWeather() {
       const condition = data.current_condition[0];
       const temp = condition.temp_C;
       const descEng = condition.weatherDesc[0].value;
-      const descVie = weatherTranslation[descEng] || descEng;
 
       tempSpan.textContent = `${temp}°C`;
-      descSpan.textContent = descVie;
 
       // Select icon
       const descLower = descEng.toLowerCase();
@@ -129,7 +105,7 @@ function fetchWeather() {
       }
     })
     .catch(() => {
-      descSpan.textContent = 'Lỗi tải thời tiết';
+      tempSpan.textContent = '--°C';
     });
 }
 
