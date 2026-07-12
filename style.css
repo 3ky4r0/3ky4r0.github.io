@@ -28,7 +28,6 @@ body {
   text-decoration: none;
   font-size: 1.05em;
   font-weight: 500;
-  transition: color 0.15s ease;
 }
 
 @media (hover: hover) {
@@ -65,17 +64,16 @@ body {
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 @media (hover: hover) {
   .fab-btn:hover {
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
 .fab-btn:active {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.18);
 }
 
 .fab-btn svg {
@@ -112,17 +110,6 @@ body {
   display: flex;
   gap: 4px;
   z-index: 1000;
-}
-
-#fab-ublock {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
-  background: transparent;
 }
 
 #fab-ublock img {
@@ -163,12 +150,12 @@ body.dark-theme .fab-btn {
 
 @media (hover: hover) {
   body.dark-theme .fab-btn:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }
 
 body.dark-theme .fab-btn:active {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.18);
 }
 
 .bg-illustration {
