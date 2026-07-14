@@ -49,7 +49,8 @@ body {
   bottom: 24px;
   right: 24px;
   display: flex;
-  gap: 4px; /* Thu hẹp khoảng cách các nút còn 4px */
+  gap: 4px;
+  /* Thu hẹp khoảng cách các nút còn 4px */
 }
 
 .fab-btn {
@@ -126,7 +127,7 @@ body {
 
 /* Dark Theme Styles */
 body.dark-theme {
-  background-color: #3c3c3c;
+  background-color: #1F2020;
   color: #f9fafb;
 }
 
@@ -201,7 +202,8 @@ body.dark-theme .fab-btn:active {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b7280; /* gray-500 */
+  color: #6b7280;
+  /* gray-500 */
 }
 
 .weather-main {
@@ -216,7 +218,8 @@ body.dark-theme .fab-btn:active {
   justify-content: center;
   width: 24px;
   height: 24px;
-  color: #374151; /* gray-700 */
+  color: #374151;
+  /* gray-700 */
 }
 
 .weather-icon-container svg {
@@ -228,7 +231,8 @@ body.dark-theme .fab-btn:active {
 #weather-temp {
   font-size: 1.15em;
   font-weight: 700;
-  color: #111827; /* gray-900 */
+  color: #111827;
+  /* gray-900 */
 }
 
 
@@ -244,4 +248,3 @@ body.dark-theme .weather-icon-container {
 body.dark-theme #weather-temp {
   color: #f9fafb;
 }
-
