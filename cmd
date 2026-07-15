@@ -14,18 +14,20 @@ try {
         Write-Host "[$($i + 1)] $displayName"
     }
     Write-Host ""
-    $choice = Read-Host ">"
-    if ($choice -notmatch '^\d+$') {
-        Write-Host "Invalid choice!"
-        pause
-        exit
+
+    $index = -1
+    while ($true) {
+        $choice = Read-Host ">"
+        if ($choice -match '^\d+$') {
+            $tryIndex = [int]$choice - 1
+            if ($tryIndex -ge 0 -and $tryIndex -lt $files.Count) {
+                $index = $tryIndex
+                break
+            }
+        }
+        Write-Host "Invalid choice, try again!"
     }
-    $index = [int]$choice - 1
-    if ($index -lt 0 -or $index -ge $files.Count) {
-        Write-Host "Invalid choice!"
-        pause
-        exit
-    }
+
     $selected = $files[$index]
     $tempFile = Join-Path $env:TEMP $selected.name
     Invoke-WebRequest `
