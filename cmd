@@ -4,7 +4,7 @@ $api = "https://api.github.com/repos/$owner/$repo/contents"
 try {
     $files = Invoke-RestMethod -Uri $api | Sort-Object name
     if ($files.Count -eq 0) {
-        Write-Host "Khong tim thay file nao!"
+        Write-Host "No files found!"
         pause
         exit
     }
@@ -16,13 +16,13 @@ try {
     Write-Host ""
     $choice = Read-Host ">"
     if ($choice -notmatch '^\d+$') {
-        Write-Host "Lua chon khong hop le!"
+        Write-Host "Invalid choice!"
         pause
         exit
     }
     $index = [int]$choice - 1
     if ($index -lt 0 -or $index -ge $files.Count) {
-        Write-Host "Lua chon khong hop le!"
+        Write-Host "Invalid choice!"
         pause
         exit
     }
@@ -35,6 +35,6 @@ try {
     Remove-Item $tempFile -Force
 }
 catch {
-    Write-Host "Loi: $($_.Exception.Message)"
+    Write-Host "Error: $($_.Exception.Message)"
     pause
 }
