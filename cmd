@@ -1,5 +1,5 @@
 $owner = "duyxyz"
-$repo = "CMD"
+$repo = "My-Script-Collection"
 $api = "https://api.github.com/repos/$owner/$repo/contents"
 try {
     $files = Invoke-RestMethod -Uri $api | Sort-Object name
