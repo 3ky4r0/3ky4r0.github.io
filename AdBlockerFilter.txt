@@ -76,4 +76,6 @@ online-fix.me##.messages-0.left.messages
 vi.xhwide.com##.ca1fa-close.ca1fa-overlay
 vi.xhwide.com##.ca1fa-pauseSpotContainer
 vi.xhwide.com##.ec31f16c._51a88326
+vi.xhwide.com##.mBjnr-Reno-ts-init.mBjnr-Re--top.mBjnr-Re
+
 
