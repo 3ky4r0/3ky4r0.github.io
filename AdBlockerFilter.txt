@@ -1,0 +1,79 @@
+! Youtube Shorts
+! Main page
+youtube.com##ytd-rich-section-renderer:has(a[href^="/shorts/"])
+m.youtube.com##.rich-section-content
+m.youtube.com##.big-shorts-singleton
+! Trending page
+youtube.com##ytd-reel-shelf-renderer:has(a[href^="/shorts/"])
+! Search/Trending page (Android)
+youtube.com##ytm-reel-shelf-renderer
+youtube.com##.media-item-thumbnail-container[aria-hidden][href^="/shorts/"]
+youtube.com##ytm-media-item:has(a[href^="/shorts/"])
+youtube.com##.ytd-rich-shelf-renderer:has-text(Shorts)
+youtube.com##ytd-video-renderer > .ytd-video-renderer:has(a[href^="/shorts/"])
+youtube.com##.rich-section-content.fresh-feeds-dismissals
+! side shorts
+youtube.com###items.yt-horizontal-list-renderer > ytd-reel-item-renderer
+! shorts icons (desktop and mobile)
+youtube.com##.pivot-shorts.pivot-bar-item-tab
+youtube.com##.yt-simple-endpoint[title="Shorts"]
+! Updated rules
+youtube.com##.ytGridShelfViewModelHost
+! Shorts search header button
+youtube.com##.ytChipShapeHost:has-text(Shorts)
+
+! 18 thg 7, 2026 https://web.facebook.com
+web.facebook.com##.x10wlt62.x6ikm8r > div > div > div > .xyen2ro.x1uc6qws.x1n2onr6
+web.facebook.com##.xf7dkkf.x1l90r2v.xv54qhq.xyamay9.x2lah0s
+www.facebook.com##.x10wlt62.x6ikm8r > div > div > div > .xyen2ro.x1uc6qws.x1n2onr6
+www.facebook.com##.xf7dkkf.x1l90r2v.xv54qhq.xyamay9.x2lah0s
+
+
+! 18 thg 7, 2026 https://chat.zalo.me
+chat.zalo.me##.--main-window.--web.system-banner__container
+
+! 18 thg 7, 2026 https://www.youtube.com
+www.youtube.com###country-code
+www.youtube.com##.ytd-mini-guide-entry-renderer.style-scope.title
+www.youtube.com##ytd-guide-section-renderer.ytd-guide-renderer.style-scope:nth-of-type(5)
+www.youtube.com###right-arrow
+www.youtube.com###left-arrow
+www.youtube.com##.ytdTextInputAssistantIcon
+
+! 18 thg 7, 2026 https://www.tiktok.com
+www.tiktok.com##div.egvv9qt0.css-1q7o284-5e6d46e3--DivActionBarContainer > .TUXTooltip-reference
+www.tiktok.com##.e184xsy96.css-1bca0o4-5e6d46e3--DivVerticalDivider
+www.tiktok.com###\:r3j\:
+
+! 18 thg 7, 2026 https://www.pinterest.com
+www.pinterest.com##.i1hWBD.gSktR2.ADXRXN
+
+! Xchat
+! 18 thg 7, 2026 https://x.com
+x.com##.r-bnwqim.r-1jte41z.r-hvns9x.r-1va2g9v.r-117bsoe.r-1euycsn.r-6koalj.r-173mn98.r-633pao.css-175oi2r
+
+! 19 thg 7, 2026 https://theredteam.vn
+theredteam.vn###tNoticeRoot_8291
+
+! 19 thg 7, 2026 https://www.youtube.com
+www.youtube.com###buttons > ytd-button-renderer.ytd-masthead.style-scope
+
+! 21 thg 7, 2026 https://www.facebook.com
+www.facebook.com##.x1useyqa.x10l6tqk.xdg88n9.x191j7n5 > .x1qrby5j.x7ja8zs.x1t2pt76.x1lytzrv.xedcshv.xarpa2k.x3igimt.x12ejxvf.xaigb6o.x1beo9mf.xv2umb2.x1jfb8zj.x1h9r5lt.x1h91t0o.x4k7w5x.x1vvkbs.x16tdsg8.x1hl2dhg.x1c1uobl.x18d9i69.xyri2b.xexx8yu.x1lziwak.xat24cr.x14z9mp.xdj266r.html-span
+
+! 22 thg 7, 2026 https://x.com
+x.com##.r-ttdzmv.r-vacyoi.css-175oi2r > div.css-175oi2r > .r-1udh08x.r-1ifxtd0.r-rs99b7.r-1phboty.r-1867qdf.r-1kqtdi0.r-kemksi.css-175oi2r
+x.com##a.r-1loqt21.r-1ny4l3l.r-13qz1uu.r-cnw61z.r-1habvwh.r-16y2uox.r-eqz5dr.r-6koalj.css-175oi2r:nth-of-type(9)
+x.com##a.r-1loqt21.r-1ny4l3l.r-13qz1uu.r-cnw61z.r-1habvwh.r-16y2uox.r-eqz5dr.r-6koalj.css-175oi2r:nth-of-type(8)
+
+! 22 thg 7, 2026 https://chat.zalo.me
+chat.zalo.me##.nav__tabs__bottom > div > .rel.flx-center.flx-al-c.flx-col.flx.leftbar-tab.clickable
+
+! 22 thg 7, 2026 https://online-fix.me
+online-fix.me##.messages-0.left.messages
+
+! 23 thg 7, 2026 https://vi.xhwide.com
+vi.xhwide.com##.ca1fa-close.ca1fa-overlay
+vi.xhwide.com##.ca1fa-pauseSpotContainer
+vi.xhwide.com##.ec31f16c._51a88326
+
