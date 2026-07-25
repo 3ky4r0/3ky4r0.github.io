@@ -353,3 +353,67 @@ body.dark-theme .weather-icon-container {
 body.dark-theme #weather-temp {
   color: #f9fafb;
 }
+
+/* 404 Error Page Styles */
+.error-container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.error-code {
+  font-size: 6rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+  color: #2563eb;
+  letter-spacing: -0.05em;
+}
+
+body.dark-theme .error-code {
+  color: #60a5fa;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 16px 0 8px 0;
+  color: inherit;
+}
+
+.error-desc {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+body.dark-theme .error-desc {
+  color: #9ca3af;
+}
+
+.error-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #2563eb;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.error-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+body.dark-theme .error-btn {
+  background-color: #3b82f6;
+  color: #ffffff !important;
+}
+
+body.dark-theme .error-btn:hover {
+  background-color: #2563eb;
+}
