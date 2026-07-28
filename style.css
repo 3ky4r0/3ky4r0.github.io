@@ -277,11 +277,13 @@ body.dark-theme .fab-btn:active {
 }
 
 .left-illustration {
-  left: 20px;
+  left: 16.666vw;
+  transform: translate(-50%, -50%);
 }
 
 .right-illustration {
-  right: 20px;
+  right: 16.666vw;
+  transform: translate(50%, -50%);
 }
 
 @media (max-width: 1024px) {
