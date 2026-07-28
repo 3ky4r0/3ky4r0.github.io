@@ -114,18 +114,28 @@ fetchWeather();
 // Dynamic background illustration loading for desktop only
 function initBackgrounds() {
   const mediaQuery = window.matchMedia('(min-width: 1025px)');
+
+  // Các cặp ảnh ngẫu nhiên tương ứng: (bên trái, bên phải)
+  const imagePairs = [
+    { left: 'assets/1.webp', right: 'assets/2.webp' },
+    { left: 'assets/1.2.webp', right: 'assets/2.2.webp' },
+    { left: 'assets/1.3.webp', right: 'assets/2.3.webp' }
+  ];
+
+  // Chọn ngẫu nhiên 1 cặp
+  const randomPair = imagePairs[Math.floor(Math.random() * imagePairs.length)];
   
   function handleTabletChange(e) {
     if (e.matches) {
       if (!document.querySelector('.bg-illustration')) {
         const leftImg = document.createElement('img');
-        leftImg.src = 'assets/1.webp';
-        leftImg.alt = 'Makoto Niijima';
+        leftImg.src = randomPair.left;
+        leftImg.alt = 'Illustration Left';
         leftImg.className = 'bg-illustration left-illustration';
 
         const rightImg = document.createElement('img');
-        rightImg.src = 'assets/2.webp';
-        rightImg.alt = 'Morgana';
+        rightImg.src = randomPair.right;
+        rightImg.alt = 'Illustration Right';
         rightImg.className = 'bg-illustration right-illustration';
 
         document.body.appendChild(leftImg);
