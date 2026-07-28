@@ -117,9 +117,10 @@ function initBackgrounds() {
 
   // Các cặp ảnh ngẫu nhiên tương ứng: (bên trái, bên phải)
   const imagePairs = [
-    { left: 'assets/1.webp', right: 'assets/2.webp' },
+    { left: 'assets/1.1.webp', right: 'assets/2.1.webp' },
     { left: 'assets/1.2.webp', right: 'assets/2.2.webp' },
-    { left: 'assets/1.3.webp', right: 'assets/2.3.webp' }
+    { left: 'assets/1.3.webp', right: 'assets/2.3.webp' },
+    { left: 'assets/1.4.webp', right: 'assets/2.4.webp' }
   ];
 
   // Chọn ngẫu nhiên 1 cặp
