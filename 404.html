@@ -4,54 +4,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - Trang không tồn tại | duyxyz</title>
-  <meta name="description" content="Trang bạn tìm kiếm không tồn tại trên duyxyz.github.io">
+  <title>404 | Page Not Found</title>
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="favicon.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/favicon-32x32.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f7f7f8;
+      color: #313131;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #151515;
+        color: #d9d9d9;
+      }
+    }
+
+    .container {
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      p {
+        color: #999;
+      }
+    }
+
+    a {
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
-<body ontouchstart="">
-  <script>
-    (function () {
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        document.body.classList.add('dark-theme');
-      }
-    })();
-  </script>
-
-  <div class="top-controls">
-    <button id="theme-toggle" class="fab-btn" title="Chuyển chế độ sáng/tối" data-tooltip="Chế độ">
-      <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon">
-        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-      </svg>
-    </button>
+<body>
+  <div class="container">
+    <h1>404 | We can't find the page you're looking for.</h1>
+    <p>The requested URL was not found on this server.</p>
+    <a href="/">&larr; Return to homepage</a>
   </div>
-
-  <main class="error-container">
-    <h1 class="error-code">404</h1>
-    <h2 class="error-title">Trang không tồn tại</h2>
-    <p class="error-desc">Đường dẫn bạn truy cập không tồn tại hoặc đã bị di chuyển.</p>
-    <a href="/" class="error-btn">Quay về trang chủ</a>
-  </main>
-
-  <script>
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDark = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      });
-    }
-  </script>
 </body>
 
 </html>
