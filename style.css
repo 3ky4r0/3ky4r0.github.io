@@ -127,6 +127,7 @@ body.dark-theme .fab-btn[data-tooltip]::after {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+
   .top-controls .fab-btn[data-tooltip]:hover::after {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -419,4 +420,16 @@ body.dark-theme .error-btn {
 
 body.dark-theme .error-btn:hover {
   background-color: #2563eb;
+}
+
+main {
+  background-color: #f3f4f6;
+  padding: 24px;
+  border-radius: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body.dark-theme main {
+  background-color: #2a2b2b;
 }
