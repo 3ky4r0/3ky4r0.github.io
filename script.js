@@ -4,6 +4,13 @@ const TARGETS = [
   'https://rentry.co/duyxyz'
 ];
 
+// Tạo và hiển thị vòng xoay lúc đầu
+const container = document.getElementById('links');
+const spinnerDiv = document.createElement('div');
+spinnerDiv.id = 'loading-spinner';
+spinnerDiv.className = 'spinner';
+container.appendChild(spinnerDiv);
+
 function parseLinks(html) {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   let links = Array.from(doc.querySelectorAll('a.external[href]'));
@@ -14,7 +21,14 @@ function parseLinks(html) {
 
 function tryFetch(index) {
   if (index >= TARGETS.length) {
-    document.getElementById('status').textContent = 'Không tìm thấy link nào.';
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) spinner.remove();
+
+    const err = document.createElement('div');
+    err.textContent = 'Không tìm thấy link nào.';
+    err.style.color = '#6b7280';
+    err.style.fontSize = '0.95em';
+    container.appendChild(err);
     return;
   }
 
@@ -23,16 +37,16 @@ function tryFetch(index) {
     .then(r => r.text())
     .then(html => {
       const links = parseLinks(html);
-      const container = document.getElementById('links');
-      const status = document.getElementById('status');
 
       if (links.length === 0) {
-        // Thử nguồn tiếp theo
         tryFetch(index + 1);
         return;
       }
 
-      status.textContent = '';
+      // Xóa vòng xoay khi đã lấy được link
+      const spinner = document.getElementById('loading-spinner');
+      if (spinner) spinner.remove();
+
       links.forEach(a => {
         const el = document.createElement('a');
         el.href = a.getAttribute('href');
@@ -43,7 +57,6 @@ function tryFetch(index) {
       });
     })
     .catch(() => {
-      // Nguồn hiện tại lỗi, thử nguồn tiếp theo
       tryFetch(index + 1);
     });
 }
@@ -125,7 +138,7 @@ function initBackgrounds() {
 
   // Chọn ngẫu nhiên 1 cặp
   const randomPair = imagePairs[Math.floor(Math.random() * imagePairs.length)];
-  
+
   function handleTabletChange(e) {
     if (e.matches) {
       if (!document.querySelector('.bg-illustration')) {
@@ -144,13 +157,13 @@ function initBackgrounds() {
       }
     }
   }
-  
+
   if (typeof mediaQuery.addEventListener === 'function') {
     mediaQuery.addEventListener('change', handleTabletChange);
   } else {
     mediaQuery.addListener(handleTabletChange);
   }
-  
+
   handleTabletChange(mediaQuery);
 }
 
