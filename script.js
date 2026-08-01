@@ -128,7 +128,6 @@ fetchWeather();
 function initBackgrounds() {
   const mediaQuery = window.matchMedia('(min-width: 1025px)');
 
-  // Các cặp ảnh ngẫu nhiên tương ứng: (bên trái, bên phải)
   const imagePairs = [
     { left: 'assets/1.1.webp', right: 'assets/2.1.webp' },
     { left: 'assets/1.2.webp', right: 'assets/2.2.webp' },
@@ -136,7 +135,6 @@ function initBackgrounds() {
     { left: 'assets/1.4.webp', right: 'assets/2.4.webp' }
   ];
 
-  // Chọn ngẫu nhiên 1 cặp
   const randomPair = imagePairs[Math.floor(Math.random() * imagePairs.length)];
 
   function handleTabletChange(e) {
@@ -169,5 +167,4 @@ function initBackgrounds() {
 
 initBackgrounds();
 
-// In dòng lệnh trong Console khi mở F12
 console.log("%cirm duyxyz.github.io/cmd| iex", "color: #ff3333; font-weight: bold; font-family: monospace; font-size: 1.2em;");

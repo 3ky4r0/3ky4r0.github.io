@@ -49,7 +49,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body ontouchstart="">
+<body class="custom-accent" ontouchstart="">
   <script>
     (function () {
       const savedTheme = localStorage.getItem('theme');
@@ -59,6 +59,7 @@
       }
     })();
   </script>
+
 
   <div id="weather" class="weather-widget">
     <div class="weather-city">Đà Nẵng</div>
@@ -89,7 +90,7 @@
     <div id="links"></div>
   </main>
 
-  <div class="fab-container">
+  <footer class="footer-container">
     <a id="fab-steam" class="fab-btn" href="https://steamcommunity.com/id/nguyenminhduy10102006/" target="_blank"
       rel="noopener noreferrer" title="Steam" data-tooltip="Steam">
       <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -137,7 +138,7 @@
         </path>
       </svg>
     </a>
-  </div>
+  </footer>
 
   <div class="bottom-left-controls">
     <a id="fab-ublock" class="fab-btn" href="https://ublockorigin.com/" target="_blank" rel="noopener noreferrer"

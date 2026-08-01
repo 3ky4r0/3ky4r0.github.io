@@ -1,18 +1,15 @@
 :root {
-  /* Google Material Design 3 Color Tokens */
-  --md-sys-color-background: #ffffff;
-  --md-sys-color-on-background: #1c1b1f;
+  --md-sys-color-background: #fbf8fe;
+  --md-sys-color-on-background: #1d1b20;
   --md-sys-color-surface-container: #f3edf7;
-  /* Chuẩn màu card Material Design sáng */
   --md-sys-color-primary: #6750a4;
   --card-bg: var(--md-sys-color-surface-container);
 }
 
 body.dark-theme {
-  --md-sys-color-background: #1f1b24;
-  --md-sys-color-on-background: #e6e1e5;
-  --md-sys-color-surface-container: #2b2930;
-  /* Chuẩn màu card Material Design tối */
+  --md-sys-color-background: #141218;
+  --md-sys-color-on-background: #e6e0e9;
+  --md-sys-color-surface-container: #211f26;
   --md-sys-color-primary: #d0bcff;
   --card-bg: var(--md-sys-color-surface-container);
 }
@@ -37,7 +34,6 @@ main {
   background-color: var(--card-bg);
   padding: 24px;
   border-radius: 20px;
-  /* Bo góc chuẩn M3 (Material 3) */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,7 +41,7 @@ main {
   width: fit-content;
   box-sizing: border-box;
   box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.15);
-  /* Hiệu ứng nổi chuẩn Google Elevation */
+  transition: background-color 0.3s ease;
 }
 
 #links {
@@ -63,6 +59,7 @@ main {
   font-size: 1.05em;
   font-weight: 500;
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 @media (hover: hover) {
@@ -71,12 +68,18 @@ main {
   }
 }
 
-.fab-container {
+.footer-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
   display: flex;
   gap: 4px;
+  background-color: var(--card-bg);
+  padding: 4px;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
 .fab-btn {
@@ -92,27 +95,45 @@ main {
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  overflow: hidden;
   transition: all 0.2s ease;
 }
 
-.fab-container .fab-btn[data-tooltip]::after,
+.fab-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-effect 0.4s linear;
+  background-color: currentColor;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.footer-container .fab-btn[data-tooltip]::after,
 .top-controls .fab-btn[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 12px);
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background-color: var(--md-sys-color-on-background);
   color: var(--md-sys-color-background);
   padding: 4px 10px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 500;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1001;
 }
 
@@ -122,7 +143,9 @@ main {
 }
 
 @media (hover: hover) {
-  .fab-btn[data-tooltip]:hover::after {
+
+  .footer-container .fab-btn[data-tooltip]:hover::after,
+  .top-controls .fab-btn[data-tooltip]:hover::after {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
@@ -132,32 +155,30 @@ main {
   }
 }
 
-@media (hover: hover) {
-  body.dark-theme .fab-btn:hover {
-    background-color: rgba(208, 188, 255, 0.08);
-  }
+body.dark-theme .fab-btn:hover {
+  background-color: rgba(208, 188, 233, 0.08);
 }
 
 .fab-btn:active {
-  background-color: rgba(103, 80, 164, 0.12);
+  background-color: rgba(103, 80, 164, 0.16);
 }
 
 .fab-btn svg {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   stroke-width: 2;
 }
 
 #fab-pinterest svg,
 #fab-facebook svg,
 #fab-tiktok svg {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
 }
 
 #fab-github svg {
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
 }
 
 .top-controls {
@@ -183,16 +204,16 @@ main {
   min-width: 48px;
   height: 48px;
   border-radius: 24px;
-  padding: 0 12px;
-  gap: 6px;
+  padding: 0 9px;
+  gap: 0;
   overflow: hidden;
   transition: all 0.2s ease;
   box-sizing: border-box;
 }
 
 #fab-ublock img {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   display: block;
   flex-shrink: 0;
 }
@@ -201,23 +222,40 @@ main {
   max-width: 0;
   opacity: 0;
   white-space: nowrap;
-  font-size: 0.9em;
-  font-weight: 500;
+  font-size: 0.95em;
+  font-weight: 600;
   color: inherit;
-  overflow: hidden;
-  transition: max-width 0.2s ease, opacity 0.2s ease;
+  margin-left: 0;
+  transform: translateX(15px);
+  transition: max-width 0.2s ease, opacity 0.2s ease, margin-left 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
 }
 
 @media (hover: hover) {
+  #fab-ublock:hover {
+    padding: 0 14px 0 10px;
+  }
+
   #fab-ublock:hover .ublock-text {
     max-width: 120px;
     opacity: 1;
+    margin-left: 8px;
+    transform: translateX(0);
   }
 }
 
 @media (max-width: 768px) {
   .bottom-left-controls {
     display: none;
+  }
+}
+
+/* Căn giữa thanh footer trên màn hình di động */
+@media (max-width: 768px) {
+  .footer-container {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
   }
 }
 
@@ -232,10 +270,11 @@ main {
 }
 
 .weather-city {
-  font-size: 0.75em;
+  font-size: 0.8em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--md-sys-color-on-background);
   opacity: 0.7;
 }
 
@@ -249,19 +288,21 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  color: var(--md-sys-color-on-background);
 }
 
 .weather-icon-container svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   stroke-width: 2.2;
 }
 
 #weather-temp {
-  font-size: 1.1em;
+  font-size: 1.15em;
   font-weight: 700;
+  color: var(--md-sys-color-on-background);
 }
 
 .spinner {
@@ -274,13 +315,36 @@ main {
   margin: 0 auto;
 }
 
-body.dark-theme .spinner {
-  border: 3px solid rgba(208, 188, 255, 0.2);
-  border-left-color: var(--md-sys-color-primary);
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.bg-illustration {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 45vh;
+  max-width: 30vw;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.95;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+.left-illustration {
+  left: 16.666vw;
+  transform: translate(-50%, -50%);
+}
+
+.right-illustration {
+  right: 16.666vw;
+  transform: translate(50%, -50%);
+}
+
+@media (max-width: 1024px) {
+  .bg-illustration {
+    display: none;
   }
 }
