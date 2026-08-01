@@ -426,7 +426,8 @@ main {
   background-color: #f3f4f6;
   padding: 24px;
   border-radius: 16px;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
