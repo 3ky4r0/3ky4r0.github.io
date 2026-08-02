@@ -119,12 +119,13 @@ table tr:nth-child(even) {
 /* Tối ưu cho điện thoại và màn hình nhỏ */
 @media (max-width: 768px) {
   body.markdown-body {
-    padding: 20px 12px;
+    padding: 20px;
     font-size: 15px;
   }
 
   h1 {
     font-size: 1.6em;
+    margin-top: 0;
   }
 
   h2 {
