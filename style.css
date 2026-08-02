@@ -1,7 +1,7 @@
 body.markdown-body {
   box-sizing: border-box;
   min-width: 200px;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -48,12 +48,24 @@ table {
   margin-top: 0;
   margin-bottom: 16px;
   border-collapse: collapse;
+  table-layout: auto;
+  /* Cho phép bảng tự động co giãn theo nội dung trên mọi thiết bị */
 }
 
 table th,
 table td {
   padding: 6px 13px;
   border: 1px solid #d0d7de;
+  word-break: break-word;
+  /* Tự động xuống dòng khi link quá dài */
+}
+
+/* Ép cột đầu tiên (Platform) luôn ôm khít theo độ dài của chữ, không bị dư thừa khoảng trống */
+table th:first-child,
+table td:first-child {
+  width: 1%;
+  white-space: nowrap;
+  /* Giữ tên platform nằm gọn trên một dòng */
 }
 
 table tr {
@@ -64,21 +76,24 @@ table tr:nth-child(even) {
   background-color: #f6f8fa;
 }
 
-/* Danh sách liên kết nhanh nằm ngang có gạch dọc phân cách */
-#links {
+/* Danh sách liên kết nằm ngang có gạch dọc phân cách */
+#links,
+#utilities {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 12px;
   margin-bottom: 24px;
 }
 
-#links a {
+#links a,
+#utilities a {
   display: inline-block;
   padding: 2px 0;
 }
 
 /* Thêm dấu gạch dọc phân cách giữa các link (trừ link cuối cùng) */
-#links a:not(:last-child)::after {
+#links a:not(:last-child)::after,
+#utilities a:not(:last-child)::after {
   content: "|";
   margin-left: 12px;
   color: #d0d7de;
@@ -98,5 +113,27 @@ table tr:nth-child(even) {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Tối ưu cho điện thoại và màn hình nhỏ */
+@media (max-width: 768px) {
+  body.markdown-body {
+    padding: 20px 12px;
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: 1.6em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+
+  table th,
+  table td {
+    padding: 8px 10px;
+    /* Tăng padding nhẹ cho dễ bấm trên điện thoại */
   }
 }
