@@ -65,6 +65,7 @@ table th:first-child,
 table td:first-child {
   width: 1%;
   white-space: nowrap;
+  text-align: center;
   /* Giữ tên platform nằm gọn trên một dòng */
 }
 
