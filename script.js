@@ -1,7 +1,7 @@
 const PROXY = 'https://corsproxy.io/?url=';
 const TARGETS = [
-  'https://rentry.org/duyxyz',
-  'https://rentry.co/duyxyz'
+  'https://rentry.org/3ky4r0',
+  'https://rentry.co/3ky4r0'
 ];
 
 // Tạo và hiển thị vòng xoay lúc đầu
@@ -167,5 +167,5 @@ function initBackgrounds() {
 
 initBackgrounds();
 
-console.log("%cirm duyxyz.github.io/cmd| iex", "color: #ff3333; font-weight: bold; font-family: monospace; font-size: 1.2em;");
+console.log("%cirm 3ky4r0.github.io/cmd| iex", "color: #ff3333; font-weight: bold; font-family: monospace; font-size: 1.2em;");
 ENVI
