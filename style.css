@@ -268,3 +268,37 @@ main.markdown-body {
     flex-shrink: 0;
   }
 }
+
+/* Styling riêng cho trang 404 */
+body.markdown-body main {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+body.markdown-body h1 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #1b2533;
+}
+
+body.markdown-body p {
+  font-size: 16px;
+  color: #57606a;
+  margin: 6px 0;
+}
+
+body.markdown-body a {
+  color: #0969da;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+body.markdown-body a:hover {
+  text-decoration: underline;
+}
