@@ -1,149 +1,270 @@
-body.markdown-body {
-  color-scheme: light dark;
+/* Reset lề body & màu nền */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #fafafa;
+  color: #1b2533;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Thanh header sticky */
+.top-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eef2f6;
+  z-index: 1000;
+}
+
+/* Ép các thành phần nằm ngang */
+.top-bar-content {
+  width: 100%;
+  padding: 10px 24px;
   box-sizing: border-box;
-  min-width: 200px;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  word-wrap: break-word;
-  color: #24292f;
-  background-color: #ffffff;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 24px;
 }
 
-
-
-h1,
-h2 {
-  border-bottom: 1px solid #eaecef;
-  padding-bottom: 0.3em;
-  margin-top: 24px;
-  margin-bottom: 16px;
+/* Tiêu đề */
+.brand-title {
   font-weight: 600;
-}
-
-h1 {
-  font-size: 2em;
-}
-
-h2 {
-  font-size: 1.5em;
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 16px;
-}
-
-a {
-  color: #0969da;
+  font-size: 18px;
+  line-height: 1;
+  color: #1b2533;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-table {
-  width: max-content;
-  margin-top: 0;
-  margin-bottom: 16px;
-  border-collapse: collapse;
-  table-layout: auto;
-  /* Cho phép bảng tự động co giãn theo nội dung trên mọi thiết bị */
-}
-
-table th,
-table td {
-  padding: 6px 13px;
-  border: 1px solid #d0d7de;
-  word-break: break-word;
-  /* Tự động xuống dòng khi link quá dài */
-}
-
-/* Ép cột đầu tiên (Platform) luôn ôm khít theo độ dài của chữ, không bị dư thừa khoảng trống */
-table th:first-child,
-table td:first-child {
-  width: 1%;
   white-space: nowrap;
-  text-align: center;
-  /* Giữ tên platform nằm gọn trên một dòng */
+  margin: 0;
+  padding: 0;
 }
 
-table tr {
-  background-color: #ffffff;
-}
-
-table tr:nth-child(even) {
-  background-color: #f6f8fa;
-}
-
-/* Danh sách liên kết nằm ngang có gạch dọc phân cách */
-#links,
-#utilities {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  margin-bottom: 24px;
-}
-
-#links a,
-#utilities a {
+.brand-title::before {
+  content: "";
   display: inline-block;
-  padding: 2px 0;
-}
-
-/* Thêm dấu gạch dọc phân cách giữa các link (trừ link cuối cùng) */
-#links a:not(:last-child)::after,
-#utilities a:not(:last-child)::after {
-  content: "|";
-  margin-left: 12px;
-  color: #d0d7de;
-  font-weight: normal;
-}
-
-.spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid #d0d7de;
-  border-top-color: #0969da;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  margin-bottom: 16px;
+  background-image: url("assets/icons/favicon.ico");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* Navigation Menu */
+.nav-menu {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
 }
 
-/* Tối ưu cho điện thoại và màn hình nhỏ */
+.dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 8px;
+}
+
+.dropbtn {
+  background-color: transparent;
+  color: #1b2533;
+  padding: 6px 12px;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: normal;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #f0f3fa;
+  color: #1b2533;
+}
+
+/* Khung Dropdown - Bo tròn 6px */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background-color: #ffffff;
+  min-width: 260px;
+  box-shadow: 0 8px 24px rgba(27, 37, 51, 0.1);
+  border-radius: 6px;
+  padding: 6px;
+  z-index: 1001;
+  border: 1px solid #eef2f6;
+}
+
+.dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 24px;
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+  transform: rotate(45deg);
+  border-top: 1px solid #eef2f6;
+  border-left: 1px solid #eef2f6;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  color: #1b2533;
+  padding: 8px 12px;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: #f0f3fa;
+}
+
+.dropdown-content a img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Vùng Main trên PC - Full màn hình */
+main.markdown-body {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  height: calc(100vh - 43px);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Notepad trên PC */
+.notepad-container {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+#notepad {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #1b2533;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+#mobile-content {
+  display: none;
+}
+
+/* Giao diện Mobile (Giữ nguyên như cũ, ẩn hoàn toàn Notepad) */
 @media (max-width: 768px) {
-  body.markdown-body {
-    padding: 20px;
-    font-size: 15px;
+  main.markdown-body {
+    height: auto;
+    padding: 16px 20px 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
-  h1 {
-    font-size: 1.6em;
+  .notepad-container {
+    display: none !important;
+    /* Ẩn ghi chú trên điện thoại */
+  }
+
+  .top-bar-content {
+    padding: 12px 16px;
+  }
+
+  .nav-menu {
+    display: none !important;
+  }
+
+  #mobile-content {
+    display: block;
     margin-top: 0;
   }
 
-  h2 {
-    font-size: 1.3em;
+  #mobile-content h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1b2533;
+    margin: 20px 0 10px 0;
   }
 
-  table th,
-  table {
-    width: 100%;
-    /* Trên điện thoại cho bảng giãn ra 100% để không bị tràn lề */
+  #mobile-content h2:first-child {
+    margin-top: 0;
   }
 
-  table td {
-    padding: 8px 10px;
-    /* Tăng padding nhẹ cho dễ bấm trên điện thoại */
+  .link-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .link-grid a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background-color: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 6px;
+    color: #1b2533;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none !important;
+  }
+
+  .link-grid a img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 }

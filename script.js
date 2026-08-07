@@ -1,65 +1,57 @@
-const PROXY = 'https://corsproxy.io/?url=';
-const TARGETS = [
-  'https://rentry.org/3ky4r0',
-  'https://rentry.co/3ky4r0'
-];
+function renderMobileLinks() {
+  const mobileContainer = document.getElementById("mobile-content");
+  if (!mobileContainer) return;
 
-// Tạo và hiển thị vòng xoay lúc đầu
-const container = document.getElementById('links');
-const spinnerDiv = document.createElement('div');
-spinnerDiv.id = 'loading-spinner';
-spinnerDiv.className = 'spinner';
-container.appendChild(spinnerDiv);
+  mobileContainer.innerHTML = "";
 
-function parseLinks(html) {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  let links = Array.from(doc.querySelectorAll('a.external[href]'));
-  if (links.length === 0) links = Array.from(doc.querySelectorAll('.entry-text a[href]'));
-  if (links.length === 0) links = Array.from(doc.querySelectorAll('article a[href]'));
-  return links;
+  const dropdowns = document.querySelectorAll(".nav-menu .dropdown");
+
+  dropdowns.forEach(dropdown => {
+    const titleText = dropdown.querySelector(".dropbtn")?.textContent.trim();
+    const links = dropdown.querySelectorAll(".dropdown-content a");
+
+    if (links.length > 0) {
+      const sectionTitle = document.createElement("h2");
+      sectionTitle.textContent = titleText;
+      mobileContainer.appendChild(sectionTitle);
+
+      const grid = document.createElement("div");
+      grid.className = "link-grid";
+
+      links.forEach(link => {
+        grid.appendChild(link.cloneNode(true));
+      });
+
+      mobileContainer.appendChild(grid);
+    }
+  });
 }
 
-function tryFetch(index) {
-  if (index >= TARGETS.length) {
-    const spinner = document.getElementById('loading-spinner');
-    if (spinner) spinner.remove();
+function initNotepad() {
+  const notepad = document.getElementById("notepad");
+  if (!notepad) return;
 
-    const err = document.createElement('div');
-    err.textContent = 'Không tìm thấy link nào.';
-    err.style.color = '#6b7280';
-    err.style.fontSize = '0.95em';
-    container.appendChild(err);
-    return;
+  // Lấy dữ liệu cũ đã lưu từ trình duyệt
+  const savedNote = localStorage.getItem("user_notepad_data");
+  if (savedNote !== null) {
+    notepad.value = savedNote;
   }
 
-  const url = TARGETS[index];
-  fetch(PROXY + encodeURIComponent(url + '?_=' + Date.now()), { cache: 'no-store' })
-    .then(r => r.text())
-    .then(html => {
-      const links = parseLinks(html);
-
-      if (links.length === 0) {
-        tryFetch(index + 1);
-        return;
-      }
-
-      // Xóa vòng xoay khi đã lấy được link
-      const spinner = document.getElementById('loading-spinner');
-      if (spinner) spinner.remove();
-
-      links.forEach(a => {
-        const el = document.createElement('a');
-        el.href = a.getAttribute('href');
-        el.textContent = a.textContent.trim();
-        el.target = '_blank';
-        el.rel = 'noopener noreferrer';
-        container.appendChild(el);
-      });
-    })
-    .catch(() => {
-      tryFetch(index + 1);
-    });
+  // Tự động lưu mỗi khi gõ
+  notepad.addEventListener("input", () => {
+    localStorage.setItem("user_notepad_data", notepad.value);
+  });
 }
 
-tryFetch(0);
+document.addEventListener("DOMContentLoaded", () => {
+  renderMobileLinks();
+  initNotepad();
 
+  const brandTitle = document.querySelector(".brand-title");
+  if (brandTitle) {
+    brandTitle.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.reload();
+    });
+  }
+});
