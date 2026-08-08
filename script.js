@@ -29,7 +29,14 @@ function renderMobileLinks() {
 
 function initNotepad() {
   const notepad = document.getElementById("notepad");
+  const preview = document.getElementById("notepad-preview");
+  const toggleBtn = document.getElementById("notepad-toggle-btn");
+  const statusEl = document.getElementById("notepad-status");
+
   if (!notepad) return;
+
+  let isPreviewMode = false;
+  let saveTimeout = null;
 
   // Lấy dữ liệu cũ đã lưu từ trình duyệt
   const savedNote = localStorage.getItem("user_notepad_data");
@@ -37,10 +44,85 @@ function initNotepad() {
     notepad.value = savedNote;
   }
 
+  function updateStatus(isSaving) {
+    if (!statusEl) return;
+    if (isSaving) {
+      statusEl.innerHTML = '<span class="status-dot saving"></span> Đang lưu...';
+    } else {
+      statusEl.innerHTML = '<span class="status-dot"></span> Đã tự động lưu';
+    }
+  }
+
+  function renderMarkdown() {
+    if (!preview) return;
+    const rawText = notepad.value.trim();
+
+    if (!rawText) {
+      preview.innerHTML = '<div class="notepad-empty-hint">(Ghi chú trống - bấm nút "Chỉnh sửa" để bắt đầu viết)</div>';
+      return;
+    }
+
+    if (window.marked) {
+      try {
+        preview.innerHTML = window.marked.parse(notepad.value);
+      } catch (err) {
+        preview.textContent = notepad.value;
+      }
+    } else {
+      preview.textContent = notepad.value;
+    }
+  }
+
+  function showPreview() {
+    renderMarkdown();
+    notepad.style.display = "none";
+    if (preview) preview.style.display = "block";
+    isPreviewMode = true;
+
+    if (toggleBtn) {
+      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg> <span class="btn-text">Chỉnh sửa</span>';
+    }
+  }
+
+  function showEdit() {
+    if (preview) preview.style.display = "none";
+    notepad.style.display = "block";
+    notepad.focus();
+    isPreviewMode = false;
+
+    if (toggleBtn) {
+      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> <span class="btn-text">Xem Markdown</span>';
+    }
+  }
+
+  // Khởi tạo: nếu có ghi chú cũ thì hiển thị dạng Preview trước, nếu chưa có thì cho sửa luôn
+  if (savedNote && savedNote.trim().length > 0) {
+    showPreview();
+  } else {
+    showEdit();
+  }
+
   // Tự động lưu mỗi khi gõ
   notepad.addEventListener("input", () => {
+    updateStatus(true);
     localStorage.setItem("user_notepad_data", notepad.value);
+
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+      updateStatus(false);
+    }, 400);
   });
+
+  // Nút chuyển đổi chế độ Sửa / Xem (chỉ đổi khi bấm nút này)
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      if (isPreviewMode) {
+        showEdit();
+      } else {
+        showPreview();
+      }
+    });
+  }
 }
 
 function initHeaderSearch() {
@@ -220,6 +302,19 @@ function initHeaderSearch() {
   document.addEventListener("click", (e) => {
     if (!searchInput.contains(e.target) && !resultsDropdown.contains(e.target)) {
       resultsDropdown.classList.remove("active");
+    }
+  });
+
+  // Phím tắt '/' để focus nhanh thanh tìm kiếm khi không nhập liệu
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" &&
+        document.activeElement !== searchInput &&
+        document.activeElement.tagName !== "INPUT" &&
+        document.activeElement.tagName !== "TEXTAREA" &&
+        !document.activeElement.isContentEditable) {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
     }
   });
 }

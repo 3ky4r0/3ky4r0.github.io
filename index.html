@@ -19,6 +19,8 @@
   <link rel="manifest" href="assets/icons/site.webmanifest" />
 
   <link rel="stylesheet" href="style.css">
+  <!-- Marked Library for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
@@ -156,7 +158,7 @@
 
         <!-- LINHTINH -->
         <div class="dropdown">
-          <button class="dropbtn">LinhTinh</button>
+          <button class="dropbtn">More</button>
           <div class="dropdown-content">
             <a href="https://catbox.moe/" target="_blank" rel="noopener noreferrer">
               <img
@@ -209,7 +211,7 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="header-search" placeholder="Tìm kiếm link..." autocomplete="off" />
+          <input type="text" id="header-search" placeholder="type / to search" autocomplete="off" />
           <button type="button" id="search-clear" class="search-clear-btn" aria-label="Xóa" style="display: none;">✕</button>
         </div>
         <div id="search-results" class="search-results-dropdown"></div>
@@ -220,7 +222,20 @@
   <main class="markdown-body">
     <!-- Khung Notepad chỉ hiển thị trên PC -->
     <div class="notepad-container">
-      <textarea id="notepad" placeholder="take notes"></textarea>
+      <div class="notepad-header">
+        <div class="notepad-status" id="notepad-status">
+          <span class="status-dot"></span> Đã tự động lưu
+        </div>
+        <div class="notepad-actions">
+          <button type="button" id="notepad-toggle-btn" class="notepad-btn" title="Chuyển giữa chế độ Sửa và Xem HTML">
+            <svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> <span class="btn-text">Xem Markdown</span>
+          </button>
+        </div>
+      </div>
+      <div class="notepad-body">
+        <textarea id="notepad" placeholder="Nhập ghi chú hỗ trợ Markdown (# Tiêu đề, **in đậm**, - danh sách)..."></textarea>
+        <div id="notepad-preview" class="notepad-preview-content" style="display: none;"></div>
+      </div>
     </div>
 
     <!-- Hiển thị danh sách link khi xem trên điện thoại -->
