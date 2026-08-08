@@ -47,7 +47,7 @@ function initNotepad() {
   function updateStatus(isSaving) {
     if (!statusEl) return;
     if (isSaving) {
-      statusEl.innerHTML = '<span class="status-dot saving"></span> Saving...';
+      statusEl.innerHTML = '<span class="status-dot saving"></span> Saving';
     } else {
       statusEl.innerHTML = '<span class="status-dot"></span> Auto-saved';
     }
