@@ -343,15 +343,20 @@ main.markdown-body {
 }
 
 .notepad-preview-content blockquote {
-  border-left: 4px solid #3b82f6;
-  padding-left: 14px;
-  margin: 1em 0;
-  color: #475569;
-  font-style: italic;
+  border-left: 3px solid #3b82f6;
+  margin: 0.6em 0;
+  padding: 8px 12px;
+  color: #334155;
   background-color: #f8fafc;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.notepad-preview-content blockquote p {
+  margin: 0;
+}
+
+.notepad-preview-content blockquote p + p {
+  margin-top: 0.5em;
 }
 
 .notepad-preview-content code {
@@ -364,12 +369,46 @@ main.markdown-body {
 }
 
 .notepad-preview-content pre {
-  background-color: #1e293b;
-  color: #f8fafc;
-  padding: 14px;
-  border-radius: 6px;
+  position: relative;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  padding: 12px 16px;
+  border-radius: 8px;
   overflow-x: auto;
   margin-bottom: 1em;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  border-radius: 6px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: none;
+  user-select: none;
+  z-index: 5;
+}
+
+.code-copy-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.code-copy-btn.copied {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
 }
 
 .notepad-preview-content pre code {

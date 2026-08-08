@@ -47,10 +47,48 @@ function initNotepad() {
   function updateStatus(isSaving) {
     if (!statusEl) return;
     if (isSaving) {
-      statusEl.innerHTML = '<span class="status-dot saving"></span> Đang lưu...';
+      statusEl.innerHTML = '<span class="status-dot saving"></span> Saving...';
     } else {
-      statusEl.innerHTML = '<span class="status-dot"></span> Đã tự động lưu';
+      statusEl.innerHTML = '<span class="status-dot"></span> Auto-saved';
     }
+  }
+
+  function attachCodeCopyButtons(container) {
+    if (!container) return;
+    const preBlocks = container.querySelectorAll("pre");
+    preBlocks.forEach((pre) => {
+      if (pre.querySelector(".code-copy-btn")) return;
+
+      const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+      const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "code-copy-btn";
+      button.title = "Copy code";
+      button.innerHTML = copyIcon;
+
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const codeElement = pre.querySelector("code");
+        const codeText = codeElement ? codeElement.innerText : pre.innerText;
+
+        navigator.clipboard.writeText(codeText).then(() => {
+          button.classList.add("copied");
+          button.title = "Copied!";
+          button.innerHTML = checkIcon;
+          setTimeout(() => {
+            button.classList.remove("copied");
+            button.title = "Copy code";
+            button.innerHTML = copyIcon;
+          }, 2000);
+        }).catch((err) => {
+          console.error("Copy failed:", err);
+        });
+      });
+
+      pre.appendChild(button);
+    });
   }
 
   function renderMarkdown() {
@@ -58,13 +96,14 @@ function initNotepad() {
     const rawText = notepad.value.trim();
 
     if (!rawText) {
-      preview.innerHTML = '<div class="notepad-empty-hint">(Ghi chú trống - bấm nút "Chỉnh sửa" để bắt đầu viết)</div>';
+      preview.innerHTML = '<div class="notepad-empty-hint">(Empty note - click "Edit" to start typing...)</div>';
       return;
     }
 
     if (window.marked) {
       try {
         preview.innerHTML = window.marked.parse(notepad.value);
+        attachCodeCopyButtons(preview);
       } catch (err) {
         preview.textContent = notepad.value;
       }
@@ -80,7 +119,7 @@ function initNotepad() {
     isPreviewMode = true;
 
     if (toggleBtn) {
-      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg> <span class="btn-text">Chỉnh sửa</span>';
+      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg> <span class="btn-text">Edit</span>';
     }
   }
 
@@ -91,7 +130,7 @@ function initNotepad() {
     isPreviewMode = false;
 
     if (toggleBtn) {
-      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> <span class="btn-text">Xem Markdown</span>';
+      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> <span class="btn-text">Preview</span>';
     }
   }
 
@@ -277,6 +316,12 @@ function initHeaderSearch() {
 
   // Bàn phím điều hướng (ArrowUp, ArrowDown, Enter, Escape)
   searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      resultsDropdown.classList.remove("active");
+      searchInput.blur();
+      return;
+    }
+
     const items = resultsDropdown.querySelectorAll(".search-result-item, .search-result-google");
     if (!items.length || !resultsDropdown.classList.contains("active")) return;
 
@@ -293,8 +338,6 @@ function initHeaderSearch() {
         e.preventDefault();
         items[selectedIndex].click();
       }
-    } else if (e.key === "Escape") {
-      resultsDropdown.classList.remove("active");
     }
   });
 
@@ -305,9 +348,12 @@ function initHeaderSearch() {
     }
   });
 
-  // Phím tắt '/' để focus nhanh thanh tìm kiếm khi không nhập liệu
+  // Phím tắt '/' để focus nhanh, 'Escape' để bỏ focus thanh tìm kiếm
   document.addEventListener("keydown", (e) => {
-    if (e.key === "/" &&
+    if (e.key === "Escape" && document.activeElement === searchInput) {
+      searchInput.blur();
+      resultsDropdown.classList.remove("active");
+    } else if (e.key === "/" &&
         document.activeElement !== searchInput &&
         document.activeElement.tagName !== "INPUT" &&
         document.activeElement.tagName !== "TEXTAREA" &&
