@@ -5,11 +5,13 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
   background-color: #fafafa;
   color: #1b2533;
   font-family: 'Plus Jakarta Sans', 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 button,
@@ -21,9 +23,7 @@ textarea {
 
 /* Thanh header sticky */
 .top-bar {
-  position: sticky;
-  top: 0;
-  left: 0;
+  flex-shrink: 0;
   width: 100%;
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
@@ -194,11 +194,13 @@ main.markdown-body {
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
-  height: calc(100vh - 43px);
+  flex: 1;
+  min-height: 0;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Notepad trên PC */
@@ -206,12 +208,15 @@ main.markdown-body {
   width: 100%;
   height: 100%;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 .notepad-header {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -221,6 +226,7 @@ main.markdown-body {
   font-size: 12.5px;
   color: #64748b;
   user-select: none;
+  z-index: 10;
 }
 
 .notepad-status {
@@ -273,8 +279,8 @@ main.markdown-body {
 .notepad-body {
   position: relative;
   flex: 1;
+  min-height: 0;
   width: 100%;
-  height: calc(100% - 33px);
   overflow: hidden;
 }
 
@@ -452,8 +458,16 @@ main.markdown-body {
 
 /* Giao diện Mobile (Giữ nguyên như cũ, ẩn hoàn toàn Notepad) */
 @media (max-width: 768px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
   main.markdown-body {
     height: auto;
+    overflow: visible;
     padding: 16px 20px 40px 20px;
     max-width: 800px;
     margin: 0 auto;
@@ -593,6 +607,9 @@ body.markdown-body a:hover {
   flex-shrink: 0;
   margin-right: 6px;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #header-search {
@@ -601,9 +618,12 @@ body.markdown-body a:hover {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 13.5px;
+  font-size: 13px;
+  line-height: 1;
   color: #1b2533;
   padding: 0;
+  margin: 0;
+  display: block;
 }
 
 #header-search::placeholder {
