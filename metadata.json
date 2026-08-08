@@ -1,0 +1,8 @@
+{
+  "name": "3ky4r0 GitHub Pages",
+  "description": "3ky4r0 personal website and quick links dashboard",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

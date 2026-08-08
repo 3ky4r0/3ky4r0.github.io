@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 /* Reset lề body & màu nền */
 html,
 body {
@@ -6,8 +8,15 @@ body {
   height: 100%;
   background-color: #fafafa;
   color: #1b2533;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
 /* Thanh header sticky */
@@ -108,14 +117,16 @@ body {
   color: #1b2533;
 }
 
-/* Khung Dropdown - Bo tròn 6px */
+/* Khung Dropdown - Co giãn tự động theo nội dung */
 .dropdown-content {
   display: none;
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
   background-color: #ffffff;
-  min-width: 260px;
+  width: max-content;
+  min-width: 140px;
+  max-width: calc(100vw - 32px);
   box-shadow: 0 8px 24px rgba(27, 37, 51, 0.1);
   border-radius: 6px;
   padding: 6px;
@@ -150,7 +161,21 @@ body {
   font-size: 15px;
   font-weight: 400;
   border-radius: 4px;
+  white-space: nowrap;
   transition: background-color 0.15s ease;
+}
+
+/* Định vị menu sát lề phải cho các nút cuối để không bị tràn màn hình */
+.dropdown:last-child .dropdown-content,
+.dropdown:nth-last-child(2) .dropdown-content {
+  left: auto;
+  right: 0;
+}
+
+.dropdown:last-child .dropdown-content::before,
+.dropdown:nth-last-child(2) .dropdown-content::before {
+  left: auto;
+  right: 20px;
 }
 
 .dropdown-content a:hover {
@@ -192,7 +217,7 @@ main.markdown-body {
   border-radius: 0;
   background-color: #ffffff;
   color: #1b2533;
-  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-family: 'Plus Jakarta Sans', 'Nunito', system-ui, -apple-system, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   resize: none;
