@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 /* Reset lề body & màu nền */
+*,
+*::before,
+*::after {
+  transition: none !important;
+  animation: none !important;
+}
+
 html,
 body {
   margin: 0;
@@ -105,7 +112,6 @@ textarea {
   border: none;
   cursor: pointer;
   border-radius: 4px;
-  transition: all 0.15s ease;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -162,7 +168,6 @@ textarea {
   font-weight: 400;
   border-radius: 4px;
   white-space: nowrap;
-  transition: background-color 0.15s ease;
 }
 
 /* Định vị menu sát lề phải cho các nút cuối để không bị tràn màn hình */
@@ -242,7 +247,6 @@ main.markdown-body {
   border-radius: 50%;
   background-color: #3b82f6;
   display: inline-block;
-  transition: background-color 0.2s ease;
 }
 
 .status-dot.saving {
@@ -261,7 +265,6 @@ main.markdown-body {
   font-weight: 500;
   color: #334155;
   cursor: pointer;
-  transition: all 0.15s ease;
 }
 
 .btn-icon-svg {
@@ -592,7 +595,6 @@ body.markdown-body a:hover {
   width: 100%;
   height: 32px;
   box-sizing: border-box;
-  transition: border-color 0.15s ease;
 }
 
 .search-input-wrapper:focus-within {
@@ -643,7 +645,6 @@ body.markdown-body a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .search-clear-btn:hover {
@@ -682,7 +683,6 @@ body.markdown-body a:hover {
   text-decoration: none;
   color: #1e293b;
   font-size: 13px;
-  transition: background-color 0.15s ease;
   cursor: pointer;
 }
 
