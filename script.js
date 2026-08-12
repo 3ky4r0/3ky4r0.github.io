@@ -161,7 +161,7 @@ function initNotepad() {
       if (tabs.length > 1) {
         const closeBtn = document.createElement("span");
         closeBtn.className = "notepad-tab-close";
-        closeBtn.innerHTML = "✕";
+        closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
         closeBtn.title = "Đóng tab (Ctrl+W)";
         closeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -305,6 +305,50 @@ function initNotepad() {
     });
   }
 
+  // Xử lý GitHub Flavored Alerts: > [!NOTE], > [!TIP], > [!IMPORTANT], > [!WARNING], > [!CAUTION]
+  function processGithubAlerts(html) {
+    const alertTypes = {
+      NOTE: {
+        cls: "gh-alert-note",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+        label: "Note"
+      },
+      TIP: {
+        cls: "gh-alert-tip",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 5 11.9V18a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2v-4.1A7 7 0 0 1 12 2z"/><line x1="9" y1="21" x2="15" y2="21"/></svg>`,
+        label: "Tip"
+      },
+      IMPORTANT: {
+        cls: "gh-alert-important",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        label: "Important"
+      },
+      WARNING: {
+        cls: "gh-alert-warning",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        label: "Warning"
+      },
+      CAUTION: {
+        cls: "gh-alert-caution",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+        label: "Caution"
+      }
+    };
+
+    // marked render > [!TYPE] thành <blockquote><p>[!TYPE]</p>...</blockquote>
+    return html.replace(
+      /<blockquote>\s*<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]([\s\S]*?)<\/blockquote>/gi,
+      (match, type, rest) => {
+        const key = type.toUpperCase();
+        const cfg = alertTypes[key];
+        if (!cfg) return match;
+        // Bỏ thẻ <p> đầu tiên chứa [!TYPE] và lấy nội dung còn lại
+        const content = rest.replace(/^\s*<\/p>/, "").trim();
+        return `<div class="gh-alert ${cfg.cls}"><div class="gh-alert-title">${cfg.icon}${cfg.label}</div>${content ? `<p style="margin:0">${content}` : ""}</div>`;
+      }
+    );
+  }
+
   function renderMarkdown() {
     if (!preview) return;
     const rawText = notepad.value.trim();
@@ -320,7 +364,8 @@ function initNotepad() {
 
     if (window.marked) {
       try {
-        preview.innerHTML = window.marked.parse(notepad.value);
+        const rawHtml = window.marked.parse(notepad.value);
+        preview.innerHTML = processGithubAlerts(rawHtml);
         attachCodeCopyButtons(preview);
       } catch (err) {
         preview.textContent = notepad.value;

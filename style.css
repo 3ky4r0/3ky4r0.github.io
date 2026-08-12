@@ -225,8 +225,8 @@ main.markdown-body {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  background-color: #f1f5f9;
-  border-bottom: none;
+  background-color: #dde3ec;
+  border-bottom: 1px solid #e2e8f0;
   padding: 6px 12px;
   min-height: 40px;
   gap: 6px;
@@ -264,7 +264,7 @@ main.markdown-body {
   gap: 6px;
   padding: 5px 10px;
   height: 28px;
-  background-color: #e2e8f0;
+  background-color: transparent;
   color: #64748b;
   font-size: 13px;
   font-weight: 500;
@@ -285,8 +285,26 @@ main.markdown-body {
 }
 
 .notepad-tab-item:hover {
-  background-color: #cbd5e1;
+  background-color: #c4cdd9;
   color: #1e293b;
+}
+
+/* Dấu gạch dọc ngăn cách giữa các tab — dùng ::after bên trong element */
+.notepad-tab-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background-color: #cbd5e1;
+  border-radius: 1px;
+}
+
+/* Ẩn divider cho tab active và tab ngay trước active */
+.notepad-tab-item.active::after,
+.notepad-tab-item:has(+ .notepad-tab-item.active)::after {
+  display: none;
 }
 
 .notepad-tab-item.active {
@@ -321,33 +339,40 @@ main.markdown-body {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  color: #64748b;
-  font-size: 11px;
-  line-height: 1;
+  color: #94a3b8;
   flex-shrink: 0;
+  cursor: pointer;
+}
+
+.notepad-tab-close svg {
+  display: block;
+  pointer-events: none;
 }
 
 .notepad-tab-close:hover {
-  background-color: #ef4444;
-  color: #ffffff;
+  background-color: #c4cdd9;
+  color: #0f172a;
 }
 
 .notepad-add-tab-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   background-color: transparent;
   border: none;
-  color: #475569;
+  border-left: 1px solid #c8d0db;
+  margin-left: 4px;
+  color: #64748b;
   cursor: pointer;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .notepad-add-tab-btn:hover {
-  background-color: #cbd5e1;
+  background-color: #c4cdd9;
   color: #0f172a;
 }
 
@@ -837,4 +862,79 @@ body.markdown-body a:hover {
   text-align: center;
   color: #64748b;
   font-size: 13px;
+}
+
+/* ===== GitHub Flavored Alerts (rendered in Notepad preview) ===== */
+.gh-alert {
+  border-left: 4px solid;
+  border-radius: 0 6px 6px 0;
+  padding: 10px 14px;
+  margin: 12px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.gh-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.gh-alert-title svg {
+  flex-shrink: 0;
+}
+
+/* NOTE — xanh dương */
+.gh-alert-note {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  color: #1e3a5f;
+}
+.gh-alert-note .gh-alert-title {
+  color: #2563eb;
+}
+
+/* TIP — xanh lá */
+.gh-alert-tip {
+  border-color: #22c55e;
+  background-color: #f0fdf4;
+  color: #14532d;
+}
+.gh-alert-tip .gh-alert-title {
+  color: #16a34a;
+}
+
+/* IMPORTANT — tím */
+.gh-alert-important {
+  border-color: #a855f7;
+  background-color: #faf5ff;
+  color: #3b0764;
+}
+.gh-alert-important .gh-alert-title {
+  color: #9333ea;
+}
+
+/* WARNING — vàng cam */
+.gh-alert-warning {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+  color: #78350f;
+}
+.gh-alert-warning .gh-alert-title {
+  color: #d97706;
+}
+
+/* CAUTION — đỏ */
+.gh-alert-caution {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #7f1d1d;
+}
+.gh-alert-caution .gh-alert-title {
+  color: #dc2626;
 }
