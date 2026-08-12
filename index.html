@@ -227,13 +227,19 @@
   <main class="markdown-body">
     <!-- Khung Notepad chỉ hiển thị trên PC -->
     <div class="notepad-container">
-      <div class="notepad-header">
-        <div class="notepad-status" id="notepad-status">
-          <span class="status-dot"></span> Auto-saved
+      <div class="notepad-tabs-bar">
+        <div class="notepad-tabs-group">
+          <div class="notepad-tabs-list" id="notepad-tabs-list"></div>
+          <button type="button" id="notepad-add-tab-btn" class="notepad-add-tab-btn" title="New Note Tab (Ctrl+N)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
         </div>
         <div class="notepad-actions">
-          <button type="button" id="notepad-toggle-btn" class="notepad-btn" title="Toggle between Edit and Preview">
-            <svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> <span class="btn-text">Preview</span>
+          <button type="button" id="notepad-toggle-btn" class="notepad-btn" title="Toggle Edit/Preview (Ctrl+Shift+P)">
+            <svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
           </button>
         </div>
       </div>

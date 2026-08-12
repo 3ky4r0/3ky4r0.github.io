@@ -32,16 +32,230 @@ function initNotepad() {
   const preview = document.getElementById("notepad-preview");
   const toggleBtn = document.getElementById("notepad-toggle-btn");
   const statusEl = document.getElementById("notepad-status");
+  const tabsListEl = document.getElementById("notepad-tabs-list");
+  const addTabBtn = document.getElementById("notepad-add-tab-btn");
 
   if (!notepad) return;
 
   let isPreviewMode = false;
   let saveTimeout = null;
 
-  // Lấy dữ liệu cũ đã lưu từ trình duyệt
-  const savedNote = localStorage.getItem("user_notepad_data");
-  if (savedNote !== null) {
-    notepad.value = savedNote;
+  // Quản lý trạng thái Đa Tab (Multi-tab State)
+  let tabs = [];
+  let activeTabId = null;
+
+  function loadTabsData() {
+    try {
+      const rawTabs = localStorage.getItem("user_notepad_tabs_v1");
+      if (rawTabs) {
+        tabs = JSON.parse(rawTabs);
+      }
+    } catch (e) {
+      tabs = [];
+    }
+
+    // Chuyển đổi dữ liệu đơn từ cũ (backward migration)
+    if (!tabs || tabs.length === 0) {
+      const oldNote = localStorage.getItem("user_notepad_data") || "";
+      tabs = [
+        {
+          id: "tab_" + Date.now(),
+          title: "Note 1",
+          content: oldNote
+        }
+      ];
+    }
+
+    activeTabId = localStorage.getItem("user_active_tab_id");
+    if (!activeTabId || !tabs.find(t => t.id === activeTabId)) {
+      activeTabId = tabs[0].id;
+    }
+  }
+
+  function saveTabsData() {
+    const activeTab = tabs.find(t => t.id === activeTabId);
+    if (activeTab) {
+      activeTab.content = notepad.value;
+    }
+
+    localStorage.setItem("user_notepad_tabs_v1", JSON.stringify(tabs));
+    localStorage.setItem("user_active_tab_id", activeTabId);
+
+    if (activeTab) {
+      localStorage.setItem("user_notepad_data", activeTab.content);
+    }
+  }
+
+  function renderTabsBar() {
+    if (!tabsListEl) return;
+    tabsListEl.innerHTML = "";
+
+    // Chỉ thu gọn tên (ẩn chữ Note, giữ lại số) khi chiều rộng thực tế của mỗi tab bị nén hẹp (< 75px)
+    const containerGroup = tabsListEl.closest(".notepad-tabs-group");
+    const availableWidth = containerGroup ? containerGroup.clientWidth - 40 : 600;
+    const avgTabWidth = tabs.length > 0 ? (availableWidth / tabs.length) : 180;
+    const isCompact = avgTabWidth < 75;
+
+    if (isCompact) {
+      tabsListEl.classList.add("compact");
+    } else {
+      tabsListEl.classList.remove("compact");
+    }
+
+    tabs.forEach((tab) => {
+      const tabEl = document.createElement("div");
+      tabEl.className = "notepad-tab-item" + (tab.id === activeTabId ? " active" : "");
+      tabEl.dataset.tabId = tab.id;
+
+      const titleSpan = document.createElement("span");
+      titleSpan.className = "notepad-tab-title";
+
+      let rawTitle = tab.title || "Untitled Note";
+      let displayTitle = rawTitle;
+      // Chỉ ẩn chữ "Note" và hiển thị con số khi tab thực sự bị thu hẹp hết cỡ do gần đầy
+      if (isCompact && /^Note\s+\d+$/i.test(rawTitle)) {
+        displayTitle = rawTitle.replace(/^Note\s+/i, "");
+      }
+
+      titleSpan.textContent = displayTitle;
+      titleSpan.title = `${rawTitle} (Nhấp đúp để đổi tên)`;
+
+      // Nhấp đúp (Double click) để đổi tên tab trực tiếp
+      titleSpan.addEventListener("dblclick", (e) => {
+        e.stopPropagation();
+        titleSpan.textContent = tab.title || "Untitled Note";
+        titleSpan.contentEditable = "true";
+        titleSpan.focus();
+
+        const range = document.createRange();
+        range.selectNodeContents(titleSpan);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      });
+
+      const finishRename = () => {
+        if (titleSpan.contentEditable === "true") {
+          titleSpan.contentEditable = "false";
+          const newTitle = titleSpan.textContent.trim() || "Untitled Note";
+          tab.title = newTitle;
+          saveTabsData();
+          renderTabsBar();
+        }
+      };
+
+      titleSpan.addEventListener("blur", finishRename);
+      titleSpan.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          finishRename();
+        } else if (e.key === "Escape") {
+          titleSpan.contentEditable = "false";
+          renderTabsBar();
+        }
+      });
+
+      tabEl.appendChild(titleSpan);
+
+      // Hiển thị nút close nếu có nhiều hơn 1 tab
+      if (tabs.length > 1) {
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "notepad-tab-close";
+        closeBtn.innerHTML = "✕";
+        closeBtn.title = "Đóng tab (Ctrl+W)";
+        closeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          closeTab(tab.id);
+        });
+        tabEl.appendChild(closeBtn);
+      }
+
+      tabEl.addEventListener("click", () => {
+        if (tab.id !== activeTabId) {
+          switchTab(tab.id);
+        }
+      });
+
+      tabsListEl.appendChild(tabEl);
+    });
+  }
+
+  function switchTab(newTabId) {
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    if (currentTab) {
+      currentTab.content = notepad.value;
+    }
+
+    activeTabId = newTabId;
+    const nextTab = tabs.find(t => t.id === activeTabId);
+    if (nextTab) {
+      notepad.value = nextTab.content || "";
+    }
+
+    if (isPreviewMode) {
+      renderMarkdown();
+    }
+
+    renderTabsBar();
+    saveTabsData();
+  }
+
+  function addNewTab() {
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    if (currentTab) {
+      currentTab.content = notepad.value;
+    }
+
+    const newTabNum = tabs.length + 1;
+    const newTab = {
+      id: "tab_" + Date.now(),
+      title: `Note ${newTabNum}`,
+      content: ""
+    };
+
+    tabs.push(newTab);
+    activeTabId = newTab.id;
+    notepad.value = "";
+
+    if (isPreviewMode) {
+      showEdit();
+    }
+
+    renderTabsBar();
+    saveTabsData();
+    notepad.focus();
+  }
+
+  function closeTab(targetTabId) {
+    if (tabs.length <= 1) return;
+
+    const targetIdx = tabs.findIndex(t => t.id === targetTabId);
+    if (targetIdx === -1) return;
+
+    tabs.splice(targetIdx, 1);
+
+    if (activeTabId === targetTabId) {
+      const nextIdx = Math.min(targetIdx, tabs.length - 1);
+      activeTabId = tabs[nextIdx].id;
+      notepad.value = tabs[nextIdx].content || "";
+      if (isPreviewMode) renderMarkdown();
+    }
+
+    renderTabsBar();
+    saveTabsData();
+  }
+
+  // Khởi tạo tab dữ liệu
+  loadTabsData();
+  const initialTab = tabs.find(t => t.id === activeTabId);
+  if (initialTab) {
+    notepad.value = initialTab.content || "";
+  }
+  renderTabsBar();
+  window.addEventListener("resize", renderTabsBar);
+
+  if (addTabBtn) {
+    addTabBtn.addEventListener("click", addNewTab);
   }
 
   function updateStatus(isSaving) {
@@ -96,7 +310,11 @@ function initNotepad() {
     const rawText = notepad.value.trim();
 
     if (!rawText) {
-      preview.innerHTML = '<div class="notepad-empty-hint">(Empty note - click "Edit" to start typing...)</div>';
+      preview.innerHTML = '<div class="notepad-empty-hint">(Trang ghi chú trống - bấm nút "Edit" ở trên để bắt đầu nhập...)</div>';
+      const hintEl = preview.querySelector(".notepad-empty-hint");
+      if (hintEl) {
+        hintEl.addEventListener("click", showEdit);
+      }
       return;
     }
 
@@ -119,7 +337,8 @@ function initNotepad() {
     isPreviewMode = true;
 
     if (toggleBtn) {
-      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg> <span class="btn-text">Edit</span>';
+      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>';
+      toggleBtn.title = "Chuyển sang chế độ Sửa (Edit)";
     }
   }
 
@@ -130,21 +349,18 @@ function initNotepad() {
     isPreviewMode = false;
 
     if (toggleBtn) {
-      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> <span class="btn-text">Preview</span>';
+      toggleBtn.innerHTML = '<svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+      toggleBtn.title = "Chuyển sang chế độ Xem (Preview)";
     }
   }
 
-  // Khởi tạo: nếu có ghi chú cũ thì hiển thị dạng Preview trước, nếu chưa có thì cho sửa luôn
-  if (savedNote && savedNote.trim().length > 0) {
-    showPreview();
-  } else {
-    showEdit();
-  }
+  // Mặc định luôn ở chế độ Xem (Khóa chỉnh sửa, phải bấm nút Edit mới sửa được)
+  showPreview();
 
   // Tự động lưu mỗi khi gõ
   notepad.addEventListener("input", () => {
     updateStatus(true);
-    localStorage.setItem("user_notepad_data", notepad.value);
+    saveTabsData();
 
     if (saveTimeout) clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
@@ -152,7 +368,86 @@ function initNotepad() {
     }, 400);
   });
 
-  // Nút chuyển đổi chế độ Sửa / Xem (chỉ đổi khi bấm nút này)
+  function downloadNotepadContent() {
+    const text = notepad.value;
+    if (!text) return;
+    const currentTab = tabs.find(t => t.id === activeTabId);
+    const titleName = currentTab && currentTab.title ? currentTab.title.replace(/[^a-zA-Z0-9_\-áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ]/g, "_") : "note";
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${titleName}.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function copyAllNotepadContent() {
+    const text = notepad.value;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      if (statusEl) {
+        const originalHTML = statusEl.innerHTML;
+        statusEl.innerHTML = '<span class="status-dot"></span> Copied to clipboard!';
+        setTimeout(() => {
+          statusEl.innerHTML = originalHTML;
+        }, 1500);
+      }
+    });
+  }
+
+  const downloadBtn = document.getElementById("notepad-download-btn");
+  if (downloadBtn) {
+    downloadBtn.addEventListener("click", downloadNotepadContent);
+  }
+
+  // Phím tắt bàn phím cho Notepad
+  document.addEventListener("keydown", (e) => {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const modifier = isMac ? e.metaKey : e.ctrlKey;
+
+    // Ctrl + N / Cmd + N: Thêm tab mới
+    if (modifier && (e.key === "n" || e.key === "N") && !e.shiftKey) {
+      e.preventDefault();
+      addNewTab();
+    }
+
+    // Ctrl + W / Cmd + W: Đóng tab hiện tại
+    if (modifier && (e.key === "w" || e.key === "W") && !e.shiftKey) {
+      if (tabs.length > 1) {
+        e.preventDefault();
+        closeTab(activeTabId);
+      }
+    }
+
+    // Ctrl + S / Cmd + S: Tải ghi chú dạng .md
+    if (modifier && (e.key === "s" || e.key === "S") && !e.shiftKey) {
+      e.preventDefault();
+      downloadNotepadContent();
+    }
+
+    // Ctrl + Shift + P / Cmd + Shift + P: Toggle Edit / Preview
+    if (modifier && e.shiftKey && (e.key === "p" || e.key === "P")) {
+      e.preventDefault();
+      if (isPreviewMode) {
+        showEdit();
+      } else {
+        showPreview();
+      }
+    }
+
+    // Ctrl + Shift + C / Cmd + Shift + C: Copy toàn bộ ghi chú
+    if (modifier && e.shiftKey && (e.key === "c" || e.key === "C")) {
+      if (!window.getSelection().toString()) {
+        e.preventDefault();
+        copyAllNotepadContent();
+      }
+    }
+  });
+
+  // Nút chuyển đổi chế độ Sửa / Xem
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
       if (isPreviewMode) {

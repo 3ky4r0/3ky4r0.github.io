@@ -220,63 +220,156 @@ main.markdown-body {
   overflow: hidden;
 }
 
-.notepad-header {
+/* Notepad Tab Bar (Single Header Row - Centered & Borderless) */
+.notepad-tabs-bar {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 6px 16px;
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 12.5px;
-  color: #64748b;
+  background-color: #f1f5f9;
+  border-bottom: none;
+  padding: 6px 12px;
+  min-height: 40px;
+  gap: 6px;
   user-select: none;
-  z-index: 10;
+  z-index: 11;
+  box-sizing: border-box;
 }
 
-.notepad-status {
+.notepad-tabs-group {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.notepad-tabs-list {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+  flex: 0 1 auto;
+  max-width: calc(100% - 32px);
+}
+
+.notepad-tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+.notepad-tab-item {
+  flex: 1 1 180px;
+  width: 180px;
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 5px 10px;
+  height: 28px;
+  background-color: #e2e8f0;
+  color: #64748b;
+  font-size: 13px;
   font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  max-width: 200px;
+  min-width: 36px;
+  box-sizing: border-box;
+  position: relative;
+  border: none;
+  overflow: hidden;
 }
 
-.status-dot {
-  width: 7px;
-  height: 7px;
+.notepad-tabs-list.compact .notepad-tab-item {
+  min-width: 30px;
+  max-width: 100px;
+  padding: 5px 6px;
+}
+
+.notepad-tab-item:hover {
+  background-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.notepad-tab-item.active {
+  background-color: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  border: none;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.notepad-tab-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  outline: none;
+}
+
+.notepad-tab-title[contenteditable="true"] {
+  background: #f1f5f9;
+  padding: 0 4px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #3b82f6;
+  cursor: text;
+}
+
+.notepad-tab-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background-color: #3b82f6;
-  display: inline-block;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-.status-dot.saving {
-  background-color: #f59e0b;
+.notepad-tab-close:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.notepad-add-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.notepad-add-tab-btn:hover {
+  background-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.notepad-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .notepad-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   background-color: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 500;
+  border-radius: 6px;
   color: #334155;
   cursor: pointer;
-}
-
-.btn-icon-svg {
-  flex-shrink: 0;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.notepad-btn:hover {
-  background-color: #f1f5f9;
-  border-color: #94a3b8;
-  color: #0f172a;
+  box-sizing: border-box;
 }
 
 .notepad-body {
