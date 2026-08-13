@@ -240,14 +240,14 @@ main.markdown-body {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .notepad-tabs-list {
   display: flex;
   align-items: center;
-  gap: 3px;
-  overflow: hidden;
+  gap: 6px;
+  overflow: visible;
   flex: 0 1 auto;
   max-width: calc(100% - 32px);
 }
@@ -275,7 +275,7 @@ main.markdown-body {
   box-sizing: border-box;
   position: relative;
   border: none;
-  overflow: hidden;
+  margin: 0;
 }
 
 .notepad-tabs-list.compact .notepad-tab-item {
@@ -289,22 +289,27 @@ main.markdown-body {
   color: #1e293b;
 }
 
-/* Dấu gạch dọc ngăn cách giữa các tab — dùng ::after bên trong element */
-.notepad-tab-item:not(:last-child)::after {
+/* Dấu gạch phân cách nằm chính giữa và cách đều 2 tab (ở giữa khoảng nghỉ gap 6px) */
+.notepad-tab-item+.notepad-tab-item::before {
   content: '';
   position: absolute;
-  right: 0;
-  top: 20%;
-  height: 60%;
+  left: -3.5px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 14px;
   width: 1px;
-  background-color: #cbd5e1;
+  background-color: rgba(100, 116, 139, 0.4);
   border-radius: 1px;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
 }
 
-/* Ẩn divider cho tab active và tab ngay trước active */
-.notepad-tab-item.active::after,
-.notepad-tab-item:has(+ .notepad-tab-item.active)::after {
-  display: none;
+/* Ẩn vạch phân cách khi 1 trong 2 tab kề cạnh được Hover hoặc Active */
+.notepad-tab-item.active::before,
+.notepad-tab-item:hover::before,
+.notepad-tab-item.active+.notepad-tab-item::before,
+.notepad-tab-item:hover+.notepad-tab-item::before {
+  opacity: 0;
 }
 
 .notepad-tab-item.active {
@@ -350,7 +355,13 @@ main.markdown-body {
 }
 
 .notepad-tab-close:hover {
-  background-color: #c4cdd9;
+  background-color: rgba(100, 116, 139, 0.25);
+  color: #0f172a;
+}
+
+/* Nút X hover khi tab đang active — nền trắng đủ tương phản */
+.notepad-tab-item.active .notepad-tab-close:hover {
+  background-color: #e2e8f0;
   color: #0f172a;
 }
 
@@ -360,16 +371,39 @@ main.markdown-body {
   justify-content: center;
   width: 28px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: 50%;
   background-color: transparent;
   border: none;
-  border-left: 1px solid #c8d0db;
-  margin-left: 4px;
+  margin: 0;
   color: #64748b;
   cursor: pointer;
   flex-shrink: 0;
   box-sizing: border-box;
+  position: relative;
 }
+
+/* Vạch phân cách nằm chính giữa gap 6px trước nút + */
+.notepad-add-tab-btn::before {
+  content: '';
+  position: absolute;
+  left: -3.5px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 14px;
+  width: 1px;
+  background-color: rgba(100, 116, 139, 0.4);
+  border-radius: 1px;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+/* Ẩn vạch trước nút + khi tab cuối cùng đang Active hoặc Hover */
+.notepad-tabs-group:has(.notepad-tab-item:last-child.active) .notepad-add-tab-btn::before,
+.notepad-tabs-group:has(.notepad-tab-item:last-child:hover) .notepad-add-tab-btn::before {
+  opacity: 0;
+}
+
+
 
 .notepad-add-tab-btn:hover {
   background-color: #c4cdd9;
@@ -389,12 +423,17 @@ main.markdown-body {
   justify-content: center;
   width: 28px;
   height: 28px;
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  color: #334155;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #64748b;
   cursor: pointer;
   box-sizing: border-box;
+}
+
+.notepad-btn:hover {
+  background-color: #c4cdd9;
+  color: #0f172a;
 }
 
 .notepad-body {
@@ -435,7 +474,7 @@ main.markdown-body {
 }
 
 /* Format HTML Markdown preview */
-.notepad-preview-content > *:first-child {
+.notepad-preview-content>*:first-child {
   margin-top: 0 !important;
 }
 
@@ -450,9 +489,21 @@ main.markdown-body {
   line-height: 1.3;
 }
 
-.notepad-preview-content h1 { font-size: 1.8em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
-.notepad-preview-content h2 { font-size: 1.4em; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.2em; }
-.notepad-preview-content h3 { font-size: 1.2em; }
+.notepad-preview-content h1 {
+  font-size: 1.8em;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.3em;
+}
+
+.notepad-preview-content h2 {
+  font-size: 1.4em;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.2em;
+}
+
+.notepad-preview-content h3 {
+  font-size: 1.2em;
+}
 
 .notepad-preview-content p {
   margin-top: 0;
@@ -482,7 +533,7 @@ main.markdown-body {
   margin: 0;
 }
 
-.notepad-preview-content blockquote p + p {
+.notepad-preview-content blockquote p+p {
   margin-top: 0.5em;
 }
 
@@ -579,6 +630,7 @@ main.markdown-body {
 
 /* Giao diện Mobile (Giữ nguyên như cũ, ẩn hoàn toàn Notepad) */
 @media (max-width: 768px) {
+
   html,
   body {
     height: auto;
@@ -895,6 +947,7 @@ body.markdown-body a:hover {
   background-color: #eff6ff;
   color: #1e3a5f;
 }
+
 .gh-alert-note .gh-alert-title {
   color: #2563eb;
 }
@@ -905,6 +958,7 @@ body.markdown-body a:hover {
   background-color: #f0fdf4;
   color: #14532d;
 }
+
 .gh-alert-tip .gh-alert-title {
   color: #16a34a;
 }
@@ -915,6 +969,7 @@ body.markdown-body a:hover {
   background-color: #faf5ff;
   color: #3b0764;
 }
+
 .gh-alert-important .gh-alert-title {
   color: #9333ea;
 }
@@ -925,6 +980,7 @@ body.markdown-body a:hover {
   background-color: #fffbeb;
   color: #78350f;
 }
+
 .gh-alert-warning .gh-alert-title {
   color: #d97706;
 }
@@ -935,6 +991,7 @@ body.markdown-body a:hover {
   background-color: #fef2f2;
   color: #7f1d1d;
 }
+
 .gh-alert-caution .gh-alert-title {
   color: #dc2626;
 }
