@@ -289,6 +289,12 @@ main.markdown-body {
   color: #1e293b;
 }
 
+.notepad-tab-item.dragging {
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  cursor: grabbing !important;
+}
+
 /* Dấu gạch phân cách nằm chính giữa và cách đều 2 tab (ở giữa khoảng nghỉ gap 6px) */
 .notepad-tab-item+.notepad-tab-item::before {
   content: '';

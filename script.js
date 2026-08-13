@@ -43,6 +43,7 @@ function initNotepad() {
   // Quản lý trạng thái Đa Tab (Multi-tab State)
   let tabs = [];
   let activeTabId = null;
+  let draggedTabId = null;
 
   function loadTabsData() {
     try {
@@ -170,7 +171,80 @@ function initNotepad() {
         tabEl.appendChild(closeBtn);
       }
 
-      tabEl.addEventListener("click", () => {
+      // Xử lý kéo thả Tab khoá hướng ngang chuẩn Chrome (Pointer Events)
+      tabEl.addEventListener("pointerdown", (e) => {
+        if (e.target.closest(".notepad-tab-close") || titleSpan.contentEditable === "true") {
+          return;
+        }
+        if (e.button !== 0) return;
+
+        let startX = e.clientX;
+        let hasMoved = false;
+
+        const onPointerMove = (moveEvent) => {
+          const deltaX = moveEvent.clientX - startX;
+
+          if (!hasMoved && Math.abs(deltaX) > 4) {
+            hasMoved = true;
+            tabEl.classList.add("dragging");
+            tabEl.style.zIndex = "100";
+          }
+
+          if (hasMoved) {
+            // Khoá hướng dọc (Y = 0), chỉ di chuyển theo chiều ngang (X)
+            tabEl.style.transform = `translateX(${deltaX}px)`;
+
+            const rect = tabEl.getBoundingClientRect();
+            const currentCenterX = rect.left + rect.width / 2;
+
+            const nextSib = tabEl.nextElementSibling;
+            const prevSib = tabEl.previousElementSibling;
+
+            if (nextSib) {
+              const sibRect = nextSib.getBoundingClientRect();
+              const sibCenterX = sibRect.left + sibRect.width / 2;
+              if (currentCenterX > sibCenterX) {
+                tabsListEl.insertBefore(nextSib, tabEl);
+                startX += sibRect.width + 6;
+                tabEl.style.transform = `translateX(${moveEvent.clientX - startX}px)`;
+                return;
+              }
+            }
+
+            if (prevSib) {
+              const sibRect = prevSib.getBoundingClientRect();
+              const sibCenterX = sibRect.left + sibRect.width / 2;
+              if (currentCenterX < sibCenterX) {
+                tabsListEl.insertBefore(tabEl, prevSib);
+                startX -= sibRect.width + 6;
+                tabEl.style.transform = `translateX(${moveEvent.clientX - startX}px)`;
+                return;
+              }
+            }
+          }
+        };
+
+        const onPointerUp = () => {
+          window.removeEventListener("pointermove", onPointerMove);
+          window.removeEventListener("pointerup", onPointerUp);
+
+          if (hasMoved) {
+            tabEl.classList.remove("dragging");
+            tabEl.style.transform = "";
+            tabEl.style.zIndex = "";
+
+            const newOrderIds = Array.from(tabsListEl.children).map(el => el.dataset.tabId);
+            tabs.sort((a, b) => newOrderIds.indexOf(a.id) - newOrderIds.indexOf(b.id));
+            saveTabsData();
+            renderTabsBar();
+          }
+        };
+
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+      });
+
+      tabEl.addEventListener("click", (e) => {
         if (tab.id !== activeTabId) {
           switchTab(tab.id);
         }
