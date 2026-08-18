@@ -88,43 +88,38 @@ function initNotepad() {
   }
 
   function renderTabsBar() {
+    const currentTabNameEl = document.getElementById("current-tab-name");
+    const activeTab = tabs.find(t => t.id === activeTabId);
+    if (currentTabNameEl) {
+      currentTabNameEl.textContent = activeTab ? activeTab.title : "Notes";
+    }
+
     if (!tabsListEl) return;
     tabsListEl.innerHTML = "";
 
-    // Chỉ thu gọn tên (ẩn chữ Note, giữ lại số) khi chiều rộng thực tế của mỗi tab bị nén hẹp (< 75px)
-    const containerGroup = tabsListEl.closest(".notepad-tabs-group");
-    const availableWidth = containerGroup ? containerGroup.clientWidth - 40 : 600;
-    const avgTabWidth = tabs.length > 0 ? (availableWidth / tabs.length) : 180;
-    const isCompact = avgTabWidth < 75;
-
-    if (isCompact) {
-      tabsListEl.classList.add("compact");
-    } else {
-      tabsListEl.classList.remove("compact");
-    }
-
     tabs.forEach((tab) => {
       const tabEl = document.createElement("div");
-      tabEl.className = "notepad-tab-item" + (tab.id === activeTabId ? " active" : "");
+      tabEl.className = "notes-tab-item" + (tab.id === activeTabId ? " active" : "");
       tabEl.dataset.tabId = tab.id;
 
-      const titleSpan = document.createElement("span");
-      titleSpan.className = "notepad-tab-title";
-
-      let rawTitle = tab.title || "Untitled Note";
-      let displayTitle = rawTitle;
-      // Chỉ ẩn chữ "Note" và hiển thị con số khi tab thực sự bị thu hẹp hết cỡ do gần đầy
-      if (isCompact && /^Note\s+\d+$/i.test(rawTitle)) {
-        displayTitle = rawTitle.replace(/^Note\s+/i, "");
+      // Icon trạng thái
+      const iconSpan = document.createElement("span");
+      iconSpan.className = "notes-tab-icon";
+      if (tab.id === activeTabId) {
+        iconSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else {
+        iconSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>`;
       }
+      tabEl.appendChild(iconSpan);
 
-      titleSpan.textContent = displayTitle;
-      titleSpan.title = `${rawTitle} (Nhấp đúp để đổi tên)`;
+      const titleSpan = document.createElement("span");
+      titleSpan.className = "notes-tab-title";
+      titleSpan.textContent = tab.title || "Untitled Note";
+      titleSpan.title = `${tab.title || "Untitled Note"} (Nhấp đúp để đổi tên)`;
 
       // Nhấp đúp (Double click) để đổi tên tab trực tiếp
       titleSpan.addEventListener("dblclick", (e) => {
         e.stopPropagation();
-        titleSpan.textContent = tab.title || "Untitled Note";
         titleSpan.contentEditable = "true";
         titleSpan.focus();
 
@@ -161,9 +156,9 @@ function initNotepad() {
       // Hiển thị nút close nếu có nhiều hơn 1 tab
       if (tabs.length > 1) {
         const closeBtn = document.createElement("span");
-        closeBtn.className = "notepad-tab-close";
+        closeBtn.className = "notes-tab-close";
         closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-        closeBtn.title = "Đóng tab (Ctrl+W)";
+        closeBtn.title = "Đóng note";
         closeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           closeTab(tab.id);
@@ -171,80 +166,8 @@ function initNotepad() {
         tabEl.appendChild(closeBtn);
       }
 
-      // Xử lý kéo thả Tab khoá hướng ngang chuẩn Chrome (Pointer Events)
-      tabEl.addEventListener("pointerdown", (e) => {
-        if (e.target.closest(".notepad-tab-close") || titleSpan.contentEditable === "true") {
-          return;
-        }
-        if (e.button !== 0) return;
-
-        let startX = e.clientX;
-        let hasMoved = false;
-
-        const onPointerMove = (moveEvent) => {
-          const deltaX = moveEvent.clientX - startX;
-
-          if (!hasMoved && Math.abs(deltaX) > 4) {
-            hasMoved = true;
-            tabEl.classList.add("dragging");
-            tabEl.style.zIndex = "100";
-          }
-
-          if (hasMoved) {
-            // Khoá hướng dọc (Y = 0), chỉ di chuyển theo chiều ngang (X)
-            tabEl.style.transform = `translateX(${deltaX}px)`;
-
-            const rect = tabEl.getBoundingClientRect();
-            const currentCenterX = rect.left + rect.width / 2;
-
-            const nextSib = tabEl.nextElementSibling;
-            const prevSib = tabEl.previousElementSibling;
-
-            if (nextSib) {
-              const sibRect = nextSib.getBoundingClientRect();
-              const sibCenterX = sibRect.left + sibRect.width / 2;
-              if (currentCenterX > sibCenterX) {
-                tabsListEl.insertBefore(nextSib, tabEl);
-                startX += sibRect.width + 6;
-                tabEl.style.transform = `translateX(${moveEvent.clientX - startX}px)`;
-                return;
-              }
-            }
-
-            if (prevSib) {
-              const sibRect = prevSib.getBoundingClientRect();
-              const sibCenterX = sibRect.left + sibRect.width / 2;
-              if (currentCenterX < sibCenterX) {
-                tabsListEl.insertBefore(tabEl, prevSib);
-                startX -= sibRect.width + 6;
-                tabEl.style.transform = `translateX(${moveEvent.clientX - startX}px)`;
-                return;
-              }
-            }
-          }
-        };
-
-        const onPointerUp = () => {
-          window.removeEventListener("pointermove", onPointerMove);
-          window.removeEventListener("pointerup", onPointerUp);
-
-          if (hasMoved) {
-            tabEl.classList.remove("dragging");
-            tabEl.style.transform = "";
-            tabEl.style.zIndex = "";
-
-            const newOrderIds = Array.from(tabsListEl.children).map(el => el.dataset.tabId);
-            tabs.sort((a, b) => newOrderIds.indexOf(a.id) - newOrderIds.indexOf(b.id));
-            saveTabsData();
-            renderTabsBar();
-          }
-        };
-
-        window.addEventListener("pointermove", onPointerMove);
-        window.addEventListener("pointerup", onPointerUp);
-      });
-
       tabEl.addEventListener("click", (e) => {
+        if (titleSpan.contentEditable === "true") return;
         if (tab.id !== activeTabId) {
           switchTab(tab.id);
         }
@@ -270,6 +193,10 @@ function initNotepad() {
       renderMarkdown();
     }
 
+    if (notesDropdown) {
+      notesDropdown.classList.remove("active");
+    }
+
     renderTabsBar();
     saveTabsData();
   }
@@ -293,6 +220,10 @@ function initNotepad() {
 
     if (isPreviewMode) {
       showEdit();
+    }
+
+    if (notesDropdown) {
+      notesDropdown.classList.remove("active");
     }
 
     renderTabsBar();
@@ -328,8 +259,27 @@ function initNotepad() {
   renderTabsBar();
   window.addEventListener("resize", renderTabsBar);
 
+  const notesDropdown = document.getElementById("notes-dropdown");
+  const notesDropbtn = document.getElementById("notes-dropbtn");
+
+  if (notesDropbtn && notesDropdown) {
+    notesDropbtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      notesDropdown.classList.toggle("active");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!notesDropdown.contains(e.target)) {
+        notesDropdown.classList.remove("active");
+      }
+    });
+  }
+
   if (addTabBtn) {
-    addTabBtn.addEventListener("click", addNewTab);
+    addTabBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addNewTab();
+    });
   }
 
   function updateStatus(isSaving) {

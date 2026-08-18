@@ -12,13 +12,12 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #fafafa;
   color: #1b2533;
   font-family: 'Plus Jakarta Sans', 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 button,
@@ -119,7 +118,7 @@ textarea {
 }
 
 .dropdown:hover .dropbtn {
-  background-color: #f0f3fa;
+  background-color: #f3f4f6;
   color: #1b2533;
 }
 
@@ -133,11 +132,11 @@ textarea {
   width: max-content;
   min-width: 140px;
   max-width: calc(100vw - 32px);
-  box-shadow: 0 8px 24px rgba(27, 37, 51, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
   padding: 6px;
   z-index: 1001;
-  border: 1px solid #eef2f6;
+  border: 1px solid #e5e7eb;
 }
 
 .dropdown-content::before {
@@ -149,8 +148,8 @@ textarea {
   height: 10px;
   background-color: #ffffff;
   transform: rotate(45deg);
-  border-top: 1px solid #eef2f6;
-  border-left: 1px solid #eef2f6;
+  border-top: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
 }
 
 .dropdown:hover .dropdown-content {
@@ -170,21 +169,9 @@ textarea {
   white-space: nowrap;
 }
 
-/* Định vị menu sát lề phải cho các nút cuối để không bị tràn màn hình */
-.dropdown:last-child .dropdown-content,
-.dropdown:nth-last-child(2) .dropdown-content {
-  left: auto;
-  right: 0;
-}
-
-.dropdown:last-child .dropdown-content::before,
-.dropdown:nth-last-child(2) .dropdown-content::before {
-  left: auto;
-  right: 20px;
-}
 
 .dropdown-content a:hover {
-  background-color: #f0f3fa;
+  background-color: #f3f4f6;
 }
 
 .dropdown-content a img {
@@ -194,270 +181,285 @@ textarea {
   flex-shrink: 0;
 }
 
-/* Vùng Main trên PC - Full màn hình */
+/* Vùng Main trên PC */
 main.markdown-body {
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   flex: 1;
-  min-height: 0;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 /* Notepad trên PC */
 .notepad-container {
   width: 100%;
-  height: 100%;
   flex: 1;
-  min-height: 0;
+  min-height: calc(100vh - 49px);
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  overflow: hidden;
+  background-color: #fafafa;
 }
 
-/* Notepad Tab Bar (Single Header Row - Centered & Borderless) */
-.notepad-tabs-bar {
-  flex-shrink: 0;
-  display: flex;
+/* Nhóm điều khiển bên phải Topbar (Nút Note, Nút Sửa/Xem, Thanh Tìm kiếm) */
+.topbar-right-controls {
+  display: inline-flex;
   align-items: center;
-  background-color: #dde3ec;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 6px 12px;
-  min-height: 40px;
-  gap: 6px;
-  user-select: none;
-  z-index: 11;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.notes-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notes-dropbtn {
+  height: 32px;
   box-sizing: border-box;
-}
-
-.notepad-tabs-group {
-  flex: 1;
-  min-width: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-
-.notepad-tabs-list {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  overflow: visible;
-  flex: 0 1 auto;
-  max-width: calc(100% - 32px);
-}
-
-.notepad-tabs-list::-webkit-scrollbar {
-  display: none;
-}
-
-.notepad-tab-item {
-  flex: 1 1 180px;
-  width: 180px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  height: 28px;
-  background-color: transparent;
-  color: #64748b;
+  padding: 0 10px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  color: #1e293b;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 500;
-  border-radius: 6px;
+  line-height: 1;
   cursor: pointer;
   max-width: 200px;
-  min-width: 36px;
-  box-sizing: border-box;
-  position: relative;
-  border: none;
-  margin: 0;
 }
 
-.notepad-tabs-list.compact .notepad-tab-item {
-  min-width: 30px;
-  max-width: 100px;
-  padding: 5px 6px;
+.notes-dropbtn:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  color: #111827;
 }
 
-.notepad-tab-item:hover {
-  background-color: #c4cdd9;
-  color: #1e293b;
+.notes-icon {
+  color: #6b7280;
+  flex-shrink: 0;
 }
 
-.notepad-tab-item.dragging {
-  opacity: 1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-  cursor: grabbing !important;
-}
-
-/* Dấu gạch phân cách nằm chính giữa và cách đều 2 tab (ở giữa khoảng nghỉ gap 6px) */
-.notepad-tab-item+.notepad-tab-item::before {
-  content: '';
-  position: absolute;
-  left: -3.5px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 14px;
-  width: 1px;
-  background-color: rgba(100, 116, 139, 0.4);
-  border-radius: 1px;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-}
-
-/* Ẩn vạch phân cách khi 1 trong 2 tab kề cạnh được Hover hoặc Active */
-.notepad-tab-item.active::before,
-.notepad-tab-item:hover::before,
-.notepad-tab-item.active+.notepad-tab-item::before,
-.notepad-tab-item:hover+.notepad-tab-item::before {
-  opacity: 0;
-}
-
-.notepad-tab-item.active {
-  background-color: #ffffff;
-  color: #0f172a;
-  font-weight: 600;
-  border: none;
-  z-index: 2;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.notepad-tab-title {
+.current-tab-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.dropdown-arrow-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+/* Khung Dropdown danh sách Notes */
+.notes-dropdown-content {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: auto;
+  background-color: #ffffff;
+  min-width: 240px;
+  max-width: 320px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 1001;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+}
+
+.notes-dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  left: auto;
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+  transform: rotate(45deg);
+  border-top: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+}
+
+.notes-dropdown:hover .notes-dropdown-content,
+.notes-dropdown.active .notes-dropdown-content {
+  display: block;
+}
+
+.notes-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px 8px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notes-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.notes-add-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.notes-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-top: 6px;
+}
+
+.notes-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.notes-tab-item:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.notes-tab-item.active {
+  background-color: #e5e7eb;
+  color: #111827;
+  font-weight: 600;
+}
+
+.notes-tab-icon {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.notes-tab-item.active .notes-tab-icon {
+  color: #111827;
+}
+
+.notes-tab-title {
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   outline: none;
 }
 
-.notepad-tab-title[contenteditable="true"] {
-  background: #f1f5f9;
+.notes-tab-title[contenteditable="true"] {
+  background: #ffffff;
   padding: 0 4px;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #3b82f6;
   cursor: text;
 }
 
-.notepad-tab-close {
+.notes-tab-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  color: #94a3b8;
+  color: #9ca3af;
   flex-shrink: 0;
   cursor: pointer;
 }
 
-.notepad-tab-close svg {
-  display: block;
-  pointer-events: none;
+.notes-tab-close:hover {
+  background-color: #d1d5db;
+  color: #111827;
 }
 
-.notepad-tab-close:hover {
-  background-color: rgba(100, 116, 139, 0.25);
-  color: #0f172a;
-}
-
-/* Nút X hover khi tab đang active — nền trắng đủ tương phản */
-.notepad-tab-item.active .notepad-tab-close:hover {
-  background-color: #e2e8f0;
-  color: #0f172a;
-}
-
-.notepad-add-tab-btn {
+/* Nút Preview / Edit trên Topbar */
+.topbar-icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: transparent;
-  border: none;
+  width: 32px;
+  height: 32px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #6b7280;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
+  flex-shrink: 0;
   margin: 0;
-  color: #64748b;
-  cursor: pointer;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  position: relative;
+  padding: 0;
 }
 
-/* Vạch phân cách nằm chính giữa gap 6px trước nút + */
-.notepad-add-tab-btn::before {
-  content: '';
-  position: absolute;
-  left: -3.5px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 14px;
-  width: 1px;
-  background-color: rgba(100, 116, 139, 0.4);
-  border-radius: 1px;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
+.topbar-icon-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+  border-color: #d1d5db;
 }
 
-/* Ẩn vạch trước nút + khi tab cuối cùng đang Active hoặc Hover */
-.notepad-tabs-group:has(.notepad-tab-item:last-child.active) .notepad-add-tab-btn::before,
-.notepad-tabs-group:has(.notepad-tab-item:last-child:hover) .notepad-add-tab-btn::before {
-  opacity: 0;
-}
-
-
-
-.notepad-add-tab-btn:hover {
-  background-color: #c4cdd9;
-  color: #0f172a;
-}
-
-.notepad-actions {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.notepad-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  color: #64748b;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.notepad-btn:hover {
-  background-color: #c4cdd9;
-  color: #0f172a;
+.topbar-icon-btn.active {
+  background-color: #e5e7eb;
+  color: #111827;
+  border-color: #d1d5db;
 }
 
 .notepad-body {
   position: relative;
   flex: 1;
-  min-height: 0;
-  width: 100%;
-  overflow: hidden;
+  min-height: calc(100vh - 89px);
+  width: 65%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
 }
 
 #notepad {
   width: 100%;
-  height: 100%;
-  padding: 20px;
+  flex: 1;
+  min-height: calc(100vh - 89px);
+  padding: 20px 0;
   box-sizing: border-box;
   border: none;
   border-radius: 0;
-  background-color: #ffffff;
+  background-color: #fafafa;
   color: #1b2533;
   font-family: 'Plus Jakarta Sans', 'Nunito', system-ui, -apple-system, sans-serif;
   font-size: 15px;
@@ -468,11 +470,11 @@ main.markdown-body {
 
 .notepad-preview-content {
   width: 100%;
-  height: 100%;
-  padding: 20px;
+  flex: 1;
+  min-height: calc(100vh - 89px);
+  padding: 20px 0;
   box-sizing: border-box;
-  overflow-y: auto;
-  background-color: #ffffff;
+  background-color: #fafafa;
   color: #1b2533;
   font-family: 'Plus Jakarta Sans', 'Nunito', system-ui, -apple-system, sans-serif;
   font-size: 15px;
@@ -634,6 +636,12 @@ main.markdown-body {
   display: none;
 }
 
+@media (max-width: 1024px) {
+  .notepad-body {
+    width: 85%;
+  }
+}
+
 /* Giao diện Mobile (Giữ nguyên như cũ, ẩn hoàn toàn Notepad) */
 @media (max-width: 768px) {
 
@@ -655,6 +663,10 @@ main.markdown-body {
   .notepad-container {
     display: none !important;
     /* Ẩn ghi chú trên điện thoại */
+  }
+
+  .topbar-right-controls {
+    display: none !important;
   }
 
   .top-bar-content {
@@ -754,10 +766,11 @@ body.markdown-body a:hover {
 /* Search Box ở góc phải Header */
 .search-box {
   position: relative;
-  margin-left: auto;
   display: flex;
   align-items: center;
-  width: 210px;
+  width: 200px;
+  flex-shrink: 0;
+  margin: 0;
 }
 
 .search-input-wrapper {
@@ -765,9 +778,9 @@ body.markdown-body a:hover {
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  padding: 0 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0 10px;
   width: 100%;
   height: 32px;
   box-sizing: border-box;
@@ -776,7 +789,7 @@ body.markdown-body a:hover {
 .search-input-wrapper:focus-within {
   width: 100%;
   border: 2px solid #2563eb;
-  padding: 0 7px;
+  padding: 0 9px;
   box-shadow: none;
 }
 
@@ -796,9 +809,11 @@ body.markdown-body a:hover {
   border: none;
   outline: none;
   background: transparent;
+  font-family: inherit;
   font-size: 13px;
+  font-weight: 500;
   line-height: 1;
-  color: #1b2533;
+  color: #1e293b;
   padding: 0;
   margin: 0;
   display: block;
@@ -806,6 +821,7 @@ body.markdown-body a:hover {
 
 #header-search::placeholder {
   color: #94a3b8;
+  font-weight: 400;
 }
 
 .search-clear-btn {
@@ -824,8 +840,8 @@ body.markdown-body a:hover {
 }
 
 .search-clear-btn:hover {
-  color: #1e293b;
-  background-color: #e2e8f0;
+  color: #111827;
+  background-color: #e5e7eb;
 }
 
 /* Dropdown kết quả tìm kiếm - dài bằng thanh tìm kiếm */
@@ -839,9 +855,9 @@ body.markdown-body a:hover {
   max-height: 320px;
   overflow-y: auto;
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e7eb;
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 4px;
   z-index: 1100;
 }
@@ -864,7 +880,7 @@ body.markdown-body a:hover {
 
 .search-result-item:hover,
 .search-result-item.selected {
-  background-color: #f1f5f9;
+  background-color: #f3f4f6;
 }
 
 .search-result-item img {
@@ -889,7 +905,7 @@ body.markdown-body a:hover {
 
 .search-result-category {
   font-size: 10.5px;
-  color: #64748b;
+  color: #6b7280;
   font-weight: 400;
 }
 
@@ -898,7 +914,7 @@ body.markdown-body a:hover {
   align-items: center;
   gap: 6px;
   padding: 6px 8px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #f3f4f6;
   margin-top: 2px;
   color: #2563eb;
   font-weight: 500;
@@ -912,13 +928,13 @@ body.markdown-body a:hover {
 
 .search-result-google:hover,
 .search-result-google.selected {
-  background-color: #eff6ff;
+  background-color: #f3f4f6;
 }
 
 .search-no-results {
   padding: 10px;
   text-align: center;
-  color: #64748b;
+  color: #6b7280;
   font-size: 13px;
 }
 

@@ -206,20 +206,55 @@
             </a>
           </div>
         </div>
-
       </nav>
 
-      <!-- Search Bar -->
-      <div class="search-box">
-        <div class="search-input-wrapper">
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="header-search" placeholder="type / to search" autocomplete="off" />
-          <button type="button" id="search-clear" class="search-clear-btn" aria-label="Clear" style="display: none;">✕</button>
+      <!-- Right Controls Group: Note Tabs, Edit/Preview Toggle & Search Bar -->
+      <div class="topbar-right-controls">
+        <!-- Note Tabs Dropdown -->
+        <div class="dropdown notes-dropdown" id="notes-dropdown">
+          <button type="button" class="dropbtn notes-dropbtn" id="notes-dropbtn" title="Switch Note Tab">
+            <svg class="notes-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span id="current-tab-name" class="current-tab-name">Note 1</span>
+            <svg class="dropdown-arrow-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="dropdown-content notes-dropdown-content" id="notes-dropdown-content">
+            <div class="notes-dropdown-header">
+              <span>All Notes</span>
+              <button type="button" id="notepad-add-tab-btn" class="notes-add-btn" title="New Note (Ctrl+N)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </button>
+            </div>
+            <div class="notes-dropdown-list" id="notepad-tabs-list"></div>
+          </div>
         </div>
-        <div id="search-results" class="search-results-dropdown"></div>
+
+        <!-- Edit / Preview Button -->
+        <button type="button" id="notepad-toggle-btn" class="topbar-icon-btn" title="Toggle Edit/Preview (Ctrl+Shift+P)">
+          <svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+            <path d="m15 5 4 4"/>
+          </svg>
+        </button>
+
+        <!-- Search Bar -->
+        <div class="search-box">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="header-search" placeholder="type / to search" autocomplete="off" />
+            <button type="button" id="search-clear" class="search-clear-btn" aria-label="Clear" style="display: none;">✕</button>
+          </div>
+          <div id="search-results" class="search-results-dropdown"></div>
+        </div>
       </div>
     </div>
   </header>
@@ -227,21 +262,6 @@
   <main class="markdown-body">
     <!-- Khung Notepad chỉ hiển thị trên PC -->
     <div class="notepad-container">
-      <div class="notepad-tabs-bar">
-        <div class="notepad-tabs-group">
-          <div class="notepad-tabs-list" id="notepad-tabs-list"></div>
-          <button type="button" id="notepad-add-tab-btn" class="notepad-add-tab-btn" title="New Note Tab (Ctrl+N)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 5v14M5 12h14"/>
-            </svg>
-          </button>
-        </div>
-        <div class="notepad-actions">
-          <button type="button" id="notepad-toggle-btn" class="notepad-btn" title="Toggle Edit/Preview (Ctrl+Shift+P)">
-            <svg class="btn-icon-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-          </button>
-        </div>
-      </div>
       <div class="notepad-body">
         <textarea id="notepad" placeholder="Type notes (Markdown supported: # Heading, **bold**, - list)..."></textarea>
         <div id="notepad-preview" class="notepad-preview-content" style="display: none;"></div>
